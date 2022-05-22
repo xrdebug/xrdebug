@@ -1,16 +1,16 @@
-# %namespace%
+# XrServer
 
 > 🔔 Subscribe to the [newsletter](https://newsletter.chevereto.com/subscription?f=gTmksA6763vPCG763763kYCOTgWu6Kx4BPohVDY97aHddrqis6B763cHay8dhtmMKlI6r3vUfGREZmSvDNNGj3MlrRJV7A) to don't miss any update regarding Chevere.
 
 ![Chevere](chevere.svg)
 
-[![Build](https://img.shields.io/github/workflow/status/chevere/%repoName%/Test?style=flat-square)](https://github.com/chevere/%repoName%/actions) ![Code size](https://img.shields.io/github/languages/code-size/chevere/%repoName%?style=flat-square) [![Apache-2.0](https://img.shields.io/github/license/chevere/%repoName%?style=flat-square)](LICENSE)
+[![Build](https://img.shields.io/github/workflow/status/chevere/xr-server/Test?style=flat-square)](https://github.com/chevere/xr-server/actions) ![Code size](https://img.shields.io/github/languages/code-size/chevere/xr-server?style=flat-square) [![Apache-2.0](https://img.shields.io/github/license/chevere/xr-server?style=flat-square)](LICENSE)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chevere_%repoName%&metric=alert_status)](https://sonarcloud.io/dashboard?id=chevere_%repoName%) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_%repoName%&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=chevere_%repoName%) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_%repoName%&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=chevere_%repoName%) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_%repoName%&metric=security_rating)](https://sonarcloud.io/dashboard?id=chevere_%repoName%) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=chevere_%repoName%&metric=coverage)](https://sonarcloud.io/dashboard?id=chevere_%repoName%) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chevere_%repoName%&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chevere_%repoName%) [![CodeFactor](https://www.codefactor.io/repository/github/chevere/%repoName%/badge)](https://www.codefactor.io/repository/github/chevere/%repoName%) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b956754f8ff04aaa9ca24a6e4cc21661)](https://www.codacy.com/gh/chevere/%repoName%/dashboard)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=chevere_xr-server) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=chevere_xr-server) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=chevere_xr-server) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=security_rating)](https://sonarcloud.io/dashboard?id=chevere_xr-server) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=coverage)](https://sonarcloud.io/dashboard?id=chevere_xr-server) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chevere_xr-server) [![CodeFactor](https://www.codefactor.io/repository/github/chevere/xr-server/badge)](https://www.codefactor.io/repository/github/chevere/xr-server) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b956754f8ff04aaa9ca24a6e4cc21661)](https://www.codacy.com/gh/chevere/xr-server/dashboard)
 
 ## Documentation
 
-Documentation is available at [chevere.org](https://chevere.org/).
+Documentation is available at [xr-docs.chevere.org](https://xr-docs.chevere.org/).
 
 ## License
 

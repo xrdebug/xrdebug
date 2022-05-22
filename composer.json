@@ -1,29 +1,29 @@
 {
-    "name": "chevere/%repoName%",
-    "description": "A chevere %repoName% package",
-    "homepage": "https://chevere.org",
-    "type": "library",
+    "name": "chevere/xr-server",
+    "description": "XR Debug server",
+    "homepage": "https://xr-debug.chevere.org",
     "license": "Apache-2.0",
     "authors": [
         {
             "name": "Rodolfo Berrios",
             "email": "rodolfo@chevere.org",
-            "homepage": "https://chevere.org"
+            "homepage": "https://rodolfoberrios.com"
         }
     ],
     "require": {
-        "chevere/chevere": "^0.7"
+        "php": ">=8.0",
+        "chevere/chevere": "^0.7",
+        "chevere/throwable-handler": "^0.6",
+        "rodber/php-sse-react": "^0.1",
+        "samejack/php-argv": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "symplify/easy-coding-standard": "^10.2"
     },
     "autoload": {
-        "files": [
-            "src/functions.php"
-        ],
         "psr-4": {
-            "Chevere\\%namespace%\\": "src/"
+            "Chevere\\XrServer\\": "src/"
         }
     },
     "autoload-dev": {
@@ -35,6 +35,9 @@
         "optimize-autoloader": true,
         "sort-packages": true
     },
+    "bin": [
+        "xrserver"
+    ],
     "scripts": {
         "update-cs": "mkdir -p .ecs && cd .ecs && curl -O https://raw.githubusercontent.com/chevere/code-style/main/.ecs/ecs-chevere.php"
     },
