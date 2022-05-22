@@ -3,7 +3,7 @@ name: Docker
 on: [create, workflow_dispatch]
 
 env:
-  GHCR_SLUG: ghcr.io/chevere/xr
+  GHCR_SLUG: ghcr.io/${{ github.repository }}
 
 jobs:
   buildx:
@@ -36,8 +36,8 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
           labels: |
-            org.opencontainers.image.title=XR dump server
-            org.opencontainers.image.description=Dump utility built on top of ReactPHP.
+            org.opencontainers.image.title=XR Debug server
+            org.opencontainers.image.description=XR Debug server (ReactPHP SSE).
             org.opencontainers.image.vendor=chevere
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
