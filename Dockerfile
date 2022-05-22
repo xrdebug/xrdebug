@@ -6,4 +6,4 @@ COPY . .
 
 EXPOSE 27420
 
-ENTRYPOINT [ "php", "server", "-p", "27420" ]
+ENTRYPOINT [ "php", "xrserver", "-p", "27420" ]
