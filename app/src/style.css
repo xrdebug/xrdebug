@@ -149,8 +149,8 @@ header {
     right: 0;
     top: 0;
     background: var(--headerBackground);
-    -webkit-backdrop-filter: blur(0.1rem);
-    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem) saturate(1.8);
+            backdrop-filter: blur(0.75rem) saturate(1.8);
     padding: 0.875rem 1.75rem;
     height: var(--headerHeight);
     grid-template-columns: auto auto 1fr;
