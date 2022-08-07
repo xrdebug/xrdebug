@@ -21,7 +21,7 @@ foreach (['/', '/../../../'] as $path) {
     }
 }
 
-use function Chevere\Filesystem\dirForPath;
+use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
 use Chevere\HrTime\HrTime;
 use Chevere\ThrowableHandler\ThrowableHandler;
@@ -105,11 +105,11 @@ echo strtr('%v (%c)', [
 $timeStart = hrtime(true);
 
 try {
-    dirForPath(__DIR__ . '/locks')->removeContents();
+    directoryForPath(__DIR__ . '/locks')->removeContents();
 } catch (Throwable) {
 }
 $build = new Build(
-    dirForPath(__DIR__ . '/app/src'),
+    directoryForPath(__DIR__ . '/app/src'),
     XR_SERVER_VERSION,
     XR_SERVER_CODENAME
 );

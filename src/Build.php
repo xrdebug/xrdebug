@@ -14,19 +14,19 @@ declare(strict_types=1);
 namespace Chevere\XrServer;
 
 use Chevere\Filesystem\File;
-use Chevere\Filesystem\Interfaces\DirInterface;
+use Chevere\Filesystem\Interfaces\DirectoryInterface;
 
 final class Build
 {
     private string $html;
 
     public function __construct(
-        private DirInterface $dir,
+        private DirectoryInterface $directory,
         private string $version,
         private string $codename,
     ) {
-        $dir->assertExists();
-        $file = new File($dir->path()->getChild('index.html'));
+        $directory->assertExists();
+        $file = new File($directory->path()->getChild('index.html'));
         $this->html = $file->getContents();
         $this->replace('%version%', $this->version);
         $this->replace('%codename%', $this->codename);
@@ -50,7 +50,7 @@ final class Build
             $files
         );
         foreach ($files[0] as $pos => $match) {
-            $fileMatch = new File($this->dir->path()->getChild($files[2][$pos]));
+            $fileMatch = new File($this->directory->path()->getChild($files[2][$pos]));
             $replace = '<style media="all">' . $fileMatch->getContents() . '</style>';
             $this->replace($match, $replace);
         }
@@ -60,7 +60,7 @@ final class Build
     {
         preg_match_all("#<script .*(src=\"(.*)\")><\/script>#", $this->html, $files);
         foreach ($files[0] as $pos => $match) {
-            $fileMatch = new File($this->dir->path()->getChild($files[2][$pos]));
+            $fileMatch = new File($this->directory->path()->getChild($files[2][$pos]));
             $replace = str_replace(' ' . $files[1][$pos], '', $match);
             $replace = str_replace(
                 "></script>",
@@ -81,7 +81,7 @@ final class Build
             $files
         );
         foreach ($files[0] as $pos => $match) {
-            $fileMatch = new File($this->dir->path()->getChild($files[1][$pos]));
+            $fileMatch = new File($this->directory->path()->getChild($files[1][$pos]));
             $replace = '="data:' . $mime . ';base64,'
                 . base64_encode($fileMatch->getContents())
                 . '"';
@@ -91,7 +91,7 @@ final class Build
 
     public function replaceFont(string $font, string $mime): void
     {
-        $fileMatch = new File($this->dir->path()->getChild($font));
+        $fileMatch = new File($this->directory->path()->getChild($font));
         $replace = 'url(data:' . $mime . ';base64,'
                 . base64_encode($fileMatch->getContents())
                 . ')';
