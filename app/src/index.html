@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-is-encryption-enabled="%isEncryptionEnabled%" data-iv-length="%ivLength%">
+<html data-is-encryption-enabled="%isEncryptionEnabled%" data-nonce-length="%nonceLength%" data-tag-length="%tagLength%">
     <head>
         <meta charset="utf-8"/>
         <title>XR Debug</title>
@@ -98,6 +98,6 @@
         </template>
     </body>
     <script src="html2canvas.min.js"></script>
-    <script src="crypto-js.min.js"></script>
+    <script src="sjcl.js"></script>
     <script src="app.js"></script>
 </html>

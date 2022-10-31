@@ -23,25 +23,16 @@ foreach (['/', '/../../../'] as $path) {
 
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
-use function Chevere\Message\message;
-
-use Chevere\HrTime\HrTime;
-use Chevere\Throwable\Exceptions\InvalidArgumentException;
 use Chevere\ThrowableHandler\ThrowableHandler;
 use function Chevere\Writer\streamFor;
-use function Chevere\XrServer\decrypt;
-use function Chevere\XrServer\encrypt;
 use function Chevere\XrServer\writeToDebugger;
-
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
-use phpseclib3\Crypt\EC;
 use phpseclib3\Crypt\Random;
-use phpseclib3\Crypt\RSA;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
 use React\Http\HttpServer;
@@ -105,8 +96,7 @@ if($isEncryptionEnabled) {
     } else {
         $symmetricKey = base64_decode($symmetricKey);
     }
-    $cipher = new AES('ctr');
-    $cipher->enablePadding();
+    $cipher = new AES('gcm');
     $cipher->setKey($symmetricKey);
 }
 echo strtr('%v (%c)', [

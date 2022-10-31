@@ -11,5 +11,5 @@
 
 declare(strict_types=1);
 
-const XR_SERVER_VERSION = '0.4.0';
-const XR_SERVER_CODENAME = 'Trululú';
+const XR_SERVER_VERSION = '0.5.0';
+const XR_SERVER_CODENAME = 'Flagg';

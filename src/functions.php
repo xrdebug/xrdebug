@@ -15,39 +15,60 @@ namespace Chevere\XrServer;
 
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
+use phpseclib3\Crypt\Common\SymmetricKey;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ServerRequestInterface;
 
-function encrypt(AES $cipher, string $message, ?string $iv = null): string
+function encrypt(SymmetricKey $cipher, string $message, ?string $nonce = null): string
 {
-    if ($iv === null) {
-        $iv = Random::string(16);
+    if ($nonce === null) {
+        $nonce = Random::string(cipherNonceLength());
     }
+    $tag = Random::string(cipherTagLength());
     $cipher = clone $cipher;
-    $cipher->setIV($iv);
+    $cipher->setNonce($nonce);
+    $cipher->setTag($tag);
+    $cipherText = $cipher->encrypt($message);
 
-    return base64_encode($iv . $cipher->encrypt($message));
+    return base64_encode($nonce . $cipherText . $cipher->getTag());
 }
 
-function decrypt(AES $cipher, string $encodedCipherText): string
+function decrypt(SymmetricKey $cipher, string $encodedCipherText): string
 {
     $decode = base64_decode($encodedCipherText);
-    $iv = mb_substr(
+    $nonce = mb_substr(
         $decode,
         0,
-        16,
+        cipherNonceLength(),
+        '8bit'
+    );
+    $tag = mb_substr(
+        $decode,
+        -cipherTagLength(),
+        null,
         '8bit'
     );
     $cipherText = mb_substr(
         $decode,
-        16,
-        null,
+        cipherNonceLength(),
+        -cipherTagLength(),
         '8bit'
     );
     $cipher = clone $cipher;
-    $cipher->setIV($iv);
+    $cipher->setNonce($nonce);
+    $cipher->setTag($tag);
 
     return $cipher->decrypt($cipherText);
+}
+
+function cipherNonceLength(): int
+{
+    return 12;
+}
+
+function cipherTagLength(): int
+{
+    return 16;
 }
 
 function writeToDebugger(
