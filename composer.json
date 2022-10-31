@@ -14,6 +14,7 @@
         "php": ">=8.0",
         "chevere/chevere": "^1.0",
         "chevere/throwable-handler": "^0.8",
+        "phpseclib/phpseclib": "~3.0",
         "rodber/php-sse-react": "^0.1",
         "samejack/php-argv": "^1.0"
     },
@@ -22,6 +23,9 @@
         "symplify/easy-coding-standard": "^10.3"
     },
     "autoload": {
+        "files": [
+            "src/functions.php"
+        ],
         "psr-4": {
             "Chevere\\XrServer\\": "src/"
         }

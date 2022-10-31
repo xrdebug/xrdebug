@@ -24,17 +24,25 @@ final class Build
         private DirectoryInterface $directory,
         private string $version,
         private string $codename,
+        private bool $isEncryptionEnabled = false,
     ) {
         $directory->assertExists();
         $file = new File($directory->path()->getChild('index.html'));
         $this->html = $file->getContents();
         $this->replace('%version%', $this->version);
         $this->replace('%codename%', $this->codename);
+        $this->replace('%isEncryptionEnabled%', strval($isEncryptionEnabled));
+        $this->replace('%ivLength%', '16');
         $this->replaceIcons('svg', 'image/svg+xml');
         $this->replaceIcons('png', 'image/png');
         $this->replaceStyles();
         $this->replaceFont('fonts/firacode/firacode-regular.woff', 'font/woff');
         $this->replaceScripts();
+    }
+
+    public function withEncryption(int $ivSize): self
+    {
+        return clone $this;
     }
 
     public function html(): string

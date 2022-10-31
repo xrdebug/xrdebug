@@ -23,14 +23,25 @@ foreach (['/', '/../../../'] as $path) {
 
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
+use function Chevere\Message\message;
+
 use Chevere\HrTime\HrTime;
+use Chevere\Throwable\Exceptions\InvalidArgumentException;
 use Chevere\ThrowableHandler\ThrowableHandler;
 use function Chevere\Writer\streamFor;
+use function Chevere\XrServer\decrypt;
+use function Chevere\XrServer\encrypt;
+use function Chevere\XrServer\writeToDebugger;
+
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
 use Clue\React\Sse\BufferedChannel;
+use phpseclib3\Crypt\AES;
+use phpseclib3\Crypt\EC;
+use phpseclib3\Crypt\Random;
+use phpseclib3\Crypt\RSA;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
 use React\Http\HttpServer;
@@ -61,43 +72,43 @@ set_error_handler(ThrowableHandler::ERROR_AS_EXCEPTION);
 register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
 set_exception_handler(ThrowableHandler::CONSOLE);
 
-function writeToDebugger(
-    ServerRequestInterface $request,
-    BufferedChannel $channel,
-    string $action = 'message',
-): void {
-    $address = $request->getServerParams()['REMOTE_ADDR'];
-    $body = $request->getParsedBody() ?? [];
-    $message = $body['body'] ?? '';
-    $message = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $message);
-    $emote = $body['emote'] ?? '';
-    $topic = $body['topic'] ?? '';
-    $id = $body['id'] ?? '';
-    $file = $body['file_path'] ?? '';
-    $line = $body['file_line'] ?? '';
-    $fileDisplay = $file;
-    $fileDisplayShort = basename($file);
-    if ($line !== '') {
-        $fileDisplay .= ':' . $line;
-        $fileDisplayShort .= ':' . $line;
-    }
-    $channel->writeMessage(
-        json_encode([
-            'message' => $message,
-            'file_path' => $file,
-            'file_line' => $line,
-            'file_display' => $fileDisplay,
-            'file_display_short' => $fileDisplayShort,
-            'emote' => $emote,
-            'topic' => $topic,
-            'id' => $id,
-            'action' => $action,
-        ])
-    );
-    echo "* [$address $action] $fileDisplay\n";
+echo file_get_contents('logo');
+$options = (new ArgvParser())->parseConfigs();
+if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
+    echo implode("\n", [
+        '-p Port (default 27420)',
+        '-c Cert file for TLS',
+        '-e Enable end-to-end encryption',
+        '-k Symmetric key',
+        '',
+        ]);
+    die(0);
 }
-
-echo "👉 Building ";
+$host = '0.0.0.0';
+$port = $options['p'] ?? '27420';
+$cert = $options['c'] ?? null;
+$isEncryptionEnabled = $options['e'] ?? false;
+$scheme = isset($cert) ? 'tls' : 'tcp';
+$uri = "$scheme://$host:$port";
+$context = $scheme === 'tcp'
+    ? []
+    : [
+        'tls' => [
+            'local_cert' => $cert
+        ]
+    ];
+$cipher = null;
+if($isEncryptionEnabled) {
+    $symmetricKey = array_key_exists('k', $options) ? $options['k'] : null;
+    if($symmetricKey === null) {
+        $symmetricKey = Random::string(32);
+    } else {
+        $symmetricKey = base64_decode($symmetricKey);
+    }
+    $cipher = new AES('ctr');
+    $cipher->enablePadding();
+    $cipher->setKey($symmetricKey);
+}
 echo strtr('%v (%c)', [
     '%v' => XR_SERVER_VERSION,
     '%c' => XR_SERVER_CODENAME,
@@ -111,20 +122,18 @@ try {
 $build = new Build(
     directoryForPath(__DIR__ . '/app/src'),
     XR_SERVER_VERSION,
-    XR_SERVER_CODENAME
+    XR_SERVER_CODENAME,
+    $isEncryptionEnabled,
 );
 $app = fileForPath(__DIR__ . '/app/build/en.html');
 $app->removeIfExists();
 $app->create();
 $app->put($build->html());
-echo sprintf(
-    "* Done! [%s]\n",
-    (new HrTime(hrTime(true) - $timeStart))
-        ->toReadMs()
-);
 $loop = Loop::get();
 $channel = new BufferedChannel();
-$handler = function (ServerRequestInterface $request) use ($channel, $loop) {
+$handler = function (ServerRequestInterface $request) use (
+        $channel, $loop, $cipher
+    ){
     switch ($request->getUri()->getPath()) {
         case '/':
             return new Response(
@@ -135,7 +144,7 @@ $handler = function (ServerRequestInterface $request) use ($channel, $loop) {
         case '/locks':
             $body = $request->getParsedBody() ?? [];
             $lockFile = fileForPath(__DIR__ . '/locks/' . $body['id']);
-            $json = json_encode(['lock' => false]);
+            $json = '{"lock":false}';
             if ($lockFile->exists()) {
                 $json = $lockFile->getContents();
             }
@@ -152,7 +161,7 @@ $handler = function (ServerRequestInterface $request) use ($channel, $loop) {
             $lockFile->removeIfExists();
             $lockFile->create();
             $lockFile->put($json);
-            writeToDebugger($request, $channel, 'pause');
+            writeToDebugger($request, $channel, 'pause', $cipher);
 
             return new Response(
                 '200',
@@ -186,7 +195,7 @@ $handler = function (ServerRequestInterface $request) use ($channel, $loop) {
             if ($request->getMethod() !== 'POST') {
                 return new Response(405);
             }
-            writeToDebugger($request, $channel);
+            writeToDebugger($request, $channel, 'message', $cipher);
 
             return new Response(
                 '201',
@@ -199,12 +208,12 @@ $handler = function (ServerRequestInterface $request) use ($channel, $loop) {
                 $channel->connect($stream, $id);
             });
             $serverParams = $request->getServerParams();
-            $message = ['message' => 'New dump session started [' . $serverParams['REMOTE_ADDR'] . ']'];
-            $channel->writeMessage(json_encode($message));
-            $stream->on('close', function () use ($stream, $channel, $request, $serverParams) {
+            $message = '{message: "New dump session started ['.$serverParams['REMOTE_ADDR'].']"}';
+            $channel->writeMessage($message);
+            $stream->on('close', function () use ($stream, $channel, $serverParams) {
                 $channel->disconnect($stream);
-                $message = ['message' => 'Dump session end [' . $serverParams['REMOTE_ADDR'] . ']'];
-                $channel->writeMessage(json_encode($message));
+                $message = '{message: "Dump session ended ['.$serverParams['REMOTE_ADDR'].']"}';
+                $channel->writeMessage($message);
             });
 
             return new Response(
@@ -224,32 +233,33 @@ $http = new HttpServer(
     new RequestBodyParserMiddleware(100 * 1024, 1),
     $handler
 );
-$options = (new ArgvParser())->parseConfigs();
-if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
-    echo implode("\n", ['-p Port (default 27420)', '-c Cert .pem file', '']);
-    die(0);
-}
-$host = '0.0.0.0';
-$port = $options['p'] ?? '0';
-$cert = $options['c'] ?? null;
-$scheme = isset($cert) ? 'tls' : 'tcp';
-$uri = "$scheme://$host:$port";
-$context = $scheme === 'tcp'
-    ? []
-    : [
-        'tls' => [
-            'local_cert' => $cert
-        ]
-    ];
 $socket = new \React\Socket\SocketServer(
-    uri: $uri,
-    context: $context,
-    loop: $loop
+    $uri,
+    $context,
+    $loop
 );
 $http->listen($socket);
 $socket->on('error', 'printf');
 $scheme = parse_url($socket->getAddress(), PHP_URL_SCHEME);
-$httpAddress = strtr($socket->getAddress(), ['tls:' => 'https:', 'tcp:' => 'http:']);
-echo "XR Debug server (ReactPHP SSE) listening on ($scheme) $httpAddress" . PHP_EOL;
-echo "---------------------------------------------------" . PHP_EOL;
+$httpAddress = strtr(
+    $socket->getAddress(),
+    ['tls' => 'https', 'tcp' => 'http']
+);
+if($isEncryptionEnabled) {
+    $symmetricKey = base64_encode($symmetricKey);
+    echo <<<PLAIN
+
+    🔑 ENCRYPTION KEY
+    $symmetricKey
+
+
+    PLAIN;
+}
+echo <<<PLAIN
+    XR Debug server (ReactPHP SSE) listening on ($scheme)
+    🌎 $httpAddress
+    ---------------------------------------------------
+    Press Ctrl+C to quit.
+
+    PLAIN;
 $loop->run();

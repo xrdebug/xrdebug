@@ -1,7 +1,13 @@
-let filter = {
-    topic: "",
-    emote: ""
-},
+let HTMLData = document.querySelector('html').dataset;
+if (HTMLData.isEncryptionEnabled === '1') {
+    var encryptionKey = CryptoJS.enc.Base64.parse(prompt('Enter encryption key', ''));
+    var ivLength = parseInt(HTMLData.ivLength);
+}
+let
+    filter = {
+        topic: "",
+        emote: ""
+    },
     filterOperator = {
         topic: "=",
         emote: "*="
@@ -202,7 +208,7 @@ document.addEventListener("click", event => {
             if(messageEl.classList.contains("message--pause")) {
                 messageActions.continue(el);
             }
-            messageEl.classList.add("message--removing");           
+            messageEl.classList.add("message--removing");
             setTimeout(function () {
                 messageEl.remove();
             }, 250);
@@ -249,5 +255,18 @@ es.addEventListener("message", function (event) {
     if (currentStatus === "stop") {
         return;
     }
-    pushMessage(JSON.parse(event.data));
+    let data = event.data
+    data = atob(data)
+    iv = CryptoJS.enc.Base64.parse(btoa(data.substr(0, ivLength)))
+    cipherText = CryptoJS.enc.Base64.parse(btoa(data.slice(ivLength)))
+    data = CryptoJS.AES.decrypt(
+        {ciphertext: cipherText},
+        encryptionKey,
+        {
+            iv: iv,
+            mode: CryptoJS.mode.CTR,
+            padding: CryptoJS.pad.NoPadding
+        }
+    ).toString(CryptoJS.enc.Utf8)
+    pushMessage(JSON.parse(data));
 });
