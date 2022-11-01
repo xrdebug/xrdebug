@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer;
 
+use function Chevere\Message\message;
+use Chevere\Throwable\Exceptions\LogicException;
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
 use phpseclib3\Crypt\Common\SymmetricKey;
@@ -35,7 +37,12 @@ function encrypt(SymmetricKey $cipher, string $message, ?string $nonce = null): 
 
 function decrypt(SymmetricKey $cipher, string $encodedCipherText): string
 {
-    $decode = base64_decode($encodedCipherText);
+    $decode = base64_decode($encodedCipherText, true);
+    if ($decode === false) {
+        throw new LogicException(
+            message('Unable to decode cipher text')
+        );
+    }
     $nonce = mb_substr(
         $decode,
         0,
@@ -97,6 +104,7 @@ function writeToDebugger(
         $fileDisplay .= ':' . $line;
         $fileDisplayShort .= ':' . $line;
     }
+    /** @var string $dump */
     $dump = json_encode([
         'message' => $message,
         'file_path' => $file,
@@ -113,5 +121,5 @@ function writeToDebugger(
             ? $dump
             : encrypt($cipher, $dump)
     );
-    echo "* [$address $action] $fileDisplay\n";
+    echo "* [{$address} {$action}] {$fileDisplay}\n";
 }

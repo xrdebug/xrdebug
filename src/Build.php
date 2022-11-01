@@ -24,7 +24,7 @@ final class Build
         private DirectoryInterface $directory,
         private string $version,
         private string $codename,
-        private bool $isEncryptionEnabled = false,
+        bool $isEncryptionEnabled = false,
     ) {
         $directory->assertExists();
         $file = new File($directory->path()->getChild('index.html'));
@@ -70,12 +70,13 @@ final class Build
         preg_match_all("#<script .*(src=\"(.*)\")><\/script>#", $this->html, $files);
         foreach ($files[0] as $pos => $match) {
             $fileMatch = new File($this->directory->path()->getChild($files[2][$pos]));
+            /** @var string $replace */
             $replace = str_replace(' ' . $files[1][$pos], '', $match);
             $replace = str_replace(
-                "></script>",
+                '></script>',
                 '>'
                     . $fileMatch->getContents()
-                    . "</script>",
+                    . '</script>',
                 $replace
             );
             $this->replace($match, $replace);
@@ -105,7 +106,7 @@ final class Build
                 . base64_encode($fileMatch->getContents())
                 . ')';
         $this->replace(
-            "url('$font')",
+            "url('{$font}')",
             $replace
         );
     }

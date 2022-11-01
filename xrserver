@@ -26,12 +26,12 @@ use function Chevere\Filesystem\fileForPath;
 use Chevere\ThrowableHandler\ThrowableHandler;
 use function Chevere\Writer\streamFor;
 use function Chevere\Writer\streamTemp;
-use function Chevere\XrServer\decrypt;
-use function Chevere\XrServer\writeToDebugger;
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
+use function Chevere\XrServer\decrypt;
+use function Chevere\XrServer\writeToDebugger;
 use Clue\React\Sse\BufferedChannel;
 use Colors\Color;
 use phpseclib3\Crypt\AES;
@@ -81,7 +81,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
         '-e Enable end-to-end encryption',
         '-k Symmetric key',
         '',
-        ]);
+    ]);
     die(0);
 }
 $host = '0.0.0.0';
@@ -89,21 +89,21 @@ $port = $options['p'] ?? '27420';
 $cert = $options['c'] ?? null;
 $isEncryptionEnabled = $options['e'] ?? false;
 $scheme = isset($cert) ? 'tls' : 'tcp';
-$uri = "$scheme://$host:$port";
+$uri = "{$scheme}://{$host}:{$port}";
 $context = $scheme === 'tcp'
     ? []
     : [
         'tls' => [
-            'local_cert' => $cert
-        ]
+            'local_cert' => $cert,
+        ],
     ];
 $cipher = null;
-if($isEncryptionEnabled) {
+if ($isEncryptionEnabled) {
     $symmetricKey = array_key_exists('k', $options) ? $options['k'] : null;
-    if($symmetricKey === null) {
+    if ($symmetricKey === null) {
         $symmetricKey = Random::string(32);
     } else {
-        $symmetricKey = base64_decode($symmetricKey);
+        $symmetricKey = base64_decode($symmetricKey, true);
     }
     $cipher = new AES('gcm');
     $cipher->setKey($symmetricKey);
@@ -129,10 +129,12 @@ $app->put($build->html());
 $loop = Loop::get();
 $channel = new BufferedChannel();
 $handler = function (ServerRequestInterface $request) use (
-        $channel, $loop, $cipher
-    ){
+    $channel,
+    $loop,
+    $cipher
+) {
     $path = $request->getUri()->getPath();
-    if($cipher !== null && in_array($path, ['/lock-patch', '/lock-delete'])) {
+    if ($cipher !== null && in_array($path, ['/lock-patch', '/lock-delete'], true)) {
         $request = $request->withBody(
             streamTemp(
                 decrypt($cipher, $request->getBody()->__toString())
@@ -143,7 +145,9 @@ $handler = function (ServerRequestInterface $request) use (
         case '/':
             return new Response(
                 '200',
-                ['Content-Type' => 'text/html'],
+                [
+                    'Content-Type' => 'text/html',
+                ],
                 file_get_contents(__DIR__ . '/app/build/en.html')
             );
         case '/locks':
@@ -156,7 +160,9 @@ $handler = function (ServerRequestInterface $request) use (
 
             return new Response(
                 '200',
-                ['Content-Type' => 'text/json'],
+                [
+                    'Content-Type' => 'text/json',
+                ],
                 $json
             );
         case '/lock-post':
@@ -170,7 +176,9 @@ $handler = function (ServerRequestInterface $request) use (
 
             return new Response(
                 '200',
-                ['Content-Type' => 'text/json'],
+                [
+                    'Content-Type' => 'text/json',
+                ],
                 $json
             );
         case '/lock-patch':
@@ -183,7 +191,9 @@ $handler = function (ServerRequestInterface $request) use (
 
             return new Response(
                 '200',
-                ['Content-Type' => 'text/json'],
+                [
+                    'Content-Type' => 'text/json',
+                ],
                 $json
             );
         case '/lock-delete':
@@ -193,7 +203,9 @@ $handler = function (ServerRequestInterface $request) use (
 
             return new Response(
                 '200',
-                ['Content-Type' => 'text/json'],
+                [
+                    'Content-Type' => 'text/json',
+                ],
                 '{"ok":true}'
             );
         case '/message':
@@ -204,7 +216,9 @@ $handler = function (ServerRequestInterface $request) use (
 
             return new Response(
                 '201',
-                ['Content-Type' => 'text/json']
+                [
+                    'Content-Type' => 'text/json',
+                ]
             );
         case '/dump':
             $stream = new ThroughStream();
@@ -213,17 +227,19 @@ $handler = function (ServerRequestInterface $request) use (
                 $channel->connect($stream, $id);
             });
             $serverParams = $request->getServerParams();
-            $message = '{message: "New dump session started ['.$serverParams['REMOTE_ADDR'].']"}';
+            $message = '{message: "New dump session started [' . $serverParams['REMOTE_ADDR'] . ']"}';
             $channel->writeMessage($message);
             $stream->on('close', function () use ($stream, $channel, $serverParams) {
                 $channel->disconnect($stream);
-                $message = '{message: "Dump session ended ['.$serverParams['REMOTE_ADDR'].']"}';
+                $message = '{message: "Dump session ended [' . $serverParams['REMOTE_ADDR'] . ']"}';
                 $channel->writeMessage($message);
             });
 
             return new Response(
                 200,
-                ['Content-Type' => 'text/event-stream'],
+                [
+                    'Content-Type' => 'text/event-stream',
+                ],
                 $stream
             );
         default:
@@ -248,19 +264,22 @@ $socket->on('error', 'printf');
 $scheme = parse_url($socket->getAddress(), PHP_URL_SCHEME);
 $httpAddress = strtr(
     $socket->getAddress(),
-    ['tls' => 'https', 'tcp' => 'http']
+    [
+        'tls' => 'https',
+        'tcp' => 'http',
+    ]
 );
-if($isEncryptionEnabled) {
+if ($isEncryptionEnabled) {
     $keyDisplay = base64_encode($symmetricKey);
     echo <<<PLAIN
     🔑 ENCRYPTION KEY
-    $keyDisplay
+    {$keyDisplay}
 
 
     PLAIN;
 }
 echo <<<PLAIN
-    Server listening on $scheme $httpAddress
+    Server listening on {$scheme} {$httpAddress}
     Press Ctrl+C to quit
     --
 
