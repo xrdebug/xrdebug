@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-is-encryption-enabled="%isEncryptionEnabled%" data-nonce-length="%nonceLength%" data-tag-length="%tagLength%">
+<html>
     <head>
         <meta charset="utf-8"/>
         <title>XR Debug</title>
@@ -97,6 +97,13 @@
             </div>
         </template>
     </body>
+    <script>
+        const IS_ENCRYPTION_ENABLED = %isEncryptionEnabled%;
+        const NONCE_LENGTH = %nonceLength%;
+        const TAG_LENGTH = %tagLength%;
+        const GCM_NONCE_LENGTH = NONCE_LENGTH * 8;
+        const GCM_TAG_LENGTH = TAG_LENGTH * 8;
+    </script>
     <script src="html2canvas.min.js"></script>
     <script src="sjcl.js"></script>
     <script src="app.js"></script>

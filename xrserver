@@ -25,6 +25,8 @@ use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
 use Chevere\ThrowableHandler\ThrowableHandler;
 use function Chevere\Writer\streamFor;
+use function Chevere\Writer\streamTemp;
+use function Chevere\XrServer\decrypt;
 use function Chevere\XrServer\writeToDebugger;
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
@@ -63,6 +65,7 @@ new WritersInstance(
 set_error_handler(ThrowableHandler::ERROR_AS_EXCEPTION);
 register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
 set_exception_handler(ThrowableHandler::CONSOLE);
+
 $color = new Color();
 echo $color(file_get_contents('logo'))->cyan() . "\n";
 echo $color(strtr('XR Debug %v (%c) by Rodolfo Berrios', [
@@ -104,6 +107,9 @@ if($isEncryptionEnabled) {
     }
     $cipher = new AES('gcm');
     $cipher->setKey($symmetricKey);
+    // vdd(
+    //     decrypt($cipher, 'Jo2DYv3xw2rpKedgiGlDuOj6aaXadhhNDYvsKi2lFfrpbKpipVsxuOqOAmu4wBf/C4AUNlJ7UKWDKTVvrinGAe/9pLvQkITi8Qyg6vQ=')
+    // );
 }
 
 try {
@@ -125,7 +131,15 @@ $channel = new BufferedChannel();
 $handler = function (ServerRequestInterface $request) use (
         $channel, $loop, $cipher
     ){
-    switch ($request->getUri()->getPath()) {
+    $path = $request->getUri()->getPath();
+    if($cipher !== null && in_array($path, ['/lock-patch', '/lock-delete'])) {
+        $request = $request->withBody(
+            streamTemp(
+                decrypt($cipher, $request->getBody()->__toString())
+            )
+        );
+    }
+    switch ($path) {
         case '/':
             return new Response(
                 '200',
@@ -239,7 +253,6 @@ $httpAddress = strtr(
 if($isEncryptionEnabled) {
     $keyDisplay = base64_encode($symmetricKey);
     echo <<<PLAIN
-
     🔑 ENCRYPTION KEY
     $keyDisplay
 

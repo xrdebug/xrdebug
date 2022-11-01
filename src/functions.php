@@ -54,6 +54,11 @@ function decrypt(SymmetricKey $cipher, string $encodedCipherText): string
         -cipherTagLength(),
         '8bit'
     );
+    // vdd(
+    //     nonce: base64_encode($nonce),
+    //     tag: base64_encode($tag),
+    //     cipherText: base64_encode($cipherText),
+    // );
     $cipher = clone $cipher;
     $cipher->setNonce($nonce);
     $cipher->setTag($tag);
@@ -63,7 +68,7 @@ function decrypt(SymmetricKey $cipher, string $encodedCipherText): string
 
 function cipherNonceLength(): int
 {
-    return 12;
+    return 16;
 }
 
 function cipherTagLength(): int

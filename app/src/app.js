@@ -1,13 +1,8 @@
-let HTMLData = document
-    .querySelector('html')
-    .dataset;
-if (HTMLData.isEncryptionEnabled === '1') {
+if (IS_ENCRYPTION_ENABLED) {
     var encryptionKey = sjcl
         .codec
         .base64
         .toBits(prompt('Enter encryption key', ''));
-    var nonceLength = parseInt(HTMLData.nonceLength);
-    var tagLength = parseInt(HTMLData.tagLength);
     var cipher = new sjcl
         .cipher
         .aes(encryptionKey)
@@ -35,13 +30,29 @@ let filter = {
         let data = {
             id: message.dataset.id
         };
+        let contentType = 'application/json';
+        data = JSON.stringify(data);
+        if (IS_ENCRYPTION_ENABLED) {
+            let nonce = sjcl.random.randomWords(GCM_NONCE_LENGTH/32);
+            let encrypted = sjcl.mode.gcm
+                .encrypt(
+                    cipher,
+                    sjcl.codec.utf8String.toBits(data),
+                    nonce,
+                    null,
+                    GCM_TAG_LENGTH
+                );
+            data = sjcl.codec.base64.fromBits(
+                sjcl.bitArray.concat(nonce, encrypted)
+            );
+        }
         fetch("/" + endpoint, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
+                method: "POST",
+                headers: {
+                    "Content-Type": contentType
+                },
+                body: data
+            })
             .then(response => response.json())
             .then(function () {
                 message
@@ -202,15 +213,15 @@ pushMessage = function (data, isStatus = false) {
     el
         .classList
         .add("message--loading");
-    el.dataset.emote = data.emote
-        ? data.emote
-        : "";
-    el.dataset.topic = data.topic
-        ? data.topic
-        : "";
-    el.dataset.id = data.id
-        ? data.id
-        : "";
+    el.dataset.emote = data.emote ?
+        data.emote :
+        "";
+    el.dataset.topic = data.topic ?
+        data.topic :
+        "";
+    el.dataset.id = data.id ?
+        data.id :
+        "";
     if (data.action === "pause") {
         el
             .classList
@@ -324,33 +335,33 @@ document.addEventListener("click", event => {
         var filterQuery = "",
             messageEl = messageEl,
             subject = el
-                .classList
-                .contains("topic")
-                    ? "topic"
-                    : "emote";
+            .classList
+            .contains("topic") ?
+            "topic" :
+            "emote";
         if (messageEl && filter[subject] === messageEl.dataset[subject]) {
             return;
         }
-        filter[subject] = messageEl
-            ? messageEl.dataset[subject]
-            : "";
+        filter[subject] = messageEl ?
+            messageEl.dataset[subject] :
+            "";
         for (filterSubject in filter) {
             if (filter[filterSubject] === "") {
                 continue;
             }
             filterQuery += "[data-" + filterSubject + filterOperator[filterSubject] + filter[filterSubject] +
-                    "]";
+                "]";
         }
         document
             .getElementById("filtering")
-            .innerHTML = filterQuery === ""
-                ? ""
-                : ".message:not(" + filterQuery + ") { display: none; }";
+            .innerHTML = filterQuery === "" ?
+            "" :
+            ".message:not(" + filterQuery + ") { display: none; }";
         document
             .querySelector(".header-filter ." + subject)
-            .textContent = messageEl
-                ? filter[subject]
-                : "";
+            .textContent = messageEl ?
+            filter[subject] :
+            "";
     }
 });
 document
@@ -363,9 +374,7 @@ es.addEventListener("message", function (event) {
         return;
     }
     let data = event.data
-    if (HTMLData.isEncryptionEnabled === '1') {
-        const GCM_NONCE_LENGTH = nonceLength * 8;
-        const GCM_TAG_LENGTH = tagLength * 8;
+    if (IS_ENCRYPTION_ENABLED) {
         let ivCiphertextTagB64 = data;
         let ivCiphertextTag = sjcl
             .codec
@@ -374,17 +383,17 @@ es.addEventListener("message", function (event) {
         let iv = sjcl
             .bitArray
             .bitSlice(ivCiphertextTag, 0, GCM_NONCE_LENGTH);
-        let ciphertextTag = sjcl
+        let cipherTextTag = sjcl
             .bitArray
             .bitSlice(ivCiphertextTag, GCM_NONCE_LENGTH);
-        let plaintext = sjcl
+        let decrypted = sjcl
             .mode
             .gcm
-            .decrypt(cipher, ciphertextTag, iv, null, GCM_TAG_LENGTH);
+            .decrypt(cipher, cipherTextTag, iv, null, GCM_TAG_LENGTH);
         data = sjcl
             .codec
             .utf8String
-            .fromBits(plaintext);
+            .fromBits(decrypted);
     }
     pushMessage(JSON.parse(data))
 });

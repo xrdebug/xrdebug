@@ -31,7 +31,7 @@ final class Build
         $this->html = $file->getContents();
         $this->replace('%version%', $this->version);
         $this->replace('%codename%', $this->codename);
-        $this->replace('%isEncryptionEnabled%', strval($isEncryptionEnabled));
+        $this->replace('%isEncryptionEnabled%', $isEncryptionEnabled ? 'true' : 'false');
         $this->replace('%nonceLength%', strval(cipherNonceLength()));
         $this->replace('%tagLength%', strval(cipherTagLength()));
         $this->replaceIcons('svg', 'image/svg+xml');
