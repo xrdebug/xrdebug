@@ -31,6 +31,7 @@ use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
 use Clue\React\Sse\BufferedChannel;
+use Colors\Color;
 use phpseclib3\Crypt\AES;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ServerRequestInterface;
@@ -62,11 +63,16 @@ new WritersInstance(
 set_error_handler(ThrowableHandler::ERROR_AS_EXCEPTION);
 register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
 set_exception_handler(ThrowableHandler::CONSOLE);
-
-echo file_get_contents('logo');
+$color = new Color();
+echo $color(file_get_contents('logo'))->cyan() . "\n";
+echo $color(strtr('XR Debug %v (%c) by Rodolfo Berrios', [
+    '%v' => XR_SERVER_VERSION,
+    '%c' => XR_SERVER_CODENAME,
+]))->green() . "\n\n";
 $options = (new ArgvParser())->parseConfigs();
 if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
     echo implode("\n", [
+        '',
         '-p Port (default 27420)',
         '-c Cert file for TLS',
         '-e Enable end-to-end encryption',
@@ -99,11 +105,6 @@ if($isEncryptionEnabled) {
     $cipher = new AES('gcm');
     $cipher->setKey($symmetricKey);
 }
-echo strtr('%v (%c)', [
-    '%v' => XR_SERVER_VERSION,
-    '%c' => XR_SERVER_CODENAME,
-]) . "\n";
-$timeStart = hrtime(true);
 
 try {
     directoryForPath(__DIR__ . '/locks')->removeContents();
@@ -236,20 +237,19 @@ $httpAddress = strtr(
     ['tls' => 'https', 'tcp' => 'http']
 );
 if($isEncryptionEnabled) {
-    $symmetricKey = base64_encode($symmetricKey);
+    $keyDisplay = base64_encode($symmetricKey);
     echo <<<PLAIN
 
     🔑 ENCRYPTION KEY
-    $symmetricKey
+    $keyDisplay
 
 
     PLAIN;
 }
 echo <<<PLAIN
-    XR Debug server (ReactPHP SSE) listening on ($scheme)
-    🌎 $httpAddress
-    ---------------------------------------------------
-    Press Ctrl+C to quit.
+    Server listening on $scheme $httpAddress
+    Press Ctrl+C to quit
+    --
 
     PLAIN;
 $loop->run();
