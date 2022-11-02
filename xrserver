@@ -67,7 +67,7 @@ register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
 set_exception_handler(ThrowableHandler::CONSOLE);
 
 $color = new Color();
-echo $color(file_get_contents(__DIR__ . 'logo'))->cyan() . "\n";
+echo $color(file_get_contents(__DIR__ . '/logo'))->cyan() . "\n";
 echo $color(strtr('XR Debug %v (%c) by Rodolfo Berrios', [
     '%v' => XR_SERVER_VERSION,
     '%c' => XR_SERVER_CODENAME,
