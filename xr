@@ -120,6 +120,7 @@ if ($isEncryptionEnabled) {
 
     PLAIN;
 }
+$privateKey = null;
 if($isSignVerificationEnabled) {
     $privateKey = array_key_exists('s', $options) ? $options['s'] : null;
     if ($privateKey === null) {
