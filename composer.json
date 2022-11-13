@@ -41,7 +41,7 @@
         "sort-packages": true
     },
     "bin": [
-        "xrserver"
+        "xr"
     ],
     "scripts": {
         "check": [
