@@ -109,7 +109,8 @@ let filter = {
             windowActions.pushStatus(action);
         }
         pushMessage({
-            message: "<b>" + action.toUpperCase() + "</b> " + document.title
+            message: "<b>" + action.toUpperCase() + "</b> " + document.title,
+            action: action
         }, true);
     },
     keysToAction = {
@@ -238,7 +239,15 @@ pushMessage = function (data, isStatus = false) {
             setTimeout(function () {
                 el.remove();
             }, 250)
-        }, 5000)
+        }, 5000);
+        if(data.action === "clear") {
+            setTimeout(function () {
+                document.body.classList = "body--splash";
+                setTimeout(function () {
+                    document.body.classList.add("body--splash-in");
+                }, 100)
+            }, 5250);
+        }
     }
     if (!isStatus && currentStatus === "pause") {
         queuedMessageCount++;
@@ -364,10 +373,12 @@ document.addEventListener("click", event => {
             "";
     }
 });
-document
-    .body
-    .classList
-    .add("body--splash-in");
+setTimeout(function () {
+    document
+        .body
+        .classList
+        .add("body--splash-in");
+}, 100);
 es = new EventSource("dump");
 es.addEventListener("message", function (event) {
     if (currentStatus === "stop") {
