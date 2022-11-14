@@ -3,7 +3,7 @@ name: Docker
 on: [create, workflow_dispatch]
 
 env:
-  GHCR_SLUG: ghcr.io/${{ github.repository_owner }}/xr
+  GHCR_SLUG: ghcr.io/${{ github.repository }}
 
 jobs:
   buildx:
