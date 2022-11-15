@@ -783,7 +783,7 @@ body:not(.body--splash) .splash {
             </div>
             <div class="splash-welcome">XR Debug</div>
             <div class="splash-version">Version
-                <a href="https://github.com/chevere/xr" target="_blank">0.6.1</a>
+                <a href="https://github.com/chevere/xr" target="_blank">0.6.2</a>
                 <span class="splash-version-codename">Mustang</span>
             </div>
             <div class="splash-keys">
@@ -1188,17 +1188,15 @@ pushMessage = function (data, isStatus = false) {
                 .add("message--removing");
             setTimeout(function () {
                 el.remove();
-                if(data.action === "clear") {
-                    if(document.querySelector("main").childElementCount == 0) {
-                        document.body.classList = "body--splash";
-                        setTimeout(function () {
-                            if(document.querySelector("main").childElementCount != 0) {
-                                document.body.classList = "";
-                                return;
-                            }
-                            document.body.classList.add("body--splash-in");
-                        }, 10)
-                    }
+                if(data.action === "clear" && document.querySelector("main").childElementCount == 0) {
+                    document.body.classList = "body--splash";
+                    setTimeout(function () {
+                        if(document.querySelector("main").childElementCount != 0) {
+                            document.body.classList = "";
+                            return;
+                        }
+                        document.body.classList.add("body--splash-in");
+                    }, 10)
                 }
             }, 250)
         }, 5000);
