@@ -52,7 +52,7 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bodyBackground: #000;
+        --bodyBackground: #0d1117;
         --bodyText: #c9d1d9;
         --headerBackground: rgba(var(--colorShadeRGB), .2);
         --colorShadeRGB: 65, 74, 88;
