@@ -52,7 +52,7 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bodyBackground: #0d1117;
+        --bodyBackground: #03060a;
         --bodyText: #c9d1d9;
         --headerBackground: rgba(var(--colorShadeRGB), .2);
         --colorShadeRGB: 65, 74, 88;
@@ -118,10 +118,10 @@ html, body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    background: var(--bodyBackground);
 }
 
 body {
-    background: var(--bodyBackground);
     color: var(--bodyText);
     padding-top: var(--headerHeight);
     line-height: normal;
