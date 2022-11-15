@@ -718,13 +718,10 @@ pre+.backtrace {
     position: absolute;
     left: 0;
     top: 0;
-    box-shadow: 0.125em 0.125em 0.375em rgba(var(--colorShadeRGB), .40);
 }
 
 .splash-key:hover kbd {
-    left: 0.15em;
-    top: 0.15em;
-    box-shadow: none;
+    border-color: rgba(var(--colorShadeRGB), 1);
 }
 
 .splash-key-title {
