@@ -201,12 +201,10 @@ pushMessage = function (data, isStatus = false) {
         bodyContextDisplay.textContent = "・" + data.file_display_short;
         bodyContextDisplay.setAttribute("title", data.file_display || "");
     }
-    if (document.body.classList.contains("body--splash")) {
-        document
-            .body
-            .classList
-            .remove("body--splash", "body--splash-in");
-    }
+    document
+        .body
+        .classList
+        .remove("body--splash", "body--splash-in");
     document
         .querySelector("main")
         .prepend(el);
@@ -238,16 +236,19 @@ pushMessage = function (data, isStatus = false) {
                 .add("message--removing");
             setTimeout(function () {
                 el.remove();
+                if(data.action === "clear" && document.querySelector("main").childElementCount == 0) {
+                    document.body.classList = "body--splash";
+                    setTimeout(function () {
+                        if(document.querySelector("main").childElementCount != 0) {
+                            document.body.classList = "";
+                            return;
+                        }
+                        document.body.classList.add("body--splash-in");
+                    }, 10)
+                }
             }, 250)
         }, 5000);
-        if(data.action === "clear") {
-            setTimeout(function () {
-                document.body.classList = "body--splash";
-                setTimeout(function () {
-                    document.body.classList.add("body--splash-in");
-                }, 100)
-            }, 5250);
-        }
+
     }
     if (!isStatus && currentStatus === "pause") {
         queuedMessageCount++;
