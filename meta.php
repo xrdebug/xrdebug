@@ -11,5 +11,5 @@
 
 declare(strict_types=1);
 
-const XR_SERVER_VERSION = '0.6.2';
-const XR_SERVER_CODENAME = 'Mustang';
+const XR_SERVER_VERSION = '0.7.0';
+const XR_SERVER_CODENAME = 'Chocopanda';
