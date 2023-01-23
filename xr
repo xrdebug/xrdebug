@@ -23,6 +23,11 @@ foreach (['/', '/../../../'] as $path) {
 
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
+use function Chevere\ThrowableHandler\handleAsConsole;
+
+use Chevere\Container\Container;
+use Chevere\Router\Dispatcher;
+use Chevere\Router\Exceptions\NotFoundException;
 use Chevere\ThrowableHandler\ThrowableHandler;
 use function Chevere\Writer\streamFor;
 use function Chevere\Writer\streamTemp;
@@ -32,6 +37,8 @@ use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
 use function Chevere\XrServer\decrypt;
 use function Chevere\XrServer\writeToDebugger;
+use function Safe\json_encode;
+
 use Clue\React\Sse\BufferedChannel;
 use Colors\Color;
 use phpseclib3\Crypt\AES;
@@ -152,13 +159,18 @@ $app = fileForPath(__DIR__ . '/app/build/en.html');
 $app->removeIfExists();
 $app->create();
 $app->put($build->html());
+$router = include 'router.php';
+$routeCollector = $router->routeCollector();
+$dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();
 $channel = new BufferedChannel();
 $handler = function (ServerRequestInterface $request) use (
     $channel,
     $loop,
     $cipher,
-    $privateKey
+    $privateKey,
+    $dispatcher,
+    $app
 ) {
     $path = $request->getUri()->getPath();
     if (in_array($path, ['/lock-patch', '/lock-delete'], true)) {
@@ -170,6 +182,7 @@ $handler = function (ServerRequestInterface $request) use (
             );
         }
     }
+    $body = $request->getParsedBody() ?? [];
     if (in_array($path, ['/message', '/lock-post', '/locks'], true)) {
         if($privateKey instanceof PrivateKey) {
             $signatureHeader = $request->getHeader('X-Signature');
@@ -180,7 +193,6 @@ $handler = function (ServerRequestInterface $request) use (
                     'Missing signature'
                 );
             }
-            $body = $request->getParsedBody() ?? [];
             $serialize = serialize($body);
             $signature = base64_decode($signatureHeader[0]);
             $publicKey = $privateKey->getPublicKey();
@@ -193,110 +205,55 @@ $handler = function (ServerRequestInterface $request) use (
             }
         }
     }
-    switch ($path) {
-        case '/':
-            return new Response(
-                '200',
-                [
-                    'Content-Type' => 'text/html',
-                ],
-                file_get_contents(__DIR__ . '/app/build/en.html')
-            );
-        case '/locks':
-            $body = $request->getParsedBody() ?? [];
-            $lockFile = fileForPath(__DIR__ . '/locks/' . $body['id']);
-            $json = '{"lock":false}';
-            if ($lockFile->exists()) {
-                $json = $lockFile->getContents();
-            }
-
-            return new Response(
-                '200',
-                [
-                    'Content-Type' => 'text/json',
-                ],
-                $json
-            );
-        case '/lock-post':
-            $json = '{"lock":true}';
-            $body = $request->getParsedBody() ?? [];
-            $lockFile = fileForPath(__DIR__ . '/locks/' . $body['id']);
-            $lockFile->removeIfExists();
-            $lockFile->create();
-            $lockFile->put($json);
-            writeToDebugger($request, $channel, 'pause', $cipher);
-
-            return new Response(
-                '200',
-                [
-                    'Content-Type' => 'text/json',
-                ],
-                $json
-            );
-        case '/lock-patch':
-            $json = '{"stop":true}';
-            $body = json_decode($request->getBody()->__toString(), true);
-            $lockFile = fileForPath(__DIR__ . '/locks/' . $body['id']);
-            $lockFile->removeIfExists();
-            $lockFile->create();
-            $lockFile->put($json);
-
-            return new Response(
-                '200',
-                [
-                    'Content-Type' => 'text/json',
-                ],
-                $json
-            );
-        case '/lock-delete':
-            $body = json_decode($request->getBody()->__toString(), true);
-            $lockFile = fileForPath(__DIR__ . '/locks/' . $body['id']);
-            $lockFile->removeIfExists();
-
-            return new Response(
-                '200',
-                [
-                    'Content-Type' => 'text/json',
-                ],
-                '{"ok":true}'
-            );
-        case '/message':
-            if ($request->getMethod() !== 'POST') {
-                return new Response(405);
-            }
-            writeToDebugger($request, $channel, 'message', $cipher);
-
-            return new Response(
-                '201',
-                [
-                    'Content-Type' => 'text/json',
-                ]
-            );
-        case '/dump':
-            $stream = new ThroughStream();
-            $id = $request->getHeaderLine('Last-Event-ID');
-            $loop->futureTick(function () use ($channel, $stream, $id) {
-                $channel->connect($stream, $id);
-            });
-            $serverParams = $request->getServerParams();
-            $message = '{message: "New dump session started [' . $serverParams['REMOTE_ADDR'] . ']"}';
-            $channel->writeMessage($message);
-            $stream->on('close', function () use ($stream, $channel, $serverParams) {
-                $channel->disconnect($stream);
-                $message = '{message: "Dump session ended [' . $serverParams['REMOTE_ADDR'] . ']"}';
-                $channel->writeMessage($message);
-            });
-
-            return new Response(
-                200,
-                [
-                    'Content-Type' => 'text/event-stream',
-                ],
-                $stream
-            );
-        default:
-            return new Response(404);
+    if (in_array($path, ['/lock-delete', '/lock-patch'], true)) {
+        $body = json_decode($request->getBody()->__toString(), true);
     }
+    try {
+        $routed = $dispatcher->dispatch($request->getMethod(), $path);
+    } catch(Throwable) {
+        return new Response(404);
+    }
+    vd(request: $path, body: $body);
+    $containerMap = [
+        'request' => $request,
+        'channel' => $channel,
+        'cipher' => $cipher,
+        'loop' => $loop,
+        'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
+        'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
+    ];
+    $view = $routed->bind()->view();
+    $controller = $routed->bind()->controller();
+    $controller = $controller->withPost($body);
+    $containerParams = [];
+    foreach ($controller->containerParameters()->keys() as $key) {
+        $containerParams[$key] = $containerMap[$key];
+    }
+    $controller = $controller->withContainer(
+        (new Container())->withPut(...$containerParams)
+    );
+    try {
+        $response = $controller->getResponse(...$routed->arguments());
+    } catch(Throwable $e) {
+        handleAsConsole($e);
+    }
+    $stream = $response->data()['stream'] ?? null;
+    $isStream = $stream instanceof ThroughStream;
+    return new Response(
+        $controller::STATUS_SUCCESS,
+        [
+            'Content-Type' => match(true) {
+                $isStream => 'text/event-stream',
+                $view === 'spa/GET' => 'text/html',
+                default => 'text/json',
+            },
+        ],
+        match(true) {
+            $isStream => $stream,
+            $view === 'spa/GET' => $app->getContents(),
+            default => json_encode($response->data()),
+        }
+    );
 };
 $http = new HttpServer(
     $loop,

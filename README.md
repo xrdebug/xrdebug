@@ -4,8 +4,7 @@
 
 ![Chevere](chevere.svg)
 
-[![Build](https://img.shields.io/github/workflow/status/chevere/xr-server/Test?style=flat-square)](https://github.com/chevere/xr-server/actions)
-![Code size](https://img.shields.io/github/languages/code-size/chevere/xr-server?style=flat-square)
+[![Build](https://img.shields.io/github/actions/workflow/status/chevere/xr-server/test.yml?branch=0.8&style=flat-square)](https://github.com/chevere/xr-server/actions)![Code size](https://img.shields.io/github/languages/code-size/chevere/xr-server?style=flat-square)
 [![Apache-2.0](https://img.shields.io/github/license/chevere/xr-server?style=flat-square)](LICENSE)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%209-blueviolet?style=flat-square)](https://phpstan.org/)
 

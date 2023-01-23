@@ -89,15 +89,14 @@ function writeToDebugger(
     string $action = 'message',
     ?AES $cipher = null
 ): void {
-    $address = $request->getServerParams()['REMOTE_ADDR'];
     $body = $request->getParsedBody() ?? [];
     $message = $body['body'] ?? '';
     $message = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $message);
     $emote = $body['emote'] ?? '';
     $topic = $body['topic'] ?? '';
     $id = $body['id'] ?? '';
-    $file = $body['file_path'] ?? '';
-    $line = $body['file_line'] ?? '';
+    $file = $body['file_path'] ?? '<file>';
+    $line = $body['file_line'] ?? '<line>';
     $fileDisplay = $file;
     $fileDisplayShort = basename($file);
     if ($line !== '') {
@@ -121,5 +120,6 @@ function writeToDebugger(
             ? $dump
             : encrypt($cipher, $dump)
     );
+    $address = $request->getServerParams()['REMOTE_ADDR'];
     echo "* [{$address} {$action}] {$fileDisplay}\n";
 }
