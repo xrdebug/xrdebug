@@ -13,35 +13,34 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controller;
 
-use Chevere\Controller\HttpController;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use function Chevere\Parameter\booleanParameter;
-use Chevere\Parameter\Interfaces\ParametersInterface;
-use function Chevere\Parameter\parameters;
-use function Chevere\Parameter\stringParameter;
+use Chevere\Http\Controller;
+use function Chevere\Parameter\arrayp;
+use function Chevere\Parameter\boolean;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use function Chevere\Parameter\string;
 
-class Locks extends HttpController
+final class LocksGet extends Controller
 {
     public function __construct(
         private DirectoryInterface $directory
     ) {
-        parent::__construct();
     }
 
-    public function getResponseParameters(): ParametersInterface
+    public static function acceptResponse(): ArrayTypeParameterInterface
     {
-        return parameters(
-            lock: booleanParameter()
-        )->withAddedOptional(
-            stop: booleanParameter()
+        return arrayp(
+            lock: boolean()
+        )->withOptional(
+            stop: boolean()
         );
     }
 
-    public function acceptPost(): ParametersInterface
+    public static function acceptBody(): ArrayTypeParameterInterface
     {
-        return parameters(
-            id: stringParameter()
+        return arrayp(
+            id: string()
         );
     }
 
@@ -50,7 +49,7 @@ class Locks extends HttpController
      */
     public function run(): array
     {
-        $id = $this->post()['id'];
+        $id = $this->body()['id'];
         $lockFile = new File(
             $this->directory->path()->getChild('locks/' . $id)
         );
@@ -59,7 +58,8 @@ class Locks extends HttpController
                 'lock' => false,
             ];
         }
+        $contents = $lockFile->getContents();
         /** @var array<string, bool> */
-        return json_decode($lockFile->getContents(), true);
+        return json_decode($contents, true);
     }
 }

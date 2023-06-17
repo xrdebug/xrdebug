@@ -23,6 +23,7 @@ foreach (['/', '/../../../'] as $path) {
 
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
+use function Chevere\Router\router;
 use function Chevere\ThrowableHandler\handleAsConsole;
 
 use Chevere\Container\Container;
@@ -159,7 +160,7 @@ $app = fileForPath(__DIR__ . '/app/build/en.html');
 $app->removeIfExists();
 $app->create();
 $app->put($build->html());
-$router = include 'router.php';
+$router = router(include 'routes.php');
 $routeCollector = $router->routeCollector();
 $dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();

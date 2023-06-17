@@ -15,38 +15,32 @@ namespace Chevere\XrServer\Controller;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use function Chevere\Parameter\booleanParameter;
-use Chevere\Parameter\Interfaces\ParametersInterface;
-use function Chevere\Parameter\parameters;
-use function Chevere\Parameter\stringParameter;
+use Chevere\Http\Controller;
+use function Chevere\Parameter\arrayp;
+use function Chevere\Parameter\boolean;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use function Safe\json_encode;
 
-class LockPatch extends Locks
+final class LockPatch extends Controller
 {
     public function __construct(
         private DirectoryInterface $directory
     ) {
-        parent::__construct($directory);
     }
 
-    public function getResponseParameters(): ParametersInterface
+    public static function acceptResponse(): ArrayTypeParameterInterface
     {
-        return parameters(
-            lock: booleanParameter(),
-            stop: booleanParameter(),
+        return arrayp(
+            lock: boolean(),
+            stop: boolean(),
         );
     }
 
-    public function acceptPost(): ParametersInterface
+    /**
+     * @return array<string, boolean>
+     */
+    public function run(string $id): array
     {
-        return parameters(
-            id: stringParameter()
-        );
-    }
-
-    public function run(): array
-    {
-        $id = $this->post()['id'];
         $lockFile = new File(
             $this->directory->path()->getChild('locks/' . $id)
         );
@@ -56,7 +50,8 @@ class LockPatch extends Locks
             'lock' => true,
             'stop' => true,
         ];
-        $lockFile->put(json_encode($data));
+        $json = json_encode($data);
+        $lockFile->put($json);
 
         return $data;
     }

@@ -13,46 +13,41 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controller;
 
-use Chevere\Controller\HttpController;
-use Chevere\Parameter\Interfaces\ParametersInterface;
-use function Chevere\Parameter\objectParameter;
-use function Chevere\Parameter\parameters;
-use function Chevere\Parameter\stringParameter;
+use Chevere\Http\Controller;
+use function Chevere\Parameter\arrayp;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use function Chevere\Parameter\object;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
 use React\Stream\ThroughStream;
 
-class DumpStream extends HttpController
+class DumpStream extends Controller
 {
-    public function getContainerParameters(): ParametersInterface
-    {
-        return parameters(
-            channel: objectParameter(BufferedChannel::class),
-            loop: objectParameter(LoopInterface::class),
-            lastEventId: stringParameter(),
-            remoteAddress: stringParameter(),
-        );
+    public function __construct(
+        private BufferedChannel $channel,
+        private LoopInterface $loop,
+        private string $lastEventId,
+        private string $remoteAddress,
+    ) {
     }
 
-    public function getResponseParameters(): ParametersInterface
+    public static function acceptResponse(): ArrayTypeParameterInterface
     {
-        return parameters(
-            stream: objectParameter(ThroughStream::class)
+        return arrayp(
+            stream: object(ThroughStream::class)
         );
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, ThroughStream>
      */
     public function run(): array
     {
         $stream = new ThroughStream();
-        /** @var BufferedChannel $channel */
-        $channel = $this->container()->get('channel');
-        /** @var LoopInterface $loop */
-        $loop = $this->container()->get('loop');
-        $lastEventId = $this->container()->get('lastEventId');
-        $remoteAddress = $this->container()->get('remoteAddress');
+        $channel = $this->channel;
+        $loop = $this->loop;
+        $lastEventId = $this->lastEventId;
+        $remoteAddress = $this->remoteAddress;
         $loop->futureTick(function () use ($channel, $stream, $lastEventId) {
             $channel->connect($stream, $lastEventId);
         });

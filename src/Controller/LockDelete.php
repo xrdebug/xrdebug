@@ -15,43 +15,27 @@ namespace Chevere\XrServer\Controller;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use function Chevere\Parameter\booleanParameter;
-use Chevere\Parameter\Interfaces\ParametersInterface;
-use function Chevere\Parameter\parameters;
-use function Chevere\Parameter\stringParameter;
+use Chevere\Http\Attributes\Status;
+use Chevere\Http\Controller;
 
-class LockDelete extends Locks
+#[Status(204)]
+final class LockDelete extends Controller
 {
     public function __construct(
         private DirectoryInterface $directory
     ) {
-        parent::__construct($directory);
     }
 
-    public function getResponseParameters(): ParametersInterface
+    /**
+     * @return array<string, mixed>
+     */
+    public function run(string $id): array
     {
-        return parameters(
-            ok: booleanParameter()
-        );
-    }
-
-    public function acceptPost(): ParametersInterface
-    {
-        return parameters(
-            id: stringParameter()
-        );
-    }
-
-    public function run(): array
-    {
-        $id = $this->post()['id'];
         $lockFile = new File(
             $this->directory->path()->getChild('locks/' . $id)
         );
         $lockFile->removeIfExists();
 
-        return [
-            'ok' => true,
-        ];
+        return [];
     }
 }

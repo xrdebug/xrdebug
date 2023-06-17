@@ -13,37 +13,33 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controller;
 
-use Chevere\Controller\HttpController;
-use Chevere\Parameter\Interfaces\ParametersInterface;
-use function Chevere\Parameter\objectParameter;
-use function Chevere\Parameter\parameters;
-use function Chevere\Parameter\stringParameter;
+use Chevere\Http\Controller;
+use function Chevere\Parameter\arrayp;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use function Chevere\Parameter\string;
 use function Chevere\XrServer\writeToDebugger;
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ServerRequestInterface;
 
-class MessageDump extends HttpController
+final class MessageDump extends Controller
 {
-    public function getContainerParameters(): ParametersInterface
-    {
-        return parameters(
-            request: objectParameter(ServerRequestInterface::class),
-            channel: objectParameter(BufferedChannel::class),
-        )->withAddedOptional(
-            cipher: objectParameter(AES::class),
-        );
+    public function __construct(
+        private ServerRequestInterface $request,
+        private BufferedChannel $channel,
+        private ?AES $cipher = null
+    ) {
     }
 
-    public function acceptPost(): ParametersInterface
+    public static function acceptBody(): ArrayTypeParameterInterface
     {
-        return parameters()->withAddedOptional(
-            body: stringParameter(),
-            emote: stringParameter(),
-            file_line: stringParameter(),
-            file_path: stringParameter(),
-            id: stringParameter(),
-            topic: stringParameter(),
+        return arrayp()->withOptional(
+            body:       string(),
+            emote:      string(),
+            file_line:  string(),
+            file_path:  string(),
+            id:         string(),
+            topic:      string(),
         );
     }
 
@@ -52,17 +48,11 @@ class MessageDump extends HttpController
      */
     public function run(): array
     {
-        /** @var ServerRequestInterface $request */
-        $request = $this->container()->get('request');
-        /** @var BufferedChannel $channel */
-        $channel = $this->container()->get('channel');
-        /** @var AES|null $cipher */
-        $cipher = $this->container()->get('cipher');
         writeToDebugger(
-            request: $request,
-            channel: $channel,
+            request: $this->request,
+            channel: $this->channel,
             action: 'message',
-            cipher: $cipher,
+            cipher: $this->cipher,
         );
 
         return [];

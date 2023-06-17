@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controller;
 
-use Chevere\Controller\HttpController;
+use Chevere\Http\Controller;
 
-class SinglePageApp extends HttpController
+class SinglePageApp extends Controller
 {
     /**
      * @return array<string>

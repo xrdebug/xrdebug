@@ -15,52 +15,47 @@ namespace Chevere\XrServer\Controller;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use function Chevere\Parameter\booleanParameter;
-use Chevere\Parameter\Interfaces\ParametersInterface;
-use function Chevere\Parameter\objectParameter;
-use function Chevere\Parameter\parameters;
-use function Chevere\Parameter\stringParameter;
+use Chevere\Http\Controller;
+use function Chevere\Parameter\arrayp;
+use function Chevere\Parameter\boolean;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use function Chevere\Parameter\string;
 use function Chevere\XrServer\writeToDebugger;
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ServerRequestInterface;
 use function Safe\json_encode;
 
-class LockPost extends Locks
+final class LockPost extends Controller
 {
     public function __construct(
-        private DirectoryInterface $directory
+        private DirectoryInterface $directory,
+        private ServerRequestInterface $request,
+        private BufferedChannel $channel,
+        private ?AES $cipher = null
     ) {
-        parent::__construct($directory);
     }
 
-    public function getResponseParameters(): ParametersInterface
+    public static function acceptResponse(): ArrayTypeParameterInterface
     {
-        return parameters(
-            lock: booleanParameter()
+        return arrayp(
+            lock: boolean()
         );
     }
 
-    public function getContainerParameters(): ParametersInterface
+    public static function acceptBody(): ArrayTypeParameterInterface
     {
-        return parameters(
-            request: objectParameter(ServerRequestInterface::class),
-            channel: objectParameter(BufferedChannel::class),
-        )->withAddedOptional(
-            cipher: objectParameter(AES::class),
+        return arrayp(
+            id: string()
         );
     }
 
-    public function acceptPost(): ParametersInterface
-    {
-        return parameters(
-            id: stringParameter()
-        );
-    }
-
+    /**
+     * @return array<string, boolean>
+     */
     public function run(): array
     {
-        $id = $this->post()['id'];
+        $id = $this->body()['id'];
         $lockFile = new File(
             $this->directory->path()->getChild('locks/' . $id)
         );
@@ -70,17 +65,11 @@ class LockPost extends Locks
             'lock' => true,
         ];
         $lockFile->put(json_encode($data));
-        /** @var ServerRequestInterface $request */
-        $request = $this->container()->get('request');
-        /** @var BufferedChannel $channel */
-        $channel = $this->container()->get('channel');
-        /** @var AES|null $cipher */
-        $cipher = $this->container()->get('cipher');
         writeToDebugger(
-            request: $request,
-            channel: $channel,
+            request: $this->request,
+            channel: $this->channel,
             action: 'pause',
-            cipher: $cipher,
+            cipher: $this->cipher,
         );
 
         return $data;
