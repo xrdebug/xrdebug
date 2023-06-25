@@ -15,24 +15,33 @@ namespace Chevere\XrServer\Controller;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Clue\React\Sse\BufferedChannel;
+use phpseclib3\Crypt\AES;
+use Psr\Http\Message\ServerRequestInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use function Chevere\Parameter\string;
+use function Chevere\XrServer\writeToDebugger;
 use function Safe\json_encode;
 
-final class LockPatch extends Controller
+#[Status(201)]
+final class LockPostController extends Controller
 {
     public function __construct(
-        private DirectoryInterface $directory
+        private DirectoryInterface $directory,
+        private ServerRequestInterface $request,
+        private BufferedChannel $channel,
+        private ?AES $cipher = null
     ) {
     }
 
     public static function acceptResponse(): ArrayTypeParameterInterface
     {
         return arrayp(
-            lock: boolean(),
-            stop: boolean(),
+            lock: boolean()
         );
     }
 
@@ -48,10 +57,14 @@ final class LockPatch extends Controller
         $lockFile->create();
         $data = [
             'lock' => true,
-            'stop' => true,
         ];
-        $json = json_encode($data);
-        $lockFile->put($json);
+        $lockFile->put(json_encode($data));
+        writeToDebugger(
+            request: $this->request,
+            channel: $this->channel,
+            action: 'pause',
+            cipher: $this->cipher,
+        );
 
         return $data;
     }

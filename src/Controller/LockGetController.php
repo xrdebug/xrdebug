@@ -16,12 +16,12 @@ namespace Chevere\XrServer\Controller;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Controller;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use function Chevere\Parameter\string;
 
-final class LocksGet extends Controller
+final class LockGetController extends Controller
 {
     public function __construct(
         private DirectoryInterface $directory
@@ -37,19 +37,11 @@ final class LocksGet extends Controller
         );
     }
 
-    public static function acceptBody(): ArrayTypeParameterInterface
-    {
-        return arrayp(
-            id: string()
-        );
-    }
-
     /**
      * @return array<string, bool>
      */
-    public function run(): array
+    public function run(string $id): array
     {
-        $id = $this->body()['id'];
         $lockFile = new File(
             $this->directory->path()->getChild('locks/' . $id)
         );

@@ -15,47 +15,34 @@ namespace Chevere\XrServer\Controller;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
+use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
-use function Chevere\Parameter\string;
-use function Chevere\XrServer\writeToDebugger;
-use Clue\React\Sse\BufferedChannel;
-use phpseclib3\Crypt\AES;
-use Psr\Http\Message\ServerRequestInterface;
 use function Safe\json_encode;
 
-final class LockPost extends Controller
+#[Status(200)]
+final class LockPatchController extends Controller
 {
     public function __construct(
-        private DirectoryInterface $directory,
-        private ServerRequestInterface $request,
-        private BufferedChannel $channel,
-        private ?AES $cipher = null
+        private DirectoryInterface $directory
     ) {
     }
 
     public static function acceptResponse(): ArrayTypeParameterInterface
     {
         return arrayp(
-            lock: boolean()
-        );
-    }
-
-    public static function acceptBody(): ArrayTypeParameterInterface
-    {
-        return arrayp(
-            id: string()
+            lock: boolean(),
+            stop: boolean(),
         );
     }
 
     /**
      * @return array<string, boolean>
      */
-    public function run(): array
+    public function run(string $id): array
     {
-        $id = $this->body()['id'];
         $lockFile = new File(
             $this->directory->path()->getChild('locks/' . $id)
         );
@@ -63,14 +50,10 @@ final class LockPost extends Controller
         $lockFile->create();
         $data = [
             'lock' => true,
+            'stop' => true,
         ];
-        $lockFile->put(json_encode($data));
-        writeToDebugger(
-            request: $this->request,
-            channel: $this->channel,
-            action: 'pause',
-            cipher: $this->cipher,
-        );
+        $json = json_encode($data);
+        $lockFile->put($json);
 
         return $data;
     }

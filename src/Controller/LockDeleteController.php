@@ -19,7 +19,7 @@ use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 
 #[Status(204)]
-final class LockDelete extends Controller
+final class LockDeleteController extends Controller
 {
     public function __construct(
         private DirectoryInterface $directory

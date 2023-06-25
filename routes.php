@@ -11,41 +11,63 @@
 
 declare(strict_types=1);
 
+use Chevere\XrServer\Controller\DumpStreamController;
+use Chevere\XrServer\Controller\LockDeleteController;
+use Chevere\XrServer\Controller\LockGetController;
+use Chevere\XrServer\Controller\LockPatchController;
+use Chevere\XrServer\Controller\LockPostController;
+use Chevere\XrServer\Controller\MessageDumpController;
+use Chevere\XrServer\Controller\SPAController;
+use Chevere\XrServer\Middleware\DecryptMiddleware;
+use Chevere\XrServer\Middleware\JsonDecodeMiddleware;
+use Chevere\XrServer\Middleware\VerifySignatureMiddleware;
+use function Chevere\Http\middlewares;
 use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\routes;
-use Chevere\XrServer\Controller\DumpStream;
-use Chevere\XrServer\Controller\LockDelete;
-use Chevere\XrServer\Controller\LockPatch;
-use Chevere\XrServer\Controller\LockPost;
-use Chevere\XrServer\Controller\LocksGet;
-use Chevere\XrServer\Controller\MessageDump;
-use Chevere\XrServer\Controller\SinglePageApp;
 
 return routes(
     route(
         path: '/',
         GET: bind(
-            controller: SinglePageApp::class,
+            controller: SPAController::class,
             view: 'spa'
         )
     ),
     route(
-        path: '/locks',
-        POST: LockPost::class,
-    ),
-    route(
         path: '/locks/{id}',
-        GET: LocksGet::class,
-        PATCH: LockPatch::class,
-        DELETE: LockDelete::class,
+        GET: bind(
+            LockGetController::class,
+            VerifySignatureMiddleware::class,
+        ),
+        POST: bind(
+            LockPostController::class,
+            VerifySignatureMiddleware::class,
+        ),
+        PATCH: bind(
+            LockPatchController::class,
+            middlewares(
+                DecryptMiddleware::class,
+                JsonDecodeMiddleware::class
+            )
+        ),
+        DELETE: bind(
+            LockDeleteController::class,
+            middlewares(
+                DecryptMiddleware::class,
+                JsonDecodeMiddleware::class
+            )
+        ),
     ),
     route(
         path: '/message',
-        POST: MessageDump::class,
+        POST: bind(
+            MessageDumpController::class,
+            VerifySignatureMiddleware::class
+        ),
     ),
     route(
         path: '/dump',
-        GET: DumpStream::class,
+        GET: DumpStreamController::class,
     ),
 );

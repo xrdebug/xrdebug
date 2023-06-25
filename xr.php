@@ -21,30 +21,18 @@ foreach (['/', '/../../../'] as $path) {
     }
 }
 
-use function Chevere\Filesystem\directoryForPath;
-use function Chevere\Filesystem\fileForPath;
-use function Chevere\Router\router;
-use function Chevere\ThrowableHandler\handleAsConsole;
-
-use Chevere\Container\Container;
+use Chevere\Http\Controller;
+use Chevere\Router\Dependencies;
 use Chevere\Router\Dispatcher;
-use Chevere\Router\Exceptions\NotFoundException;
 use Chevere\ThrowableHandler\ThrowableHandler;
-use function Chevere\Writer\streamFor;
-use function Chevere\Writer\streamTemp;
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
-use function Chevere\XrServer\decrypt;
-use function Chevere\XrServer\writeToDebugger;
-use function Safe\json_encode;
-
 use Clue\React\Sse\BufferedChannel;
 use Colors\Color;
 use phpseclib3\Crypt\AES;
 use phpseclib3\Crypt\EC;
-use phpseclib3\Crypt\EC\PrivateKey;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
@@ -56,6 +44,13 @@ use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
+use function Chevere\Filesystem\directoryForPath;
+use function Chevere\Filesystem\fileForPath;
+use function Chevere\Http\classStatus;
+use function Chevere\Router\router;
+use function Chevere\ThrowableHandler\handleAsConsole;
+use function Chevere\Writer\streamFor;
+use function Safe\json_encode;
 
 include __DIR__ . '/meta.php';
 
@@ -93,7 +88,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
         '-c Cert file for TLS',
         '',
     ]);
-    die(0);
+    exit(0);
 }
 $host = '0.0.0.0';
 $port = $options['p'] ?? '27420';
@@ -129,7 +124,7 @@ if ($isEncryptionEnabled) {
     PLAIN;
 }
 $privateKey = null;
-if($isSignVerificationEnabled) {
+if ($isSignVerificationEnabled) {
     $privateKey = array_key_exists('s', $options) ? $options['s'] : null;
     if ($privateKey === null) {
         $privateKey = EC::createKey('ed25519');
@@ -146,21 +141,25 @@ if($isSignVerificationEnabled) {
     PLAIN;
 }
 
+$directory = directoryForPath(__DIR__);
+
 try {
-    directoryForPath(__DIR__ . '/locks')->removeContents();
+    $directory->getChild('locks/')->removeContents();
 } catch (Throwable) {
 }
 $build = new Build(
-    directoryForPath(__DIR__ . '/app/src'),
+    $directory->getChild('app/src/'),
     XR_SERVER_VERSION,
     XR_SERVER_CODENAME,
     $isEncryptionEnabled,
 );
-$app = fileForPath(__DIR__ . '/app/build/en.html');
+$app = fileForPath($directory->getChild('app/build/')->path()->__toString() . 'en.html');
 $app->removeIfExists();
 $app->create();
 $app->put($build->html());
-$router = router(include 'routes.php');
+$routes = include 'routes.php';
+$dependencies = new Dependencies($routes);
+$router = router($routes);
 $routeCollector = $router->routeCollector();
 $dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();
@@ -169,92 +168,73 @@ $handler = function (ServerRequestInterface $request) use (
     $channel,
     $loop,
     $cipher,
-    $privateKey,
     $dispatcher,
-    $app
+    $app,
+    $dependencies,
+    $directory
 ) {
-    $path = $request->getUri()->getPath();
-    if (in_array($path, ['/lock-patch', '/lock-delete'], true)) {
-        if($cipher instanceof AES) {
-            $request = $request->withBody(
-                streamTemp(
-                    decrypt($cipher, $request->getBody()->__toString())
-                )
-            );
-        }
-    }
-    $body = $request->getParsedBody() ?? [];
-    if (in_array($path, ['/message', '/lock-post', '/locks'], true)) {
-        if($privateKey instanceof PrivateKey) {
-            $signatureHeader = $request->getHeader('X-Signature');
-            if ($signatureHeader === []) {
-                return new Response(
-                    400,
-                    ['Content-Type' => 'text/plain'],
-                    'Missing signature'
-                );
-            }
-            $serialize = serialize($body);
-            $signature = base64_decode($signatureHeader[0]);
-            $publicKey = $privateKey->getPublicKey();
-            if (!$publicKey->verify($serialize, $signature)) {
-                return new Response(
-                    400,
-                    ['Content-Type' => 'text/plain'],
-                    'Invalid signature'
-                );
-            }
-        }
-    }
-    if (in_array($path, ['/lock-delete', '/lock-patch'], true)) {
-        $body = json_decode($request->getBody()->__toString(), true);
-    }
     try {
-        $routed = $dispatcher->dispatch($request->getMethod(), $path);
-    } catch(Throwable) {
-        return new Response(404);
-    }
-    vd(request: $path, body: $body);
-    $containerMap = [
-        'request' => $request,
-        'channel' => $channel,
-        'cipher' => $cipher,
-        'loop' => $loop,
-        'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
-        'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
-    ];
-    $view = $routed->bind()->view();
-    $controller = $routed->bind()->controller();
-    $controller = $controller->withPost($body);
-    $containerParams = [];
-    foreach ($controller->containerParameters()->keys() as $key) {
-        $containerParams[$key] = $containerMap[$key];
-    }
-    $controller = $controller->withContainer(
-        (new Container())->withPut(...$containerParams)
-    );
-    try {
-        $response = $controller->getResponse(...$routed->arguments());
-    } catch(Throwable $e) {
+        $path = $request->getUri()->getPath();
+        $body = $request->getParsedBody() ?? [];
+
+        try {
+            $routed = $dispatcher->dispatch($request->getMethod(), $path);
+        } catch (Throwable) {
+            return new Response(404);
+        }
+        $containerMap = [
+            'app' => $app,
+            'directory' => $directory,
+            'request' => $request,
+            'channel' => $channel,
+            'cipher' => $cipher,
+            'loop' => $loop,
+            'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
+            'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
+        ];
+        $view = $routed->bind()->view();
+        $controllerName = $routed->bind()->controllerName()->__toString();
+        $controllerArguments = [];
+
+        try {
+            foreach ($dependencies->get($controllerName)->keys() as $key) {
+                $controllerArguments[$key] = $containerMap[$key];
+            }
+        } catch (Throwable) {
+        }
+        /** @var Controller $controller */
+        $controller = new $controllerName(...$controllerArguments);
+        if ($request->getMethod() === 'POST') {
+            $controller = $controller->withBody($body);
+        }
+
+        try {
+            $response = $controller->getResponse(...$routed->arguments());
+        } catch (Throwable $e) {
+            handleAsConsole($e);
+        }
+        $stream = $response->data()['stream'] ?? null;
+        $isStream = $stream instanceof ThroughStream;
+        $statuses = classStatus($controllerName);
+
+        return new Response(
+            $statuses->primary,
+            [
+                'Content-Type' => match (true) {
+                    $isStream => 'text/event-stream',
+                    $view === 'spa/GET' => 'text/html',
+                    default => 'text/json',
+                },
+            ],
+            match (true) {
+                $isStream => $stream,
+                $view !== '' => $response->data()['app'],
+                default => json_encode($response->data()),
+            }
+        );
+    } catch (Throwable $e) {
         handleAsConsole($e);
     }
-    $stream = $response->data()['stream'] ?? null;
-    $isStream = $stream instanceof ThroughStream;
-    return new Response(
-        $controller::STATUS_SUCCESS,
-        [
-            'Content-Type' => match(true) {
-                $isStream => 'text/event-stream',
-                $view === 'spa/GET' => 'text/html',
-                default => 'text/json',
-            },
-        ],
-        match(true) {
-            $isStream => $stream,
-            $view === 'spa/GET' => $app->getContents(),
-            default => json_encode($response->data()),
-        }
-    );
 };
 $http = new HttpServer(
     $loop,

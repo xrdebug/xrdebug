@@ -13,15 +13,17 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controller;
 
+use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
-use function Chevere\Parameter\arrayp;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
-use function Chevere\Parameter\object;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
 use React\Stream\ThroughStream;
+use function Chevere\Parameter\arrayp;
+use function Chevere\Parameter\object;
 
-class DumpStream extends Controller
+#[Status(200)]
+class DumpStreamController extends Controller
 {
     public function __construct(
         private BufferedChannel $channel,
