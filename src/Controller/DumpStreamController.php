@@ -40,9 +40,6 @@ class DumpStreamController extends Controller
         );
     }
 
-    /**
-     * @return array<string, ThroughStream>
-     */
     public function run(): array
     {
         $stream = new ThroughStream();
@@ -55,11 +52,14 @@ class DumpStreamController extends Controller
         });
         $message = '{message: "New dump session started [' . $remoteAddress . ']"}';
         $channel->writeMessage($message);
-        $stream->on('close', function () use ($stream, $channel, $remoteAddress) {
-            $channel->disconnect($stream);
-            $message = '{message: "Dump session ended [' . $remoteAddress . ']"}';
-            $channel->writeMessage($message);
-        });
+        $stream->on(
+            'close',
+            function () use ($stream, $channel, $remoteAddress) {
+                $channel->disconnect($stream);
+                $message = '{message: "Dump session ended [' . $remoteAddress . ']"}';
+                $channel->writeMessage($message);
+            }
+        );
 
         return [
             'stream' => $stream,

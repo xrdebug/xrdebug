@@ -38,22 +38,18 @@ final class LockPatchController extends Controller
         );
     }
 
-    /**
-     * @return array<string, boolean>
-     */
     public function run(string $id): array
     {
-        $lockFile = new File(
-            $this->directory->path()->getChild('locks/' . $id)
-        );
-        $lockFile->removeIfExists();
-        $lockFile->create();
+        $path = $this->directory->path()->getChild('locks/' . $id);
+        $file = new File($path);
+        $file->removeIfExists();
+        $file->create();
         $data = [
             'lock' => true,
             'stop' => true,
         ];
         $json = json_encode($data);
-        $lockFile->put($json);
+        $file->put($json);
 
         return $data;
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controller;
 
+use Chevere\Action\Traits\NoStrictActionTrait;
 use Chevere\Filesystem\Interfaces\FileInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
@@ -23,6 +24,8 @@ use function Chevere\Parameter\string;
 #[Status(200)]
 class SPAController extends Controller
 {
+    // use NoStrictActionTrait;
+
     public function __construct(
         private FileInterface $app
     ) {

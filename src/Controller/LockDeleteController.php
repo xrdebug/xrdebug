@@ -31,10 +31,9 @@ final class LockDeleteController extends Controller
      */
     public function run(string $id): array
     {
-        $lockFile = new File(
-            $this->directory->path()->getChild('locks/' . $id)
-        );
-        $lockFile->removeIfExists();
+        $path = $this->directory->path()->getChild('locks/' . $id);
+        $file = new File($path);
+        $file->removeIfExists();
 
         return [];
     }

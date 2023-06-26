@@ -19,7 +19,6 @@ use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
-use function Chevere\Parameter\string;
 
 final class LockGetController extends Controller
 {
@@ -37,21 +36,17 @@ final class LockGetController extends Controller
         );
     }
 
-    /**
-     * @return array<string, bool>
-     */
     public function run(string $id): array
     {
-        $lockFile = new File(
-            $this->directory->path()->getChild('locks/' . $id)
-        );
-        if (! $lockFile->exists()) {
+        $path = $this->directory->path()->getChild('locks/' . $id);
+        $file = new File($path);
+        if (! $file->exists()) {
             return [
                 'lock' => false,
             ];
         }
-        $contents = $lockFile->getContents();
-        /** @var array<string, bool> */
+        $contents = $file->getContents();
+
         return json_decode($contents, true);
     }
 }
