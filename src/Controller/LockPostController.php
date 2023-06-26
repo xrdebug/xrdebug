@@ -54,7 +54,7 @@ final class LockPostController extends Controller
         );
     }
 
-    public function run(): array
+    protected function run(): array
     {
         /** @var string $id */
         $id = $this->body()['id'];

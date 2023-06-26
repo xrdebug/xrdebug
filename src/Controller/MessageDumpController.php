@@ -45,7 +45,7 @@ final class MessageDumpController extends Controller
         );
     }
 
-    public function run(): array
+    protected function run(): array
     {
         writeToDebugger(
             request: $this->request,

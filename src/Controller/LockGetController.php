@@ -42,7 +42,7 @@ final class LockGetController extends Controller
         );
     }
 
-    public function run(
+    protected function run(
         #[StringRegex(UrlPathRegex::UUID)]
         string $id
     ): array {

@@ -22,7 +22,7 @@ use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\string;
 
 #[Status(200)]
-class SPAController extends Controller
+final class SPAController extends Controller
 {
     // use NoStrictActionTrait;
 
@@ -38,7 +38,7 @@ class SPAController extends Controller
         );
     }
 
-    public function run(): array
+    protected function run(): array
     {
         return [
             'app' => $this->app->getContents(),

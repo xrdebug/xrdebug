@@ -43,7 +43,12 @@ final class LockPatchControllerTest extends TestCase
         $controller = new LockPatchController($directory);
         $response = $controller->getResponse(id: $id);
         $decoded = json_decode($file->getContents(), true);
-        $this->assertSame($decoded, $response->data());
+        $expected = [
+            'lock' => true,
+            'stop' => true,
+        ];
+        $this->assertSame($expected, $response->data());
+        $this->assertSame($expected, $decoded);
         $this->assertTrue($file->exists());
         $file->remove();
     }

@@ -23,7 +23,7 @@ use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\object;
 
 #[Status(200)]
-class DumpStreamController extends Controller
+final class DumpStreamController extends Controller
 {
     public function __construct(
         private BufferedChannel $channel,
@@ -40,7 +40,7 @@ class DumpStreamController extends Controller
         );
     }
 
-    public function run(): array
+    protected function run(): array
     {
         $stream = new ThroughStream();
         $channel = $this->channel;
