@@ -23,7 +23,6 @@ use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ServerRequestInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
-use function Chevere\Parameter\string;
 use function Chevere\XrServer\writeToDebugger;
 use function Safe\json_encode;
 
@@ -45,9 +44,6 @@ final class LockPostController extends Controller
         );
     }
 
-    /**
-     * @return array<string, boolean>
-     */
     public function run(string $id): array
     {
         $path = $this->directory->path()->getChild('locks/' . $id);

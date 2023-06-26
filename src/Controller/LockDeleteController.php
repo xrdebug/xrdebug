@@ -26,9 +26,6 @@ final class LockDeleteController extends Controller
     ) {
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function run(string $id): array
     {
         $path = $this->directory->path()->getChild('locks/' . $id);

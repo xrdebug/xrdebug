@@ -45,9 +45,6 @@ final class MessageDumpController extends Controller
         );
     }
 
-    /**
-     * @return array<string>
-     */
     public function run(): array
     {
         writeToDebugger(
