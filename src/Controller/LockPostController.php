@@ -18,6 +18,7 @@ use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Chevere\XrServer\Constant\UrlPathRegex;
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,7 +50,7 @@ final class LockPostController extends Controller
     public static function acceptBody(): ArrayTypeParameterInterface
     {
         return arrayp(
-            id: string()
+            id: string(UrlPathRegex::UUID)
         );
     }
 

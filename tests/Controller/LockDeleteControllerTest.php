@@ -23,7 +23,7 @@ final class LockDeleteControllerTest extends TestCase
 {
     public function test404(): void
     {
-        $id = '1';
+        $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);
         $path = $directory->path()->getChild($id);
         $file = new File($path);
@@ -35,7 +35,7 @@ final class LockDeleteControllerTest extends TestCase
 
     public function test200(): void
     {
-        $id = '1';
+        $id = '93683d90-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);
         $path = $directory->path()->getChild($id);
         $file = new File($path);

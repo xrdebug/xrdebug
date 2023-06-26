@@ -23,7 +23,7 @@ final class LockGetControllerTest extends TestCase
 {
     public function test404(): void
     {
-        $id = 'not-found';
+        $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);
         $controller = new LockGetController($directory);
         $this->expectException(ControllerException::class);
@@ -33,7 +33,7 @@ final class LockGetControllerTest extends TestCase
 
     public function test200(): void
     {
-        $id = 'found';
+        $id = '93683d90-145f-11ee-be56-0242ac120002';
         $array = [
             'lock' => true,
             'stop' => false,
