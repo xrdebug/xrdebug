@@ -18,6 +18,7 @@ use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Chevere\XrServer\Controller\Traits\LockTrait;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 use function Safe\json_encode;
@@ -25,6 +26,8 @@ use function Safe\json_encode;
 #[Status(200)]
 final class LockPatchController extends Controller
 {
+    use LockTrait;
+
     public function __construct(
         private DirectoryInterface $directory
     ) {
@@ -40,9 +43,10 @@ final class LockPatchController extends Controller
 
     public function run(string $id): array
     {
-        $path = $this->directory->path()->getChild('locks/' . $id);
+        $path = $this->directory->path()->getChild($id);
         $file = new File($path);
-        $file->removeIfExists();
+        $this->assertExists($file);
+        $file->remove();
         $file->create();
         $data = [
             'lock' => true,

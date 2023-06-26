@@ -141,19 +141,20 @@ if ($isSignVerificationEnabled) {
     PLAIN;
 }
 
-$directory = directoryForPath(__DIR__);
+$rootDirectory = directoryForPath(__DIR__);
+$locksDirectory = $rootDirectory->getChild('locks/');
 
 try {
-    $directory->getChild('locks/')->removeContents();
+    $locksDirectory->removeContents();
 } catch (Throwable) {
 }
 $build = new Build(
-    $directory->getChild('app/src/'),
+    $rootDirectory->getChild('app/src/'),
     XR_SERVER_VERSION,
     XR_SERVER_CODENAME,
     $isEncryptionEnabled,
 );
-$app = fileForPath($directory->getChild('app/build/')->path()->__toString() . 'en.html');
+$app = fileForPath($rootDirectory->getChild('app/build/')->path()->__toString() . 'en.html');
 $app->removeIfExists();
 $app->create();
 $app->put($build->html());
@@ -171,7 +172,7 @@ $handler = function (ServerRequestInterface $request) use (
     $dispatcher,
     $app,
     $dependencies,
-    $directory
+    $locksDirectory
 ) {
     try {
         $path = $request->getUri()->getPath();
@@ -184,7 +185,7 @@ $handler = function (ServerRequestInterface $request) use (
         }
         $containerMap = [
             'app' => $app,
-            'directory' => $directory,
+            'directory' => $locksDirectory,
             'request' => $request,
             'channel' => $channel,
             'cipher' => $cipher,

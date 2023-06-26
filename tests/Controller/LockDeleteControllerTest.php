@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of Chevere.
+ *
+ * (c) Rodolfo Berrios <rodolfo@chevere.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Chevere\Tests\Controller;
+
+use Chevere\Filesystem\File;
+use Chevere\Http\Exceptions\ControllerException;
+use Chevere\XrServer\Controller\LockDeleteController;
+use PHPUnit\Framework\TestCase;
+use function Chevere\Filesystem\directoryForPath;
+
+final class LockDeleteControllerTest extends TestCase
+{
+    public function test404(): void
+    {
+        $id = '1';
+        $directory = directoryForPath(__DIR__);
+        $path = $directory->path()->getChild($id);
+        $file = new File($path);
+        $controller = new LockDeleteController($directory);
+        $this->expectException(ControllerException::class);
+        $this->expectExceptionCode(404);
+        $controller->getResponse(id: $id);
+    }
+
+    public function test200(): void
+    {
+        $id = '1';
+        $directory = directoryForPath(__DIR__);
+        $path = $directory->path()->getChild($id);
+        $file = new File($path);
+        $file->createIfNotExists();
+        $controller = new LockDeleteController($directory);
+        $response = $controller->getResponse(id: $id);
+        $this->assertSame([], $response->data());
+        $this->assertFalse($file->exists());
+    }
+}

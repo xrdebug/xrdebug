@@ -23,6 +23,7 @@ use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ServerRequestInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
+use function Chevere\Parameter\string;
 use function Chevere\XrServer\writeToDebugger;
 use function Safe\json_encode;
 
@@ -40,20 +41,32 @@ final class LockPostController extends Controller
     public static function acceptResponse(): ArrayTypeParameterInterface
     {
         return arrayp(
-            lock: boolean()
+            lock: boolean(),
+            stop: boolean(),
         );
     }
 
-    public function run(string $id): array
+    public static function acceptBody(): ArrayTypeParameterInterface
     {
-        $path = $this->directory->path()->getChild('locks/' . $id);
+        return arrayp(
+            id: string()
+        );
+    }
+
+    public function run(): array
+    {
+        /** @var string $id */
+        $id = $this->body()['id'];
+        $path = $this->directory->path()->getChild($id);
         $file = new File($path);
         $file->removeIfExists();
         $file->create();
         $data = [
             'lock' => true,
+            'stop' => false,
         ];
-        $file->put(json_encode($data));
+        $encoded = json_encode($data);
+        $file->put($encoded);
         writeToDebugger(
             request: $this->request,
             channel: $this->channel,

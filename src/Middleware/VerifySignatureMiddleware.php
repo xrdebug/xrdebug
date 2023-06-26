@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Chevere\XrServer\Middleware;
 
 use Chevere\Http\Exceptions\MiddlewareException;
+use phpseclib3\Crypt\Common\PublicKey;
 use phpseclib3\Crypt\EC\PrivateKey;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,6 +45,7 @@ final class VerifySignatureMiddleware implements MiddlewareInterface
         $body = $request->getParsedBody() ?? [];
         $serialize = serialize($body);
         $signature = base64_decode($signatureHeader[0], true);
+        /** @var PublicKey $publicKey */
         $publicKey = $this->privateKey->getPublicKey();
         if (! $publicKey->verify($serialize, $signature)) {
             throw new MiddlewareException(

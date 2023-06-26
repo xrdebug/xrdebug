@@ -1,0 +1,8 @@
+parameters:
+    level: 9
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: '#Method [a-zA-Z0-9\\_]+::run\(\) return type has no value type specified in iterable type array#'
+            path: src/Controller/**

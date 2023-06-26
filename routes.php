@@ -19,9 +19,7 @@ use Chevere\XrServer\Controller\LockPostController;
 use Chevere\XrServer\Controller\MessageDumpController;
 use Chevere\XrServer\Controller\SPAController;
 use Chevere\XrServer\Middleware\DecryptMiddleware;
-use Chevere\XrServer\Middleware\JsonDecodeMiddleware;
 use Chevere\XrServer\Middleware\VerifySignatureMiddleware;
-use function Chevere\Http\middlewares;
 use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\routes;
@@ -35,28 +33,25 @@ return routes(
         )
     ),
     route(
+        path: '/locks',
+        POST: bind(
+            LockPostController::class,
+            VerifySignatureMiddleware::class,
+        ),
+    ),
+    route(
         path: '/locks/{id}',
         GET: bind(
             LockGetController::class,
             VerifySignatureMiddleware::class,
         ),
-        POST: bind(
-            LockPostController::class,
-            VerifySignatureMiddleware::class,
-        ),
         PATCH: bind(
             LockPatchController::class,
-            middlewares(
-                DecryptMiddleware::class,
-                JsonDecodeMiddleware::class
-            )
+            DecryptMiddleware::class,
         ),
         DELETE: bind(
             LockDeleteController::class,
-            middlewares(
-                DecryptMiddleware::class,
-                JsonDecodeMiddleware::class
-            )
+            DecryptMiddleware::class,
         ),
     ),
     route(

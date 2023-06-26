@@ -17,10 +17,13 @@ use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
+use Chevere\XrServer\Controller\Traits\LockTrait;
 
-#[Status(204)]
+#[Status(204, 404)]
 final class LockDeleteController extends Controller
 {
+    use LockTrait;
+
     public function __construct(
         private DirectoryInterface $directory
     ) {
@@ -28,9 +31,10 @@ final class LockDeleteController extends Controller
 
     public function run(string $id): array
     {
-        $path = $this->directory->path()->getChild('locks/' . $id);
+        $path = $this->directory->path()->getChild($id);
         $file = new File($path);
-        $file->removeIfExists();
+        $this->assertExists($file);
+        $file->remove();
 
         return [];
     }
