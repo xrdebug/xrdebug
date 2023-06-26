@@ -33,7 +33,7 @@ final class LockDeleteControllerTest extends TestCase
         $controller->getResponse(id: $id);
     }
 
-    public function test200(): void
+    public function test204(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);

@@ -211,7 +211,7 @@ $handler = function (ServerRequestInterface $request) use (
         try {
             $response = $controller->getResponse(...$routed->arguments());
         } catch (Throwable $e) {
-            handleAsConsole($e);
+            return new Response();
         }
         $stream = $response->data()['stream'] ?? null;
         $isStream = $stream instanceof ThroughStream;
