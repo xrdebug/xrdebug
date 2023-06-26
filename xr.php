@@ -50,7 +50,6 @@ use function Chevere\Http\classStatus;
 use function Chevere\Router\router;
 use function Chevere\ThrowableHandler\handleAsConsole;
 use function Chevere\Writer\streamFor;
-use function Safe\json_encode;
 
 include __DIR__ . '/meta.php';
 
