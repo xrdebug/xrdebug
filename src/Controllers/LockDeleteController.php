@@ -11,35 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Controller;
+namespace Chevere\XrServer\Controllers;
 
 use Chevere\Attribute\StringRegex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
-use Chevere\XrServer\Constant\UrlPathRegex;
-use Chevere\XrServer\Controller\Traits\LockTrait;
-use function Chevere\Parameter\arrayp;
-use function Chevere\Parameter\boolean;
+use Chevere\XrServer\Constants\UrlPathRegex;
+use Chevere\XrServer\Controllers\Traits\LockTrait;
 
-#[Status(200, 404)]
-final class LockGetController extends Controller
+#[Status(204, 404)]
+final class LockDeleteController extends Controller
 {
     use LockTrait;
 
     public function __construct(
         private DirectoryInterface $directory
     ) {
-    }
-
-    public static function acceptResponse(): ArrayTypeParameterInterface
-    {
-        return arrayp(
-            lock: boolean(),
-            stop: boolean()
-        );
     }
 
     protected function run(
@@ -49,8 +38,8 @@ final class LockGetController extends Controller
         $path = $this->directory->path()->getChild($id);
         $file = new File($path);
         $this->assertExists($file);
-        $contents = $file->getContents();
-        /** @var array<string, boolean> */
-        return json_decode($contents, true);
+        $file->remove();
+
+        return [];
     }
 }

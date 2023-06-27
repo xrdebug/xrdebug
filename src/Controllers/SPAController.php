@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Controller;
+namespace Chevere\XrServer\Controllers;
 
 use Chevere\Action\Traits\NoStrictActionTrait;
 use Chevere\Filesystem\Interfaces\FileInterface;

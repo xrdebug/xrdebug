@@ -11,38 +11,41 @@
 
 declare(strict_types=1);
 
-namespace Chevere\Tests\Controller;
+namespace Chevere\Tests\Controllers;
 
-use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
-use Chevere\XrServer\Controller\LockDeleteController;
+use Chevere\XrServer\Controllers\LockGetController;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Filesystem\directoryForPath;
+use function Chevere\Filesystem\fileForPath;
 
-final class LockDeleteControllerTest extends TestCase
+final class LockGetControllerTest extends TestCase
 {
     public function test404(): void
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);
-        $path = $directory->path()->getChild($id);
-        $file = new File($path);
-        $controller = new LockDeleteController($directory);
+        $controller = new LockGetController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
         $controller->getResponse(id: $id);
     }
 
-    public function test204(): void
+    public function test200(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
+        $array = [
+            'lock' => true,
+            'stop' => false,
+        ];
+        $encode = json_encode($array);
+        $file = fileForPath(__DIR__ . '/' . $id);
+        $file->create();
+        $file->put($encode);
         $directory = directoryForPath(__DIR__);
-        $path = $directory->path()->getChild($id);
-        $file = new File($path);
-        $file->createIfNotExists();
-        $controller = new LockDeleteController($directory);
+        $controller = new LockGetController($directory);
         $response = $controller->getResponse(id: $id);
-        $this->assertSame([], $response->data());
-        $this->assertFalse($file->exists());
+        $this->assertSame($array, $response->data());
+        $file->remove();
     }
 }

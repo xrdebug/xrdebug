@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Controller;
+namespace Chevere\XrServer\Controllers;
 
 use Chevere\Attribute\StringRegex;
 use Chevere\Filesystem\File;
@@ -19,8 +19,8 @@ use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
-use Chevere\XrServer\Constant\UrlPathRegex;
-use Chevere\XrServer\Controller\Traits\LockTrait;
+use Chevere\XrServer\Constants\UrlPathRegex;
+use Chevere\XrServer\Controllers\Traits\LockTrait;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 use function Safe\json_encode;

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Middleware;
+namespace Chevere\XrServer\Middlewares;
 
 use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ResponseInterface;

@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Chevere\Tests\Controller;
+namespace Chevere\Tests\Controllers;
 
 use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
-use Chevere\XrServer\Controller\LockPatchController;
+use Chevere\XrServer\Controllers\LockDeleteController;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Filesystem\directoryForPath;
 
-final class LockPatchControllerTest extends TestCase
+final class LockDeleteControllerTest extends TestCase
 {
     public function test404(): void
     {
@@ -27,29 +27,23 @@ final class LockPatchControllerTest extends TestCase
         $directory = directoryForPath(__DIR__);
         $path = $directory->path()->getChild($id);
         $file = new File($path);
-        $controller = new LockPatchController($directory);
+        $file->removeIfExists();
+        $controller = new LockDeleteController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
         $controller->getResponse(id: $id);
     }
 
-    public function test200(): void
+    public function test204(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);
         $path = $directory->path()->getChild($id);
         $file = new File($path);
         $file->createIfNotExists();
-        $controller = new LockPatchController($directory);
+        $controller = new LockDeleteController($directory);
         $response = $controller->getResponse(id: $id);
-        $decoded = json_decode($file->getContents(), true);
-        $expected = [
-            'lock' => true,
-            'stop' => true,
-        ];
-        $this->assertSame($expected, $response->data());
-        $this->assertSame($expected, $decoded);
-        $this->assertTrue($file->exists());
-        $file->remove();
+        $this->assertSame([], $response->data());
+        $this->assertFalse($file->exists());
     }
 }

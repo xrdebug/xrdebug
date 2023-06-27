@@ -11,21 +11,23 @@
 
 declare(strict_types=1);
 
-namespace Chevere\Tests\Controller;
+namespace Chevere\Tests\Controllers;
 
+use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
-use Chevere\XrServer\Controller\LockGetController;
+use Chevere\XrServer\Controllers\LockPatchController;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Filesystem\directoryForPath;
-use function Chevere\Filesystem\fileForPath;
 
-final class LockGetControllerTest extends TestCase
+final class LockPatchControllerTest extends TestCase
 {
     public function test404(): void
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $directory = directoryForPath(__DIR__);
-        $controller = new LockGetController($directory);
+        $path = $directory->path()->getChild($id);
+        $file = new File($path);
+        $controller = new LockPatchController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
         $controller->getResponse(id: $id);
@@ -34,18 +36,20 @@ final class LockGetControllerTest extends TestCase
     public function test200(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
-        $array = [
-            'lock' => true,
-            'stop' => false,
-        ];
-        $encode = json_encode($array);
-        $file = fileForPath(__DIR__ . '/' . $id);
-        $file->create();
-        $file->put($encode);
         $directory = directoryForPath(__DIR__);
-        $controller = new LockGetController($directory);
+        $path = $directory->path()->getChild($id);
+        $file = new File($path);
+        $file->createIfNotExists();
+        $controller = new LockPatchController($directory);
         $response = $controller->getResponse(id: $id);
-        $this->assertSame($array, $response->data());
+        $decoded = json_decode($file->getContents(), true);
+        $expected = [
+            'lock' => true,
+            'stop' => true,
+        ];
+        $this->assertSame($expected, $response->data());
+        $this->assertSame($expected, $decoded);
+        $this->assertTrue($file->exists());
         $file->remove();
     }
 }

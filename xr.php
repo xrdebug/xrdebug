@@ -184,13 +184,14 @@ $handler = function (ServerRequestInterface $request) use (
         }
         $containerMap = [
             'app' => $app,
-            'directory' => $locksDirectory,
-            'request' => $request,
             'channel' => $channel,
             'cipher' => $cipher,
-            'loop' => $loop,
+            'directory' => $locksDirectory,
             'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
+            'loop' => $loop,
             'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
+            'request' => $request,
+            'stream' => new ThroughStream(),
         ];
         $view = $routed->bind()->view();
         $controllerName = $routed->bind()->controllerName()->__toString();

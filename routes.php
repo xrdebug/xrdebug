@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-use Chevere\XrServer\Controller\DumpStreamController;
-use Chevere\XrServer\Controller\LockDeleteController;
-use Chevere\XrServer\Controller\LockGetController;
-use Chevere\XrServer\Controller\LockPatchController;
-use Chevere\XrServer\Controller\LockPostController;
-use Chevere\XrServer\Controller\MessageDumpController;
-use Chevere\XrServer\Controller\SPAController;
-use Chevere\XrServer\Middleware\DecryptMiddleware;
-use Chevere\XrServer\Middleware\VerifySignatureMiddleware;
+use Chevere\XrServer\Controllers\DumpStreamController;
+use Chevere\XrServer\Controllers\LockDeleteController;
+use Chevere\XrServer\Controllers\LockGetController;
+use Chevere\XrServer\Controllers\LockPatchController;
+use Chevere\XrServer\Controllers\LockPostController;
+use Chevere\XrServer\Controllers\MessageDumpController;
+use Chevere\XrServer\Controllers\SPAController;
+use Chevere\XrServer\Middlewares\DecryptMiddleware;
+use Chevere\XrServer\Middlewares\VerifySignatureMiddleware;
 use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\routes;

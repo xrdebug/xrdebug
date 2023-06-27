@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Chevere\Tests\Controller;
+namespace Chevere\Tests\Controllers;
 
-use Chevere\XrServer\Controller\LockPostController;
+use Chevere\XrServer\Controllers\LockPostController;
 use Clue\React\Sse\BufferedChannel;
 use PHPUnit\Framework\TestCase;
 use React\Http\Message\ServerRequest;

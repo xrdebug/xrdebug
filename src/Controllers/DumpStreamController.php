@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Controller;
+namespace Chevere\XrServer\Controllers;
 
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
-use React\Stream\ThroughStream;
+use React\Stream\WritableStreamInterface;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\object;
 
@@ -28,6 +28,7 @@ final class DumpStreamController extends Controller
     public function __construct(
         private BufferedChannel $channel,
         private LoopInterface $loop,
+        private WritableStreamInterface $stream,
         private string $lastEventId,
         private string $remoteAddress,
     ) {
@@ -36,20 +37,22 @@ final class DumpStreamController extends Controller
     public static function acceptResponse(): ArrayTypeParameterInterface
     {
         return arrayp(
-            stream: object(ThroughStream::class)
+            stream: object(WritableStreamInterface::class)
         );
     }
 
     protected function run(): array
     {
-        $stream = new ThroughStream();
+        $stream = $this->stream;
         $channel = $this->channel;
         $loop = $this->loop;
         $lastEventId = $this->lastEventId;
         $remoteAddress = $this->remoteAddress;
-        $loop->futureTick(function () use ($channel, $stream, $lastEventId) {
-            $channel->connect($stream, $lastEventId);
-        });
+        $loop->futureTick(
+            function () use ($channel, $stream, $lastEventId) {
+                $channel->connect($stream, $lastEventId);
+            }
+        );
         $message = '{message: "New dump session started [' . $remoteAddress . ']"}';
         $channel->writeMessage($message);
         $stream->on(

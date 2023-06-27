@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Middleware;
+namespace Chevere\XrServer\Middlewares;
 
 use Chevere\Http\Exceptions\MiddlewareException;
 use phpseclib3\Crypt\Common\PublicKey;
