@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer;
 
-use function Chevere\Message\message;
 use Chevere\Throwable\Exceptions\LogicException;
 use Clue\React\Sse\BufferedChannel;
 use phpseclib3\Crypt\AES;
 use phpseclib3\Crypt\Common\SymmetricKey;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ServerRequestInterface;
+use function Chevere\Message\message;
 
 function encrypt(SymmetricKey $cipher, string $message, ?string $nonce = null): string
 {

@@ -56,7 +56,6 @@ final class LockPostController extends Controller
 
     protected function run(): array
     {
-        // @phpstan-ignore-next-line
         $id = $this->body()->cast('id')->string();
         $path = $this->directory->path()->getChild($id);
         $file = new File($path);
