@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
-use Chevere\Attribute\StringRegex;
+use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
@@ -44,7 +44,7 @@ final class LockPatchController extends Controller
     }
 
     protected function run(
-        #[StringRegex(UrlPathRegex::UUID)]
+        #[Regex(UrlPathRegex::UUID)]
         string $id
     ): array {
         $path = $this->directory->path()->getChild($id);
