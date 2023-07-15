@@ -13,19 +13,21 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
+use Chevere\Writer\StreamWriter;
 use Chevere\XrServer\Controllers\LockPostController;
+use Chevere\XrServer\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use PHPUnit\Framework\TestCase;
 use React\Http\Message\ServerRequest;
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
+use function Chevere\Writer\streamTemp;
 
 final class LockPostControllerTest extends TestCase
 {
     public function test201(): void
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
-        $directory = directoryForPath(__DIR__);
         $array = [
             'lock' => true,
             'stop' => false,
@@ -44,13 +46,19 @@ final class LockPostControllerTest extends TestCase
                 'REMOTE_ADDR' => '0.0.0.0',
             ]
         );
+        $directory = directoryForPath(__DIR__);
+        $remoteAddress = $request->getServerParams()['REMOTE_ADDR'];
         $channel = new BufferedChannel();
         $cipher = null;
+        $debugger = new Debugger(
+            channel: $channel,
+            logger: new StreamWriter(streamTemp()),
+            cipher: $cipher,
+        );
         $controller = new LockPostController(
             $directory,
-            $request,
-            $channel,
-            $cipher
+            $debugger,
+            $remoteAddress
         );
         $controller = $controller->withBody([
             'id' => $id,

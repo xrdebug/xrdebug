@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace Chevere\Tests;
 
-use function Chevere\Filesystem\directoryForPath;
 use Chevere\XrServer\Build;
 use PHPUnit\Framework\TestCase;
+use function Chevere\Filesystem\directoryForPath;
 
 final class XrBuildTest extends TestCase
 {
     public function testConstruct(): void
     {
         $build = new Build(
-            directoryForPath(__DIR__ . '/_resources/app/src'),
+            directoryForPath(__DIR__ . '/src/app/src'),
             '6.6.6',
             'ElNúmeroDeLaBestia'
         );
         $this->assertStringEqualsFile(
-            __DIR__ . '/_resources/app/build/index.html',
+            __DIR__ . '/src/app/build/index.html',
             $build->html()
         );
     }

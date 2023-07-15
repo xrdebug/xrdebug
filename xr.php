@@ -42,6 +42,7 @@ use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Middleware\StreamingRequestMiddleware;
+use React\Socket\SocketServer;
 use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
 use function Chevere\Filesystem\directoryForPath;
@@ -245,7 +246,7 @@ $http = new HttpServer(
     new RequestBodyParserMiddleware(100 * 1024, 1),
     $handler
 );
-$socket = new \React\Socket\SocketServer(
+$socket = new SocketServer(
     $uri,
     $context,
     $loop

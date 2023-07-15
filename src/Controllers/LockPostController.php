@@ -19,13 +19,10 @@ use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use Chevere\XrServer\Constants\UrlPathRegex;
-use Clue\React\Sse\BufferedChannel;
-use phpseclib3\Crypt\AES;
-use Psr\Http\Message\ServerRequestInterface;
+use Chevere\XrServer\Debugger;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 use function Chevere\Parameter\string;
-use function Chevere\XrServer\writeToDebugger;
 use function Safe\json_encode;
 
 #[Status(201)]
@@ -33,9 +30,8 @@ final class LockPostController extends Controller
 {
     public function __construct(
         private DirectoryInterface $directory,
-        private ServerRequestInterface $request,
-        private BufferedChannel $channel,
-        private ?AES $cipher = null
+        private Debugger $debugger,
+        private string $remoteAddress,
     ) {
     }
 
@@ -67,11 +63,9 @@ final class LockPostController extends Controller
         ];
         $encoded = json_encode($data);
         $file->put($encoded);
-        writeToDebugger(
-            request: $this->request,
-            channel: $this->channel,
-            action: 'pause',
-            cipher: $this->cipher,
+        $this->debugger->sendPause(
+            $this->body()->toArray(),
+            $this->remoteAddress
         );
 
         return $data;
