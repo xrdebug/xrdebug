@@ -54,7 +54,7 @@ final class Debugger
         string $address,
         string $action,
     ): void {
-        $dump = $this->getDump($body, $action);
+        $dump = getBodyActionDump($body, $action);
         $json = $dump->toJson();
         if ($this->cipher !== null) {
             $json = encrypt($this->cipher, $json);
@@ -62,38 +62,6 @@ final class Debugger
         $this->channel->writeMessage($json);
         $this->logger->write(
             "* [{$address} {$action}] {$dump->file_display}\n"
-        );
-    }
-
-    /**
-     * @param array<int|string, string> $body
-     */
-    private function getDump(array $body, string $action): Dump
-    {
-        $message = $body['body'] ?? '';
-        $message = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $message) ?? '';
-        $emote = $body['emote'] ?? '';
-        $topic = $body['topic'] ?? '';
-        $id = $body['id'] ?? '';
-        $file = $body['file_path'] ?? '<file>';
-        $line = $body['file_line'] ?? '<line>';
-        $fileDisplay = $file;
-        $fileDisplayShort = basename($file);
-        if ($line !== '') {
-            $fileDisplay .= ':' . $line;
-            $fileDisplayShort .= ':' . $line;
-        }
-
-        return new Dump(
-            message: $message,
-            file_path: $file,
-            file_line: $line,
-            file_display: $fileDisplay,
-            file_display_short: $fileDisplayShort,
-            emote: $emote,
-            topic: $topic,
-            id: $id,
-            action: $action,
         );
     }
 }
