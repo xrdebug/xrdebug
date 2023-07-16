@@ -13,9 +13,12 @@
     "require": {
         "php": "^8.0",
         "chevere/chevere": "^3.1.x-dev",
+        "chevere/http": "0.2.x-dev",
         "chevere/router": "^0.4.x-dev",
         "chevere/throwable-handler": "^0.10.x-dev",
+        "middlewares/utils": "dev-master",
         "phpseclib/phpseclib": "~3.0",
+        "relay/relay": "2.x-dev",
         "rodber/php-sse-react": "^0.1",
         "samejack/php-argv": "^1.0"
     },
