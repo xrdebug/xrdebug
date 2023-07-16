@@ -20,7 +20,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 trait Psr17Trait
 {
-    public function getRequestHandler(?callable $callable = null): RequestHandlerInterface
+    private function getRequestHandler(?callable $callable = null): RequestHandlerInterface
     {
         return new CallableHandler($callable ?? function () {
         });

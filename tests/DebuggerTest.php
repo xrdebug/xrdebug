@@ -13,17 +13,18 @@ declare(strict_types=1);
 
 namespace Chevere\Tests;
 
+use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Writer\StreamWriter;
 use Chevere\XrServer\Debugger;
 use Clue\React\Sse\BufferedChannel;
-use phpseclib3\Crypt\AES;
-use phpseclib3\Crypt\Random;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Writer\streamTemp;
 use function Chevere\XrServer\decrypt;
 
 final class DebuggerTest extends TestCase
 {
+    use CipherTrait;
+
     public function dataProvider(): array
     {
         return [
@@ -57,9 +58,7 @@ final class DebuggerTest extends TestCase
      */
     public function testCipher(string $action, string $method): void
     {
-        $symmetricKey = Random::string(32);
-        $cipher = new AES('gcm');
-        $cipher->setKey($symmetricKey);
+        $cipher = $this->getCipher();
         $callback = function (string $json) use ($cipher, $action) {
             $json = decrypt($cipher, $json);
             $array = json_decode($json, true);

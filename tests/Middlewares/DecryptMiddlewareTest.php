@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Middlewares;
 
+use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Tests\src\Traits\Psr17Trait;
 use Chevere\XrServer\Middlewares\DecryptMiddleware;
-use phpseclib3\Crypt\AES;
-use phpseclib3\Crypt\Random;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -25,6 +24,7 @@ use function Chevere\XrServer\encrypt;
 
 final class DecryptMiddlewareTest extends TestCase
 {
+    use CipherTrait;
     use Psr17Trait;
 
     public function testNoCipher(): void
@@ -42,9 +42,7 @@ final class DecryptMiddlewareTest extends TestCase
     public function testCipher(): void
     {
         $message = '{"action":"message"}';
-        $symmetricKey = Random::string(32);
-        $cipher = new AES('gcm');
-        $cipher->setKey($symmetricKey);
+        $cipher = $this->getCipher();
         $middleware = new DecryptMiddleware($cipher);
         $function = function ($request) use ($message) {
             $this->assertSame($message, $request->getBody()->__toString());
