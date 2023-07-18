@@ -65,7 +65,7 @@ final class LockPostControllerTest extends TestCase
         ]);
         $response = $controller->getResponse();
         $decoded = json_decode($file->getContents(), true);
-        $this->assertSame($decoded, $response->data());
+        $this->assertSame($decoded, $response->array());
         $this->assertTrue($file->exists());
         $file->remove();
     }

@@ -43,7 +43,7 @@ final class LockDeleteControllerTest extends TestCase
         $file->createIfNotExists();
         $controller = new LockDeleteController($directory);
         $response = $controller->getResponse(id: $id);
-        $this->assertSame([], $response->data());
+        $this->assertSame([], $response->array());
         $this->assertFalse($file->exists());
     }
 }

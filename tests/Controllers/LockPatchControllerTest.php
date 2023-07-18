@@ -47,7 +47,7 @@ final class LockPatchControllerTest extends TestCase
             'lock' => true,
             'stop' => true,
         ];
-        $this->assertSame($expected, $response->data());
+        $this->assertSame($expected, $response->array());
         $this->assertSame($expected, $decoded);
         $this->assertTrue($file->exists());
         $file->remove();

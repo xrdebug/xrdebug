@@ -45,7 +45,7 @@ final class LockGetControllerTest extends TestCase
         $directory = directoryForPath(__DIR__);
         $controller = new LockGetController($directory);
         $response = $controller->getResponse(id: $id);
-        $this->assertSame($array, $response->data());
+        $this->assertSame($array, $response->array());
         $file->remove();
     }
 }
