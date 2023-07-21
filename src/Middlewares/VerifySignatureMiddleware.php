@@ -43,7 +43,7 @@ final class VerifySignatureMiddleware implements MiddlewareInterface
                 code: 400
             );
         }
-        $body = $request->getParsedBody() ?? [];
+        $body = $request->getParsedBody();
         $serialize = serialize($body);
         $signature = base64_decode($signature[0]);
         /** @var PublicKey $publicKey */

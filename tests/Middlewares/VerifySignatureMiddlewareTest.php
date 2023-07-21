@@ -53,7 +53,7 @@ final class VerifySignatureMiddlewareTest extends TestCase
         $middleware->process($request, $handler);
     }
 
-    public function testInvalidSignature400(): void
+    public function testInvalidSignatureKey(): void
     {
         $privateKey = $this->getPrivateKey();
         $middleware = new VerifySignatureMiddleware($privateKey);
@@ -78,6 +78,7 @@ final class VerifySignatureMiddlewareTest extends TestCase
     {
         return [
             [
+                null,
                 [],
                 ['test'],
             ],
@@ -87,7 +88,7 @@ final class VerifySignatureMiddlewareTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSuccess(array $data): void
+    public function testSuccess(?array $data): void
     {
         $privateKey = $this->getPrivateKey();
         $middleware = new VerifySignatureMiddleware($privateKey);
