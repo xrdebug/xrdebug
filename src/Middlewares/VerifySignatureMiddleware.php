@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Chevere\XrServer\Middlewares;
 
 use Chevere\Http\Exceptions\MiddlewareException;
-use phpseclib3\Crypt\Common\PublicKey;
 use phpseclib3\Crypt\EC\PrivateKey;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use function Safe\base64_decode;
 
 final class VerifySignatureMiddleware implements MiddlewareInterface
 {
@@ -35,8 +35,8 @@ final class VerifySignatureMiddleware implements MiddlewareInterface
         if ($this->privateKey === null) {
             return $handler->handle($request);
         }
-        $signatureHeader = $request->getHeader('X-Signature');
-        if ($signatureHeader === []) {
+        $signature = $request->getHeader('X-Signature');
+        if ($signature === []) {
             throw new MiddlewareException(
                 message: 'Missing signature',
                 code: 400
@@ -44,8 +44,7 @@ final class VerifySignatureMiddleware implements MiddlewareInterface
         }
         $body = $request->getParsedBody() ?? [];
         $serialize = serialize($body);
-        $signature = base64_decode($signatureHeader[0], true);
-        /** @var PublicKey $publicKey */
+        $signature = base64_decode($signature[0]);
         $publicKey = $this->privateKey->getPublicKey();
         if (! $publicKey->verify($serialize, $signature)) {
             throw new MiddlewareException(
