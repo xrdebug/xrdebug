@@ -18,7 +18,7 @@ use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\XrServer\Constants\UrlPathRegex;
 use Chevere\XrServer\Controllers\Traits\LockTrait;
 use function Chevere\Parameter\arrayp;
@@ -34,7 +34,7 @@ final class LockGetController extends Controller
     ) {
     }
 
-    public static function acceptResponse(): ArrayTypeParameterInterface
+    public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
             lock: boolean(),

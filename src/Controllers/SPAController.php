@@ -13,35 +13,27 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
-use Chevere\Action\Traits\NoStrictActionTrait;
 use Chevere\Filesystem\Interfaces\FileInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
-use function Chevere\Parameter\arrayp;
+use Chevere\Parameter\Interfaces\ParameterInterface;
 use function Chevere\Parameter\string;
 
 #[Status(200)]
 final class SPAController extends Controller
 {
-    // use NoStrictActionTrait;
-
     public function __construct(
         private FileInterface $app
     ) {
     }
 
-    public static function acceptResponse(): ArrayTypeParameterInterface
+    public static function acceptResponse(): ParameterInterface
     {
-        return arrayp(
-            app: string('/^.*$/m'),
-        );
+        return string('/^.*$/m');
     }
 
-    protected function run(): array
+    protected function run(): string
     {
-        return [
-            'app' => $this->app->getContents(),
-        ];
+        return $this->app->getContents();
     }
 }

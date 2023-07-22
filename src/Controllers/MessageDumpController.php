@@ -38,7 +38,7 @@ final class MessageDumpController extends Controller
             file_path: string(),
             id: string(),
             topic: string(),
-        );
+        )->withOptionalMinimum(1);
     }
 
     protected function run(): array

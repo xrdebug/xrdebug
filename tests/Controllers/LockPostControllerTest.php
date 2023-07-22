@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
-use Chevere\Writer\StreamWriter;
 use Chevere\XrServer\Controllers\LockPostController;
 use Chevere\XrServer\Debugger;
-use Clue\React\Sse\BufferedChannel;
 use PHPUnit\Framework\TestCase;
 use React\Http\Message\ServerRequest;
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
-use function Chevere\Writer\streamTemp;
 
 final class LockPostControllerTest extends TestCase
 {
@@ -34,7 +31,7 @@ final class LockPostControllerTest extends TestCase
         ];
         $encode = json_encode($array);
         $file = fileForPath(__DIR__ . '/' . $id);
-        $file->create();
+        $file->createIfNotExists();
         $file->put($encode);
         $request = new ServerRequest(
             method: 'POST',
@@ -46,27 +43,30 @@ final class LockPostControllerTest extends TestCase
                 'REMOTE_ADDR' => '0.0.0.0',
             ]
         );
+        $body = [
+            'id' => $id,
+        ];
         $directory = directoryForPath(__DIR__);
         $remoteAddress = $request->getServerParams()['REMOTE_ADDR'];
-        $channel = new BufferedChannel();
-        $cipher = null;
-        $debugger = new Debugger(
-            channel: $channel,
-            logger: new StreamWriter(streamTemp()),
-            cipher: $cipher,
-        );
+        $debugger = $this->createMock(Debugger::class);
+        $debugger
+            ->expects($this->once())
+            ->method('sendPause')
+            ->with(
+                $this->equalTo($body),
+                $this->equalTo($remoteAddress)
+            );
         $controller = new LockPostController(
             $directory,
             $debugger,
             $remoteAddress
         );
-        $controller = $controller->withBody([
-            'id' => $id,
-        ]);
+        $controller = $controller->withBody($body);
         $response = $controller->getResponse();
         $decoded = json_decode($file->getContents(), true);
         $this->assertSame($decoded, $response->array());
         $this->assertTrue($file->exists());
+        $this->assertSame($encode, $file->getContents());
         $file->remove();
     }
 }

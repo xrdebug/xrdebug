@@ -54,7 +54,7 @@ final class Debugger
         string $address,
         string $action,
     ): void {
-        $dump = getBodyActionDump($body, $action);
+        $dump = getDump($body, $action);
         $json = $dump->toJson();
         if ($this->cipher !== null) {
             $json = encrypt($this->cipher, $json);

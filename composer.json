@@ -23,6 +23,7 @@
         "samejack/php-argv": "^1.0"
     },
     "require-dev": {
+        "dg/bypass-finals": "dev-master",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5",
         "symplify/easy-coding-standard": "^11.1"

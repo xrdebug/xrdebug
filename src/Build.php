@@ -15,10 +15,11 @@ namespace Chevere\XrServer;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Stringable;
 
-final class Build
+final class Build implements Stringable
 {
-    private string $html;
+    private string $string;
 
     public function __construct(
         private DirectoryInterface $directory,
@@ -28,7 +29,7 @@ final class Build
     ) {
         $directory->assertExists();
         $file = new File($directory->path()->getChild('index.html'));
-        $this->html = $file->getContents();
+        $this->string = $file->getContents();
         $this->replace('%version%', $this->version);
         $this->replace('%codename%', $this->codename);
         $this->replace('%isEncryptionEnabled%', $isEncryptionEnabled ? 'true' : 'false');
@@ -41,21 +42,16 @@ final class Build
         $this->replaceScripts();
     }
 
-    public function withEncryption(int $ivSize): self
+    public function __toString(): string
     {
-        return clone $this;
+        return $this->string;
     }
 
-    public function html(): string
-    {
-        return $this->html;
-    }
-
-    public function replaceStyles(): void
+    private function replaceStyles(): void
     {
         preg_match_all(
             '#<link rel="stylesheet".*(href=\"(.*)\")>#',
-            $this->html,
+            $this->string,
             $files
         );
         foreach ($files[0] as $pos => $match) {
@@ -65,9 +61,9 @@ final class Build
         }
     }
 
-    public function replaceScripts(): void
+    private function replaceScripts(): void
     {
-        preg_match_all("#<script .*(src=\"(.*)\")><\/script>#", $this->html, $files);
+        preg_match_all("#<script .*(src=\"(.*)\")><\/script>#", $this->string, $files);
         foreach ($files[0] as $pos => $match) {
             $fileMatch = new File($this->directory->path()->getChild($files[2][$pos]));
             /** @var string $replace */
@@ -83,11 +79,11 @@ final class Build
         }
     }
 
-    public function replaceIcons(string $extension, string $mime): void
+    private function replaceIcons(string $extension, string $mime): void
     {
         preg_match_all(
             '#="(icon\.' . $extension . ')"#',
-            $this->html,
+            $this->string,
             $files
         );
         foreach ($files[0] as $pos => $match) {
@@ -99,7 +95,7 @@ final class Build
         }
     }
 
-    public function replaceFont(string $font, string $mime): void
+    private function replaceFont(string $font, string $mime): void
     {
         $fileMatch = new File($this->directory->path()->getChild($font));
         $replace = 'url(data:' . $mime . ';base64,'
@@ -113,6 +109,6 @@ final class Build
 
     private function replace(string $search, string $replace): void
     {
-        $this->html = str_replace($search, $replace, $this->html);
+        $this->string = str_replace($search, $replace, $this->string);
     }
 }

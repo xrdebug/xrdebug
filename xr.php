@@ -157,7 +157,7 @@ $build = new Build(
 $app = fileForPath($rootDirectory->getChild('app/build/')->path()->__toString() . 'en.html');
 $app->removeIfExists();
 $app->create();
-$app->put($build->html());
+$app->put($build->__toString());
 $routes = include 'routes.php';
 $dependencies = new Dependencies($routes);
 $router = router($routes);

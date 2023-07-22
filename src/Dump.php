@@ -30,8 +30,16 @@ final class Dump
     ) {
     }
 
+    /**
+     * @return array<string, string>
+     */
+    public function toArray(): array
+    {
+        return (array) $this;
+    }
+
     public function toJson(): string
     {
-        return json_encode((array) $this);
+        return json_encode($this->toArray());
     }
 }

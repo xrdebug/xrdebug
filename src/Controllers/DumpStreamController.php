@@ -15,7 +15,7 @@ namespace Chevere\XrServer\Controllers;
 
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Chevere\Parameter\Interfaces\ParameterInterface;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
 use React\Stream\WritableStreamInterface;
@@ -34,7 +34,7 @@ final class DumpStreamController extends Controller
     ) {
     }
 
-    public static function acceptResponse(): ArrayTypeParameterInterface
+    public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
             stream: object(WritableStreamInterface::class)

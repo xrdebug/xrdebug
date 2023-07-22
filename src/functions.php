@@ -13,33 +13,27 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer;
 
-use Chevere\Throwable\Exceptions\LogicException;
 use phpseclib3\Crypt\Common\SymmetricKey;
 use phpseclib3\Crypt\Random;
-use function Chevere\Message\message;
+use function Safe\base64_decode;
 
-function encrypt(SymmetricKey $cipher, string $message, ?string $nonce = null): string
+function encrypt(SymmetricKey $symmetricKey, string $message, ?string $nonce = null): string
 {
     if ($nonce === null) {
         $nonce = Random::string(cipherNonceLength());
     }
     $tag = Random::string(cipherTagLength());
-    $cipher = clone $cipher;
-    $cipher->setNonce($nonce);
-    $cipher->setTag($tag);
-    $cipherText = $cipher->encrypt($message);
+    $symmetricKey = clone $symmetricKey;
+    $symmetricKey->setNonce($nonce);
+    $symmetricKey->setTag($tag);
+    $cipherText = $symmetricKey->encrypt($message);
 
-    return base64_encode($nonce . $cipherText . $cipher->getTag());
+    return base64_encode($nonce . $cipherText . $symmetricKey->getTag());
 }
 
-function decrypt(SymmetricKey $cipher, string $encodedCipherText): string
+function decrypt(SymmetricKey $symmetricKey, string $encodedCipherText): string
 {
     $decode = base64_decode($encodedCipherText, true);
-    if ($decode === false) {
-        throw new LogicException(
-            message('Unable to decode cipher text')
-        );
-    }
     $nonce = mb_substr(
         $decode,
         0,
@@ -58,11 +52,11 @@ function decrypt(SymmetricKey $cipher, string $encodedCipherText): string
         -cipherTagLength(),
         '8bit'
     );
-    $cipher = clone $cipher;
-    $cipher->setNonce($nonce);
-    $cipher->setTag($tag);
+    $symmetricKey = clone $symmetricKey;
+    $symmetricKey->setNonce($nonce);
+    $symmetricKey->setTag($tag);
 
-    return $cipher->decrypt($cipherText);
+    return $symmetricKey->decrypt($cipherText);
 }
 
 function cipherNonceLength(): int
@@ -78,7 +72,7 @@ function cipherTagLength(): int
 /**
  * @param array<int|string, string> $body
  */
-function getBodyActionDump(array $body, string $action): Dump
+function getDump(array $body, string $action): Dump
 {
     $message = $body['body'] ?? '';
     $message = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $message) ?? '';
