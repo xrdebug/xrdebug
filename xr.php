@@ -21,9 +21,11 @@ foreach (['/', '/../../../'] as $path) {
     }
 }
 
-use Chevere\Http\Controller;
 use Chevere\Router\Dependencies;
 use Chevere\Router\Dispatcher;
+use Chevere\Schwager\DocumentSchema;
+use Chevere\Schwager\ServerSchema;
+use Chevere\Schwager\Spec;
 use Chevere\ThrowableHandler\ThrowableHandler;
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
@@ -37,20 +39,19 @@ use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
 use React\Http\HttpServer;
-use React\Http\Message\Response;
 use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Socket\SocketServer;
-use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
-use function Chevere\Http\classStatus;
 use function Chevere\Router\router;
+use function Chevere\Standard\arrayFilterBoth;
 use function Chevere\ThrowableHandler\handleAsConsole;
 use function Chevere\Writer\streamFor;
+use function Chevere\XrServer\getResponse;
 
 include __DIR__ . '/meta.php';
 
@@ -165,75 +166,16 @@ $routeCollector = $router->routeCollector();
 $dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();
 $channel = new BufferedChannel();
-$handler = function (ServerRequestInterface $request) use (
-    $channel,
-    $loop,
-    $cipher,
-    $dispatcher,
-    $app,
-    $dependencies,
-    $locksDirectory
-) {
+$containerMap = [
+    'app' => $app,
+    'channel' => $channel,
+    'cipher' => $cipher,
+    'directory' => $locksDirectory,
+    'loop' => $loop,
+];
+$handler = function (ServerRequestInterface $request) use ($dispatcher, $dependencies, $containerMap) {
     try {
-        $path = $request->getUri()->getPath();
-        $body = $request->getParsedBody() ?? [];
-
-        try {
-            $routed = $dispatcher->dispatch($request->getMethod(), $path);
-        } catch (Throwable) {
-            return new Response(404);
-        }
-        $containerMap = [
-            'app' => $app,
-            'channel' => $channel,
-            'cipher' => $cipher,
-            'directory' => $locksDirectory,
-            'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
-            'loop' => $loop,
-            'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
-            'request' => $request,
-            'stream' => new ThroughStream(),
-        ];
-        $view = $routed->bind()->view();
-        $controllerName = $routed->bind()->controllerName()->__toString();
-        $controllerArguments = [];
-
-        try {
-            foreach ($dependencies->get($controllerName)->keys() as $key) {
-                $controllerArguments[$key] = $containerMap[$key];
-            }
-        } catch (Throwable) {
-        }
-        /** @var Controller $controller */
-        $controller = new $controllerName(...$controllerArguments);
-        if ($request->getMethod() === 'POST') {
-            $controller = $controller->withBody($body);
-        }
-
-        try {
-            $response = $controller->getResponse(...$routed->arguments());
-        } catch (Throwable $e) {
-            return new Response();
-        }
-        $stream = $response->data()['stream'] ?? null;
-        $isStream = $stream instanceof ThroughStream;
-        $statuses = classStatus($controllerName);
-
-        return new Response(
-            $statuses->primary,
-            [
-                'Content-Type' => match (true) {
-                    $isStream => 'text/event-stream',
-                    $view === 'spa/GET' => 'text/html',
-                    default => 'text/json',
-                },
-            ],
-            match (true) {
-                $isStream => $stream,
-                $view !== '' => $response->data()['app'],
-                default => json_encode($response->data()),
-            }
-        );
+        return getResponse($request, $dispatcher, $dependencies, $containerMap);
     } catch (Throwable $e) {
         handleAsConsole($e);
     }
@@ -267,4 +209,32 @@ echo <<<PLAIN
     --
 
     PLAIN;
+
+$document = new DocumentSchema(
+    api: 'xr',
+    name: 'XR Debug API',
+    version: '1.0.0'
+);
+$server = new ServerSchema(
+    url: $httpAddress,
+    description: 'XR Debug Server',
+);
+$spec = new Spec($router, $document, $server);
+$array = arrayFilterBoth($spec->toArray(), function ($v, $k) {
+    return match (true) {
+        $v === null => false,
+        $v === [] => false,
+        $v === '' => false,
+        $k === 'required' && $v === true => false,
+        $k === 'regex' && $v === '^.*$' => false,
+        $k === 'body' && $v === [
+            'type' => 'array#map',
+        ] => false,
+        default => true,
+    };
+});
+$json = json_encode($array, JSON_PRETTY_PRINT);
+$file = fileForPath(__DIR__ . '/index.json');
+$file->createIfNotExists();
+$file->put($json);
 $loop->run();

@@ -1,0 +1,228 @@
+{
+    "api": "xr",
+    "name": "XR Debug API",
+    "version": "1.0.0",
+    "servers": [
+        {
+            "url": "http:\/\/0.0.0.0:27420",
+            "description": "XR Debug Server"
+        }
+    ],
+    "paths": {
+        "\/": {
+            "name": "\/",
+            "regex": "\/",
+            "endpoints": {
+                "GET": {
+                    "description": "Transfer a current representation of the target resource.",
+                    "responses": {
+                        "200": [
+                            {
+                                "body": {
+                                    "type": "string",
+                                    "regex": "^.*$\/m"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/dump": {
+            "name": "\/dump",
+            "regex": "\/dump",
+            "endpoints": {
+                "GET": {
+                    "description": "Transfer a current representation of the target resource.",
+                    "responses": {
+                        "200": [
+                            {
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "stream": {
+                                            "type": "interfaceName",
+                                            "className": "React\\Stream\\WritableStreamInterface"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/locks": {
+            "name": "\/locks",
+            "regex": "\/locks",
+            "endpoints": {
+                "POST": {
+                    "description": "Perform resource-specific processing on the request payload.",
+                    "body": {
+                        "type": "array#map",
+                        "parameters": {
+                            "id": {
+                                "type": "string",
+                                "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "VerifySignatureMiddleware"
+                            }
+                        ],
+                        "201": [
+                            {
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "lock": {
+                                            "type": "boolean"
+                                        },
+                                        "stop": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/locks\/{id}": {
+            "name": "\/locks\/{id}",
+            "regex": "^(?|\/locks\/([0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}))$",
+            "variables": {
+                "id": {
+                    "type": "string",
+                    "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+                }
+            },
+            "endpoints": {
+                "DELETE": {
+                    "description": "Remove all current representations of the target resource.",
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "VerifySignatureMiddleware"
+                            },
+                            {
+                                "context": "DecryptMiddleware"
+                            },
+                            {
+                                "context": "DecryptMiddleware"
+                            }
+                        ],
+                        "404": [
+                            {
+                                "context": "LockDeleteController"
+                            }
+                        ]
+                    }
+                },
+                "GET": {
+                    "description": "Transfer a current representation of the target resource.",
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "VerifySignatureMiddleware"
+                            },
+                            {
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "lock": {
+                                            "type": "boolean"
+                                        },
+                                        "stop": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "404": [
+                            {
+                                "context": "LockGetController"
+                            }
+                        ]
+                    }
+                },
+                "PATCH": {
+                    "description": "Apply partial modifications described in the request entity to the target resource.",
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "VerifySignatureMiddleware"
+                            },
+                            {
+                                "context": "DecryptMiddleware"
+                            },
+                            {
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "lock": {
+                                            "type": "boolean"
+                                        },
+                                        "stop": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/message": {
+            "name": "\/message",
+            "regex": "\/message",
+            "endpoints": {
+                "POST": {
+                    "description": "Perform resource-specific processing on the request payload.",
+                    "body": {
+                        "type": "array#map",
+                        "parameters": {
+                            "body": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "emote": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "file_line": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "file_path": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "id": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "topic": {
+                                "required": false,
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "VerifySignatureMiddleware"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
