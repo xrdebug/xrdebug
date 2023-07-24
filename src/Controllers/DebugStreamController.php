@@ -17,6 +17,7 @@ use Chevere\Attributes\Description;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ParameterInterface;
+use Chevere\Writer\Interfaces\WriterInterface;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
 use React\Stream\ThroughStream;
@@ -29,9 +30,9 @@ final class DebugStreamController extends Controller
     public function __construct(
         private BufferedChannel $channel,
         private LoopInterface $loop,
-        private ThroughStream $stream,
         private string $lastEventId,
         private string $remoteAddress,
+        private WriterInterface $logger,
     ) {
     }
 
@@ -42,12 +43,11 @@ final class DebugStreamController extends Controller
 
     protected function run(): ThroughStream
     {
-        $stream = $this->stream;
+        $stream = new ThroughStream();
         $channel = $this->channel;
-        $loop = $this->loop;
         $lastEventId = $this->lastEventId;
         $remoteAddress = $this->remoteAddress;
-        $loop->futureTick(
+        $this->loop->futureTick(
             function () use ($channel, $stream, $lastEventId) {
                 $channel->connect($stream, $lastEventId);
             }

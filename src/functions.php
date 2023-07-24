@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Chevere\XrServer;
 
 use Chevere\Http\Controller;
+use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Router\Interfaces\DependenciesInterface;
 use Chevere\Router\Interfaces\DispatcherInterface;
 use Chevere\Throwable\Exceptions\LogicException;
@@ -132,9 +133,9 @@ function getResponse(
         return new Response(404);
     }
     $container = array_merge($container, [
+        'request' => $request,
         'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
         'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
-        'request' => $request,
     ]);
     $view = $routed->bind()->view();
     $controllerName = $routed->bind()->controllerName()->__toString();
@@ -142,9 +143,31 @@ function getResponse(
     /** @var Controller $controller */
     $controller = new $controllerName(...$controllerArguments);
     if ($request->getMethod() === 'POST') {
-        $controller = $controller->withBody((array) $body);
+        try {
+            $controller = $controller->withBody((array) $body);
+        } catch (Throwable $e) {
+            $headers = [
+                'Content-Type' => 'text/json',
+            ];
+            $error = json_encode([
+                'error' => $e->getMessage(),
+            ]);
+
+            return new Response(
+                status: 400,
+                headers: $headers,
+                body: $error
+            );
+        }
     }
-    $response = $controller->getResponse(...$routed->arguments());
+
+    try {
+        $response = $controller->getResponse(...$routed->arguments());
+    } catch (ControllerException $e) {
+        return new Response(
+            $e->getCode(),
+        );
+    }
     $stream = null;
 
     try {
@@ -167,7 +190,7 @@ function getResponse(
         match (true) {
             $isStream => $stream,
             $view === 'spa/GET' => $response->string(),
-            default => json_encode($response->array()),
+            default => json_encode($response->mixed()),
         }
     );
 }

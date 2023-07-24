@@ -49,7 +49,13 @@ final class LockPostController extends Controller
     public static function acceptBody(): ArrayTypeParameterInterface
     {
         return arrayp(
-            id: string(UrlPathRegex::UUID)
+            id: string(UrlPathRegex::UUID),
+        )->withOptional(
+            body: string('/.*?/'),
+            emote: string(),
+            file_line: string(),
+            file_path: string(),
+            topic: string(),
         );
     }
 

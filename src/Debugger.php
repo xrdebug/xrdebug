@@ -30,8 +30,8 @@ final class Debugger
      * @param array<int|string, string> $body
      */
     public function sendMessage(
-        array $body, //  $request->getParsedBody() ?? []
-        string $address, // $request->getServerParams()['REMOTE_ADDR']
+        array $body,
+        string $address,
     ): void {
         $this->channelWrite($body, $address, 'message');
     }

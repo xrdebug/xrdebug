@@ -61,6 +61,27 @@
                             "id": {
                                 "type": "string",
                                 "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+                            },
+                            "body": {
+                                "required": false,
+                                "type": "string",
+                                "regex": ".*?"
+                            },
+                            "emote": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "file_line": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "file_path": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "topic": {
+                                "required": false,
+                                "type": "string"
                             }
                         }
                     },

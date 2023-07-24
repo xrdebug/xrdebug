@@ -38,6 +38,7 @@ use Colors\Color;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
 use React\Http\HttpServer;
+use React\Http\Message\Response;
 use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
@@ -50,11 +51,13 @@ use function Chevere\Filesystem\fileForPath;
 use function Chevere\Router\router;
 use function Chevere\Standard\arrayFilterBoth;
 use function Chevere\ThrowableHandler\handleAsConsole;
+use function Chevere\ThrowableHandler\handleAsTerminal;
 use function Chevere\Writer\streamFor;
 use function Chevere\Writer\writers;
 use function Chevere\XrServer\getCipher;
 use function Chevere\XrServer\getPrivateKey;
 use function Chevere\XrServer\getResponse;
+use function Safe\json_encode;
 
 new WritersInstance(
     (new Writers())
@@ -173,7 +176,7 @@ $handler = function (ServerRequestInterface $request) use ($dispatcher, $depende
     try {
         return getResponse($request, $dispatcher, $dependencies, $containerMap);
     } catch (Throwable $e) {
-        handleAsConsole($e);
+        handleAsTerminal($e);
     }
 };
 $http = new HttpServer(
