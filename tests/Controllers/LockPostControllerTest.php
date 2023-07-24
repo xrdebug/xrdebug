@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
+use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\XrServer\Controllers\LockPostController;
 use Chevere\XrServer\Debugger;
 use PHPUnit\Framework\TestCase;
 use React\Http\Message\ServerRequest;
-use function Chevere\Filesystem\directoryForPath;
-use function Chevere\Filesystem\fileForPath;
 
 final class LockPostControllerTest extends TestCase
 {
+    use DirectoryTrait;
+
     public function test201(): void
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
@@ -30,7 +31,7 @@ final class LockPostControllerTest extends TestCase
             'stop' => false,
         ];
         $encode = json_encode($array);
-        $file = fileForPath(__DIR__ . '/' . $id);
+        $file = $this->getWritableFile($id);
         $file->createIfNotExists();
         $file->put($encode);
         $request = new ServerRequest(
@@ -46,7 +47,7 @@ final class LockPostControllerTest extends TestCase
         $body = [
             'id' => $id,
         ];
-        $directory = directoryForPath(__DIR__);
+        $directory = $this->getWritableDirectory();
         $remoteAddress = $request->getServerParams()['REMOTE_ADDR'];
         $debugger = $this->createMock(Debugger::class);
         $debugger

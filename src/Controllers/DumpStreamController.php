@@ -18,8 +18,7 @@ use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
-use React\Stream\WritableStreamInterface;
-use function Chevere\Parameter\arrayp;
+use React\Stream\ThroughStream;
 use function Chevere\Parameter\object;
 
 #[Status(200)]
@@ -28,7 +27,7 @@ final class DumpStreamController extends Controller
     public function __construct(
         private BufferedChannel $channel,
         private LoopInterface $loop,
-        private WritableStreamInterface $stream,
+        private ThroughStream $stream,
         private string $lastEventId,
         private string $remoteAddress,
     ) {
@@ -36,12 +35,10 @@ final class DumpStreamController extends Controller
 
     public static function acceptResponse(): ParameterInterface
     {
-        return arrayp(
-            stream: object(WritableStreamInterface::class)
-        );
+        return object(ThroughStream::class);
     }
 
-    protected function run(): array
+    protected function run(): ThroughStream
     {
         $stream = $this->stream;
         $channel = $this->channel;
@@ -64,8 +61,6 @@ final class DumpStreamController extends Controller
             }
         );
 
-        return [
-            'stream' => $stream,
-        ];
+        return $stream;
     }
 }

@@ -31,6 +31,7 @@ use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
 use Chevere\XrServer\Build;
+use Chevere\XrServer\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use Colors\Color;
 use phpseclib3\Crypt\AES;
@@ -44,6 +45,7 @@ use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Socket\SocketServer;
+use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
 use function Chevere\Filesystem\directoryForPath;
 use function Chevere\Filesystem\fileForPath;
@@ -51,6 +53,7 @@ use function Chevere\Router\router;
 use function Chevere\Standard\arrayFilterBoth;
 use function Chevere\ThrowableHandler\handleAsConsole;
 use function Chevere\Writer\streamFor;
+use function Chevere\Writer\writers;
 use function Chevere\XrServer\getResponse;
 
 include __DIR__ . '/meta.php';
@@ -166,12 +169,17 @@ $routeCollector = $router->routeCollector();
 $dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();
 $channel = new BufferedChannel();
+$logger = writers()->log();
+$debugger = new Debugger($channel, $logger, $cipher);
 $containerMap = [
     'app' => $app,
     'channel' => $channel,
     'cipher' => $cipher,
     'directory' => $locksDirectory,
     'loop' => $loop,
+    'debugger' => $debugger,
+    'logger' => $logger,
+    'stream' => new ThroughStream(),
 ];
 $handler = function (ServerRequestInterface $request) use ($dispatcher, $dependencies, $containerMap) {
     try {

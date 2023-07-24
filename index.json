@@ -38,13 +38,8 @@
                         "200": [
                             {
                                 "body": {
-                                    "type": "array#map",
-                                    "parameters": {
-                                        "stream": {
-                                            "type": "interfaceName",
-                                            "className": "React\\Stream\\WritableStreamInterface"
-                                        }
-                                    }
+                                    "type": "className",
+                                    "className": "React\\Stream\\ThroughStream"
                                 }
                             }
                         ]
@@ -190,7 +185,8 @@
                         "parameters": {
                             "body": {
                                 "required": false,
-                                "type": "string"
+                                "type": "string",
+                                "regex": ".*?"
                             },
                             "emote": {
                                 "required": false,

@@ -15,18 +15,18 @@ namespace Chevere\Tests\Controllers;
 
 use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
+use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\XrServer\Controllers\LockPatchController;
 use PHPUnit\Framework\TestCase;
-use function Chevere\Filesystem\directoryForPath;
 
 final class LockPatchControllerTest extends TestCase
 {
+    use DirectoryTrait;
+
     public function test404(): void
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
-        $directory = directoryForPath(__DIR__);
-        $path = $directory->path()->getChild($id);
-        $file = new File($path);
+        $directory = $this->getWritableDirectory();
         $controller = new LockPatchController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
@@ -36,7 +36,7 @@ final class LockPatchControllerTest extends TestCase
     public function test200(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
-        $directory = directoryForPath(__DIR__);
+        $directory = $this->getWritableDirectory();
         $path = $directory->path()->getChild($id);
         $file = new File($path);
         $file->createIfNotExists();

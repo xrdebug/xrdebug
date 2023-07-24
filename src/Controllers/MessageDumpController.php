@@ -32,7 +32,7 @@ final class MessageDumpController extends Controller
     public static function acceptBody(): ArrayTypeParameterInterface
     {
         return arrayp()->withOptional(
-            body: string(),
+            body: string('/.*?/'),
             emote: string(),
             file_line: string(),
             file_path: string(),

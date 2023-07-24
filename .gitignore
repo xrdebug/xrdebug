@@ -6,6 +6,5 @@
 /composer.lock
 /build
 /locks
-/tests/Controllers/app.html
-/tests/Controllers/b1cabc9a*
-/tests/Controllers/93683d90*
+/tests/writable/**
+!tests/writable/.gitkeep

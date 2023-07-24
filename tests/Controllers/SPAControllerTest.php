@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
+use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\XrServer\Controllers\SPAController;
 use PHPUnit\Framework\TestCase;
-use function Chevere\Filesystem\fileForPath;
 
 final class SPAControllerTest extends TestCase
 {
+    use DirectoryTrait;
+
     public function test200(): void
     {
         $contents = 'contents';
-        $file = fileForPath(__DIR__ . '/app.html');
+        $file = $this->getWritableFile('app.html');
         $file->createIfNotExists();
         $file->put($contents);
         $controller = new SPAController($file);

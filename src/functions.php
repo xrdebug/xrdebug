@@ -16,6 +16,7 @@ namespace Chevere\XrServer;
 use Chevere\Http\Controller;
 use Chevere\Router\Interfaces\DependenciesInterface;
 use Chevere\Router\Interfaces\DispatcherInterface;
+use Chevere\Throwable\Exceptions\LogicException;
 use phpseclib3\Crypt\Common\SymmetricKey;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ResponseInterface;
@@ -109,13 +110,13 @@ function getDump(array $body, string $action): Dump
 }
 
 /**
- * @param array<string, mixed> $containerMap
+ * @param array<string, mixed> $container
  */
 function getResponse(
     ServerRequestInterface $request,
     DispatcherInterface $dispatcher,
     DependenciesInterface $dependencies,
-    array $containerMap
+    array $container,
 ): ResponseInterface {
     $path = $request->getUri()->getPath();
     $body = $request->getParsedBody() ?? [];
@@ -125,33 +126,20 @@ function getResponse(
     } catch (Throwable) {
         return new Response(404);
     }
-    $containerMap = array_merge($containerMap, [
+    $container = array_merge($container, [
         'lastEventId' => $request->getHeaderLine('Last-Event-ID'),
         'remoteAddress' => $request->getServerParams()['REMOTE_ADDR'] ?? '',
         'request' => $request,
-        'stream' => new ThroughStream(),
     ]);
     $view = $routed->bind()->view();
     $controllerName = $routed->bind()->controllerName()->__toString();
-    $controllerArguments = [];
-
-    try {
-        foreach ($dependencies->get($controllerName)->keys() as $key) {
-            $controllerArguments[$key] = $containerMap[$key];
-        }
-    } catch (Throwable) {
-    }
+    $controllerArguments = getControllerArguments($dependencies, $controllerName, $container);
     /** @var Controller $controller */
     $controller = new $controllerName(...$controllerArguments);
     if ($request->getMethod() === 'POST') {
         $controller = $controller->withBody((array) $body);
     }
-
-    try {
-        $response = $controller->getResponse(...$routed->arguments());
-    } catch (Throwable) {
-        return new Response();
-    }
+    $response = $controller->getResponse(...$routed->arguments());
     $stream = null;
 
     try {
@@ -173,8 +161,26 @@ function getResponse(
         ],
         match (true) {
             $isStream => $stream,
-            $view !== '' => $response->string(),
+            $view === 'spa/GET' => $response->string(),
             default => json_encode($response->array()),
         }
     );
+}
+
+/**
+ * @param array<string, mixed> $container
+ * @return array<string, mixed>
+ */
+function getControllerArguments(
+    DependenciesInterface $dependencies,
+    string $controllerName,
+    array $container
+): array {
+    $controllerArguments = [];
+    foreach ($dependencies->get($controllerName)->keys() as $key) {
+        $controllerArguments[$key] = $container[$key]
+            ?? throw new LogicException("Missing container key {$key}");
+    }
+
+    return $controllerArguments;
 }

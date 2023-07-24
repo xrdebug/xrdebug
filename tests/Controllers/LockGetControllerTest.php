@@ -14,17 +14,18 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Http\Exceptions\ControllerException;
+use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\XrServer\Controllers\LockGetController;
 use PHPUnit\Framework\TestCase;
-use function Chevere\Filesystem\directoryForPath;
-use function Chevere\Filesystem\fileForPath;
 
 final class LockGetControllerTest extends TestCase
 {
+    use DirectoryTrait;
+
     public function test404(): void
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
-        $directory = directoryForPath(__DIR__);
+        $directory = $this->getWritableDirectory();
         $controller = new LockGetController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
@@ -39,10 +40,10 @@ final class LockGetControllerTest extends TestCase
             'stop' => false,
         ];
         $encode = json_encode($array);
-        $file = fileForPath(__DIR__ . '/' . $id);
-        $file->create();
+        $file = $this->getWritableFile($id);
+        $file->createIfNotExists();
         $file->put($encode);
-        $directory = directoryForPath(__DIR__);
+        $directory = $this->getWritableDirectory();
         $controller = new LockGetController($directory);
         $response = $controller->getResponse(id: $id);
         $this->assertSame($array, $response->array());
