@@ -14,7 +14,7 @@
             "regex": "\/message",
             "endpoints": {
                 "POST": {
-                    "description": "Create a debug message",
+                    "description": "Send a debug message",
                     "body": {
                         "type": "array#map",
                         "parameters": {
@@ -48,7 +48,10 @@
                     "responses": {
                         "200": [
                             {
-                                "context": "MessagePostController"
+                                "context": "MessagePostController",
+                                "body": {
+                                    "type": "null"
+                                }
                             }
                         ]
                     }

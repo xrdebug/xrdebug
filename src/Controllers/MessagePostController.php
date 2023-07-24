@@ -17,12 +17,14 @@ use Chevere\Attributes\Description;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\XrServer\Debugger;
 use function Chevere\Parameter\arrayp;
+use function Chevere\Parameter\null;
 use function Chevere\Parameter\string;
 
 #[Status(200)]
-#[Description('Create a debug message')]
+#[Description('Send a debug message')]
 final class MessagePostController extends Controller
 {
     public function __construct(
@@ -43,13 +45,16 @@ final class MessagePostController extends Controller
         )->withOptionalMinimum(1);
     }
 
-    protected function run(): array
+    public static function acceptResponse(): ParameterInterface
+    {
+        return null();
+    }
+
+    protected function run(): void
     {
         $this->debugger->sendMessage(
             $this->body()->toArray(),
             $this->remoteAddress
         );
-
-        return [];
     }
 }
