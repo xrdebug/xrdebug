@@ -11,5 +11,5 @@
 
 declare(strict_types=1);
 
-const XR_SERVER_VERSION = '0.8.0';
+const XR_SERVER_VERSION = '1.0.0';
 const XR_SERVER_CODENAME = 'Magnum';
