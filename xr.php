@@ -34,9 +34,6 @@ use Chevere\XrServer\Build;
 use Chevere\XrServer\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use Colors\Color;
-use phpseclib3\Crypt\AES;
-use phpseclib3\Crypt\EC;
-use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
 use React\Http\HttpServer;
@@ -54,6 +51,8 @@ use function Chevere\Standard\arrayFilterBoth;
 use function Chevere\ThrowableHandler\handleAsConsole;
 use function Chevere\Writer\streamFor;
 use function Chevere\Writer\writers;
+use function Chevere\XrServer\getCipher;
+use function Chevere\XrServer\getPrivateKey;
 use function Chevere\XrServer\getResponse;
 
 include __DIR__ . '/meta.php';
@@ -74,24 +73,30 @@ new WritersInstance(
 set_error_handler(ThrowableHandler::ERROR_AS_EXCEPTION);
 register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
 set_exception_handler(ThrowableHandler::CONSOLE);
-
 $color = new Color();
-echo $color(file_get_contents(__DIR__ . '/logo'))->cyan() . "\n";
-echo $color(strtr('XR Debug %v (%c) by Rodolfo Berrios', [
-    '%v' => XR_SERVER_VERSION,
-    '%c' => XR_SERVER_CODENAME,
-]))->green() . "\n\n";
+$logger = writers()->log();
+$logger->write(
+    $color(file_get_contents(__DIR__ . '/logo'))->cyan()
+    . "\n"
+    . $color(strtr('XR Debug %v (%c) by Rodolfo Berrios', [
+        '%v' => XR_SERVER_VERSION,
+        '%c' => XR_SERVER_CODENAME,
+    ]))->green()
+    . "\n\n"
+);
 $options = (new ArgvParser())->parseConfigs();
 if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
-    echo implode("\n", [
-        '-p Port (default 27420)',
-        '-e Enable end-to-end encryption',
-        '-k Symmetric key (for -e option)',
-        '-v Enable sign verification',
-        '-s Private key (for -v option)',
-        '-c Cert file for TLS',
-        '',
-    ]);
+    $logger->write(
+        <<<LOG
+        -p Port (default 27420)
+        -e Enable end-to-end encryption
+        -k Symmetric key (for -e option)
+        -v Enable sign verification
+        -s Private key (for -v option)
+        -c Cert file for TLS
+
+        LOG
+    );
     exit(0);
 }
 $host = '0.0.0.0';
@@ -110,41 +115,20 @@ $context = $scheme === 'tcp'
     ];
 $cipher = null;
 if ($isEncryptionEnabled) {
-    $symmetricKey = array_key_exists('k', $options) ? $options['k'] : null;
-    if ($symmetricKey === null) {
-        $symmetricKey = Random::string(32);
-        echo $color('INFO: Generated encryption key (empty -k)')->magenta() . "\n";
-    } else {
-        $symmetricKey = base64_decode($symmetricKey, true);
+    $symmetricKey = $options['k'] ?? null;
+    if ($symmetricKey === true) {
+        $symmetricKey = null;
     }
-    $cipher = new AES('gcm');
-    $cipher->setKey($symmetricKey);
-    $encryptionKeyDisplay = base64_encode($symmetricKey);
-    echo <<<PLAIN
-    🔐 ENCRYPTION KEY
-    {$encryptionKeyDisplay}
-
-
-    PLAIN;
+    $cipher = getCipher($symmetricKey, $logger, $color);
 }
 $privateKey = null;
 if ($isSignVerificationEnabled) {
-    $privateKey = array_key_exists('s', $options) ? $options['s'] : null;
-    if ($privateKey === null) {
-        $privateKey = EC::createKey('ed25519');
-        echo $color('INFO: Generated private key (empty -s)')->magenta() . "\n";
-    } else {
-        $privateKey = EC::load($privateKey);
+    $privateKey = $options['s'] ?? null;
+    if ($privateKey === true) {
+        $privateKey = null;
     }
-    $privateKeyDisplay = $privateKey->toString('PKCS8');
-    echo <<<PLAIN
-    🔏 PRIVATE KEY
-    {$privateKeyDisplay}
-
-
-    PLAIN;
+    $privateKey = getPrivateKey($privateKey, $logger, $color);
 }
-
 $rootDirectory = directoryForPath(__DIR__);
 $locksDirectory = $rootDirectory->getChild('locks/');
 
@@ -169,16 +153,16 @@ $routeCollector = $router->routeCollector();
 $dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();
 $channel = new BufferedChannel();
-$logger = writers()->log();
 $debugger = new Debugger($channel, $logger, $cipher);
 $containerMap = [
     'app' => $app,
     'channel' => $channel,
     'cipher' => $cipher,
-    'directory' => $locksDirectory,
-    'loop' => $loop,
     'debugger' => $debugger,
+    'directory' => $locksDirectory,
     'logger' => $logger,
+    'loop' => $loop,
+    'privateKey' => $privateKey,
     'stream' => new ThroughStream(),
 ];
 $handler = function (ServerRequestInterface $request) use ($dispatcher, $dependencies, $containerMap) {
@@ -196,11 +180,7 @@ $http = new HttpServer(
     new RequestBodyParserMiddleware(100 * 1024, 1),
     $handler
 );
-$socket = new SocketServer(
-    $uri,
-    $context,
-    $loop
-);
+$socket = new SocketServer($uri, $context, $loop);
 $http->listen($socket);
 $socket->on('error', 'printf');
 $scheme = parse_url($socket->getAddress(), PHP_URL_SCHEME);
@@ -211,12 +191,14 @@ $httpAddress = strtr(
         'tcp' => 'http',
     ]
 );
-echo <<<PLAIN
+$logger->write(
+    <<<LOG
     Server listening on {$scheme} {$httpAddress}
     Press Ctrl+C to quit
     --
 
-    PLAIN;
+    LOG
+);
 
 $document = new DocumentSchema(
     api: 'xr',

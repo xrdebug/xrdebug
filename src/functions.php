@@ -17,7 +17,12 @@ use Chevere\Http\Controller;
 use Chevere\Router\Interfaces\DependenciesInterface;
 use Chevere\Router\Interfaces\DispatcherInterface;
 use Chevere\Throwable\Exceptions\LogicException;
+use Chevere\Writer\Interfaces\WriterInterface;
+use Colors\Color;
+use phpseclib3\Crypt\AES;
 use phpseclib3\Crypt\Common\SymmetricKey;
+use phpseclib3\Crypt\EC;
+use phpseclib3\Crypt\EC\PrivateKey;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -183,4 +188,56 @@ function getControllerArguments(
     }
 
     return $controllerArguments;
+}
+
+function getCipher(
+    ?string $symmetricKey,
+    WriterInterface $logger,
+    Color $color
+): AES {
+    if ($symmetricKey === null) {
+        $symmetricKey = Random::string(32);
+        $logger->write(
+            $color('INFO: Generated encryption key (empty -k)')->magenta() . "\n"
+        );
+    } else {
+        $symmetricKey = base64_decode($symmetricKey, true);
+    }
+    $cipher = new AES('gcm');
+    $cipher->setKey($symmetricKey);
+    $encryptionKeyDisplay = base64_encode($symmetricKey);
+    $logger->write(<<<LOG
+    🔐 ENCRYPTION KEY
+    {$encryptionKeyDisplay}
+
+
+    LOG);
+
+    return $cipher;
+}
+
+function getPrivateKey(
+    ?string $privateKey,
+    WriterInterface $logger,
+    Color $color
+): PrivateKey {
+    if ($privateKey === null) {
+        $privateKey = EC::createKey('ed25519');
+        $logger->write(
+            $color('INFO: Generated private key (empty -s)')->magenta() . "\n"
+        );
+    } else {
+        $privateKey = EC::load($privateKey);
+    }
+    $privateKeyDisplay = $privateKey->toString('PKCS8');
+    $logger->write(
+        <<<LOG
+        🔏 PRIVATE KEY
+        {$privateKeyDisplay}
+
+
+        LOG
+    );
+    /** @var PrivateKey */
+    return $privateKey;
 }
