@@ -72,6 +72,6 @@ final class MessageDumpControllerTest extends TestCase
         );
         $controller = $controller->withBody($body);
         $response = $controller->getResponse();
-        $this->assertSame([], $response->array());
+        $this->assertSame(null, $response->null());
     }
 }

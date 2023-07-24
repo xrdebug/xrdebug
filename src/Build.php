@@ -22,13 +22,13 @@ final class Build implements Stringable
     private string $string;
 
     public function __construct(
-        private DirectoryInterface $directory,
+        private DirectoryInterface $source,
         private string $version,
         private string $codename,
         bool $isEncryptionEnabled = false,
     ) {
-        $directory->assertExists();
-        $file = new File($directory->path()->getChild('index.html'));
+        $source->assertExists();
+        $file = new File($source->path()->getChild('index.html'));
         $this->string = $file->getContents();
         $this->replace('%version%', $this->version);
         $this->replace('%codename%', $this->codename);
@@ -55,7 +55,7 @@ final class Build implements Stringable
             $files
         );
         foreach ($files[0] as $pos => $match) {
-            $fileMatch = new File($this->directory->path()->getChild($files[2][$pos]));
+            $fileMatch = new File($this->source->path()->getChild($files[2][$pos]));
             $replace = '<style media="all">' . $fileMatch->getContents() . '</style>';
             $this->replace($match, $replace);
         }
@@ -65,7 +65,7 @@ final class Build implements Stringable
     {
         preg_match_all("#<script .*(src=\"(.*)\")><\/script>#", $this->string, $files);
         foreach ($files[0] as $pos => $match) {
-            $fileMatch = new File($this->directory->path()->getChild($files[2][$pos]));
+            $fileMatch = new File($this->source->path()->getChild($files[2][$pos]));
             /** @var string $replace */
             $replace = str_replace(' ' . $files[1][$pos], '', $match);
             $replace = str_replace(
@@ -87,7 +87,7 @@ final class Build implements Stringable
             $files
         );
         foreach ($files[0] as $pos => $match) {
-            $fileMatch = new File($this->directory->path()->getChild($files[1][$pos]));
+            $fileMatch = new File($this->source->path()->getChild($files[1][$pos]));
             $replace = '="data:' . $mime . ';base64,'
                 . base64_encode($fileMatch->getContents())
                 . '"';
@@ -97,7 +97,7 @@ final class Build implements Stringable
 
     private function replaceFont(string $font, string $mime): void
     {
-        $fileMatch = new File($this->directory->path()->getChild($font));
+        $fileMatch = new File($this->source->path()->getChild($font));
         $replace = 'url(data:' . $mime . ';base64,'
                 . base64_encode($fileMatch->getContents())
                 . ')';

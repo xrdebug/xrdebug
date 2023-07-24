@@ -25,35 +25,35 @@ use function Chevere\Router\route;
 use function Chevere\Router\routes;
 
 return routes(
-    // route(
-    //     path: '/',
-    //     GET: bind(
-    //         controller: SPAController::class,
-    //         view: 'spa'
-    //     )
-    // ),
-    // route(
-    //     path: '/locks',
-    //     POST: bind(
-    //         LockPostController::class,
-    //         VerifySignatureMiddleware::class,
-    //     ),
-    // ),
-    // route(
-    //     path: '/locks/{id}',
-    //     GET: bind(
-    //         LockGetController::class,
-    //         VerifySignatureMiddleware::class,
-    //     ),
-    //     PATCH: bind(
-    //         LockPatchController::class,
-    //         DecryptMiddleware::class,
-    //     ),
-    //     DELETE: bind(
-    //         LockDeleteController::class,
-    //         DecryptMiddleware::class,
-    //     ),
-    // ),
+    route(
+        path: '/',
+        GET: bind(
+            controller: SPAController::class,
+            view: 'spa'
+        )
+    ),
+    route(
+        path: '/locks',
+        POST: bind(
+            LockPostController::class,
+            VerifySignatureMiddleware::class,
+        ),
+    ),
+    route(
+        path: '/locks/{id}',
+        GET: bind(
+            LockGetController::class,
+            VerifySignatureMiddleware::class,
+        ),
+        PATCH: bind(
+            LockPatchController::class,
+            DecryptMiddleware::class,
+        ),
+        DELETE: bind(
+            LockDeleteController::class,
+            DecryptMiddleware::class,
+        ),
+    ),
     route(
         path: '/message',
         POST: bind(
@@ -61,8 +61,8 @@ return routes(
             VerifySignatureMiddleware::class
         ),
     ),
-    // route(
-    //     path: '/dump',
-    //     GET: DebugStreamController::class,
-    // ),
+    route(
+        path: '/dump',
+        GET: DebugStreamController::class,
+    ),
 );

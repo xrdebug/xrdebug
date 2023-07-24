@@ -21,6 +21,7 @@ foreach (['/', '/../../../'] as $path) {
     }
 }
 
+use Chevere\Filesystem\File;
 use Chevere\Router\Dependencies;
 use Chevere\Router\Dispatcher;
 use Chevere\Schwager\DocumentSchema;
@@ -55,8 +56,6 @@ use function Chevere\XrServer\getCipher;
 use function Chevere\XrServer\getPrivateKey;
 use function Chevere\XrServer\getResponse;
 
-include __DIR__ . '/meta.php';
-
 new WritersInstance(
     (new Writers())
         ->with(
@@ -73,10 +72,15 @@ new WritersInstance(
 set_error_handler(ThrowableHandler::ERROR_AS_EXCEPTION);
 register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
 set_exception_handler(ThrowableHandler::CONSOLE);
+$appDirectory = directoryForPath(__DIR__ . '/app');
+$appPath = $appDirectory->path();
+$appCompiledPath = $appPath->getChild('compiled/');
+include $appPath->getChild('meta.php');
 $color = new Color();
+$logo = (new File($appPath->getChild('logo')))->getContents();
 $logger = writers()->log();
 $logger->write(
-    $color(file_get_contents(__DIR__ . '/logo'))->cyan()
+    $color($logo)->cyan()
     . "\n"
     . $color(strtr('XR Debug %v (%c) by Rodolfo Berrios', [
         '%v' => XR_SERVER_VERSION,
@@ -137,16 +141,16 @@ try {
 } catch (Throwable) {
 }
 $build = new Build(
-    $rootDirectory->getChild('app/src/'),
+    $appDirectory->getChild('src/'),
     XR_SERVER_VERSION,
     XR_SERVER_CODENAME,
     $isEncryptionEnabled,
 );
-$app = fileForPath($rootDirectory->getChild('app/build/')->path()->__toString() . 'en.html');
+$app = fileForPath($appCompiledPath . 'en.html');
 $app->removeIfExists();
 $app->create();
 $app->put($build->__toString());
-$routes = include 'routes.php';
+$routes = include $appPath->getChild('routes.php');
 $dependencies = new Dependencies($routes);
 $router = router($routes);
 $routeCollector = $router->routeCollector();
@@ -224,7 +228,7 @@ $array = arrayFilterBoth($spec->toArray(), function ($v, $k) {
     };
 });
 $json = json_encode($array, JSON_PRETTY_PRINT);
-$file = fileForPath(__DIR__ . '/index.json');
+$file = new File($appCompiledPath->getChild('schwager.json'));
 $file->createIfNotExists();
 $file->put($json);
 $loop->run();
