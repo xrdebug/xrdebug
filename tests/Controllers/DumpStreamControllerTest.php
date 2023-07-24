@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
-use Chevere\XrServer\Controllers\DumpStreamController;
+use Chevere\XrServer\Controllers\DebugStreamController;
 use Clue\React\Sse\BufferedChannel;
 use PHPUnit\Framework\TestCase;
 use React\EventLoop\LoopInterface;
@@ -64,7 +64,7 @@ final class DumpStreamControllerTest extends TestCase
         $stream = new ThroughStream();
         $lastEventId = '1234567890';
         $remoteAddress = '0.0.0.0';
-        $controller = new DumpStreamController(
+        $controller = new DebugStreamController(
             $channel,
             $loop,
             $stream,

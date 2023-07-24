@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "chevere/chevere": "^3.1.x-dev",
         "chevere/http": "0.2.x-dev",
         "chevere/router": "^0.4.x-dev",

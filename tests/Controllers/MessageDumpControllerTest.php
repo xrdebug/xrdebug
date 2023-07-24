@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Throwable\Errors\ArgumentCountError;
-use Chevere\XrServer\Controllers\MessageDumpController;
+use Chevere\XrServer\Controllers\MessagePostController;
 use Chevere\XrServer\Debugger;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Parameter\assertArray;
@@ -42,7 +42,7 @@ final class MessageDumpControllerTest extends TestCase
      */
     public function testAcceptBody(array $binds): void
     {
-        $body = MessageDumpController::acceptBody();
+        $body = MessagePostController::acceptBody();
         foreach (array_keys($binds) as $key) {
             assertArray($body, $binds);
             unset($binds[$key]);
@@ -66,7 +66,7 @@ final class MessageDumpControllerTest extends TestCase
                 $this->equalTo('remote_address')
             );
 
-        $controller = new MessageDumpController(
+        $controller = new MessagePostController(
             $debugger,
             $remoteAddress
         );

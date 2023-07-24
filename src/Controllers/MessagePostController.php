@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
@@ -20,8 +21,9 @@ use Chevere\XrServer\Debugger;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\string;
 
-#[Status(201)]
-final class MessageDumpController extends Controller
+#[Status(200)]
+#[Description('Create a debug message')]
+final class MessagePostController extends Controller
 {
     public function __construct(
         private Debugger $debugger,

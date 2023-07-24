@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
@@ -22,6 +23,7 @@ use Chevere\XrServer\Constants\UrlPathRegex;
 use Chevere\XrServer\Controllers\Traits\LockTrait;
 
 #[Status(204, 404)]
+#[Description('Delete a lock')]
 final class LockDeleteController extends Controller
 {
     use LockTrait;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Filesystem\Interfaces\FileInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
@@ -20,6 +21,7 @@ use Chevere\Parameter\Interfaces\ParameterInterface;
 use function Chevere\Parameter\string;
 
 #[Status(200)]
+#[Description('Single page application')]
 final class SPAController extends Controller
 {
     public function __construct(

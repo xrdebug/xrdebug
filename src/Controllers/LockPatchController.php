@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
@@ -26,6 +27,7 @@ use function Chevere\Parameter\boolean;
 use function Safe\json_encode;
 
 #[Status(200)]
+#[Description('Update a lock')]
 final class LockPatchController extends Controller
 {
     use LockTrait;

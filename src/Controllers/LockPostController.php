@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
@@ -27,6 +28,7 @@ use function Chevere\Parameter\string;
 use function Safe\json_encode;
 
 #[Status(201)]
+#[Description('Create a lock')]
 final class LockPostController extends Controller
 {
     public function __construct(

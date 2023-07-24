@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
@@ -25,6 +26,7 @@ use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 
 #[Status(200, 404)]
+#[Description('Get a lock')]
 final class LockGetController extends Controller
 {
     use LockTrait;

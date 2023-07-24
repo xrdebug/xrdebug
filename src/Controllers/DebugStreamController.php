@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\XrServer\Controllers;
 
+use Chevere\Attributes\Description;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ParameterInterface;
@@ -22,7 +23,8 @@ use React\Stream\ThroughStream;
 use function Chevere\Parameter\object;
 
 #[Status(200)]
-final class DumpStreamController extends Controller
+#[Description('Debug stream')]
+final class DebugStreamController extends Controller
 {
     public function __construct(
         private BufferedChannel $channel,

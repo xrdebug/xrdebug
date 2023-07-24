@@ -23,7 +23,7 @@ use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\Tests\src\Traits\Psr17Trait;
 use Chevere\Throwable\Exceptions\LogicException;
-use Chevere\XrServer\Controllers\DumpStreamController;
+use Chevere\XrServer\Controllers\DebugStreamController;
 use Chevere\XrServer\Controllers\LockPostController;
 use Chevere\XrServer\Controllers\SPAController;
 use Chevere\XrServer\Debugger;
@@ -184,11 +184,11 @@ final class FunctionsTest extends TestCase
                     route(
                         path: '/',
                         GET: bind(
-                            controller: DumpStreamController::class,
+                            controller: DebugStreamController::class,
                         )
                     )
                 ),
-                DumpStreamController::class,
+                DebugStreamController::class,
                 [
                     'channel' => $this->createMock(BufferedChannel::class),
                     'loop' => $this->createMock(LoopInterface::class),
