@@ -46,7 +46,6 @@ let filter = {
         //         sjcl.bitArray.concat(nonce, encrypted)
         //     );
         // }
-        console.log("/" + endpoint + "/" + message.dataset.id);
         fetch("/" + endpoint + "/" + message.dataset.id, {
                 method: method,
                 headers: {
@@ -54,7 +53,6 @@ let filter = {
                 },
                 // body: data
             })
-            .then(response => response.json())
             .then(function () {
                 message
                     .querySelectorAll(".message-buttons--pause > button")
