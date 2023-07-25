@@ -34,11 +34,11 @@
             "regex": "\/dump",
             "endpoints": {
                 "GET": {
-                    "description": "Debug stream",
+                    "description": "Debug dump stream",
                     "responses": {
                         "200": [
                             {
-                                "context": "DebugStreamController",
+                                "context": "DumpStreamController",
                                 "body": {
                                     "type": "className",
                                     "className": "React\\Stream\\ThroughStream"
@@ -54,7 +54,7 @@
             "regex": "\/locks",
             "endpoints": {
                 "POST": {
-                    "description": "Create a lock",
+                    "description": "Create a lock (pause execution)",
                     "body": {
                         "type": "array#map",
                         "parameters": {
@@ -158,7 +158,7 @@
                     }
                 },
                 "PATCH": {
-                    "description": "Update a lock",
+                    "description": "Update a lock (stop execution)",
                     "responses": {
                         "200": [
                             {
@@ -185,7 +185,7 @@
             "regex": "\/message",
             "endpoints": {
                 "POST": {
-                    "description": "Send a debug message",
+                    "description": "Create a debug message",
                     "body": {
                         "type": "array#map",
                         "parameters": {
