@@ -27,7 +27,7 @@ final class LockPostControllerTest extends TestCase
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $array = [
-            'lock' => true,
+            'pause' => true,
             'stop' => false,
         ];
         $encode = json_encode($array);

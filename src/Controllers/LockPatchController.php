@@ -40,7 +40,7 @@ final class LockPatchController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            lock: boolean(),
+            pause: boolean(),
             stop: boolean(),
         );
     }
@@ -55,7 +55,7 @@ final class LockPatchController extends Controller
         $file->remove();
         $file->create();
         $data = [
-            'lock' => true,
+            'pause' => true,
             'stop' => true,
         ];
         $json = json_encode($data);

@@ -41,7 +41,7 @@ final class LockPostController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            lock: boolean(),
+            pause: boolean(),
             stop: boolean(),
         );
     }
@@ -67,7 +67,7 @@ final class LockPostController extends Controller
         $file->removeIfExists();
         $file->create();
         $data = [
-            'lock' => true,
+            'pause' => true,
             'stop' => false,
         ];
         $encoded = json_encode($data);

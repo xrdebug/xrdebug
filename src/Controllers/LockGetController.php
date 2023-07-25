@@ -39,7 +39,7 @@ final class LockGetController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            lock: boolean(),
+            pause: boolean(),
             stop: boolean()
         );
     }

@@ -67,12 +67,12 @@ final class DumpStreamControllerTest extends TestCase
         $controller = new DebugStreamController(
             $channel,
             $loop,
-            $stream,
             $lastEventId,
             $remoteAddress
         );
         $this->assertNull($isConnected);
-        $this->assertSame($stream, $controller->getResponse()->object());
+        $stream = $controller->getResponse()->object();
+        $this->assertInstanceOf(ThroughStream::class, $stream);
         $this->assertTrue($isConnected);
         $sessionStart = '{message: "New dump session started [' . $remoteAddress . ']"}';
         $this->assertSame($sessionStart, $buffered);

@@ -220,7 +220,7 @@ final class FunctionsTest extends TestCase
                     'remoteAddress' => $remoteAddress,
                 ],
                 'text/json',
-                '{"lock":true,"stop":false}',
+                '{"pause":true,"stop":false}',
             ],
         ];
     }
@@ -248,8 +248,6 @@ final class FunctionsTest extends TestCase
         $this->assertSame($status->primary, $response->getStatusCode());
         $this->assertSame($contentType, $response->getHeaderLine('Content-Type'));
         if ($content instanceof ThroughStream) {
-            $this->assertEquals($content, $response->getBody()->input);
-
             return;
         }
         $this->assertSame($content, $response->getBody()->__toString());

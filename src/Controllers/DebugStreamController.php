@@ -17,7 +17,6 @@ use Chevere\Attributes\Description;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ParameterInterface;
-use Chevere\Writer\Interfaces\WriterInterface;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
 use React\Stream\ThroughStream;
@@ -32,7 +31,6 @@ final class DebugStreamController extends Controller
         private LoopInterface $loop,
         private string $lastEventId,
         private string $remoteAddress,
-        private WriterInterface $logger,
     ) {
     }
 
