@@ -23,8 +23,8 @@ use React\Stream\ThroughStream;
 use function Chevere\Parameter\object;
 
 #[Status(200)]
-#[Description('Debug stream')]
-final class DebugStreamController extends Controller
+#[Description('Debug dump stream')]
+final class DumpStreamController extends Controller
 {
     public function __construct(
         private BufferedChannel $channel,

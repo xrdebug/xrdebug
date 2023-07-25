@@ -24,7 +24,7 @@ use function Chevere\Parameter\null;
 use function Chevere\Parameter\string;
 
 #[Status(200)]
-#[Description('Send a debug message')]
+#[Description('Create a debug message')]
 final class MessagePostController extends Controller
 {
     public function __construct(

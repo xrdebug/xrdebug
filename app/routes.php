@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-use Chevere\XrServer\Controllers\DebugStreamController;
+use Chevere\XrServer\Controllers\DumpStreamController;
 use Chevere\XrServer\Controllers\LockDeleteController;
 use Chevere\XrServer\Controllers\LockGetController;
 use Chevere\XrServer\Controllers\LockPatchController;
@@ -63,6 +63,6 @@ return routes(
     ),
     route(
         path: '/dump',
-        GET: DebugStreamController::class,
+        GET: DumpStreamController::class,
     ),
 );

@@ -27,7 +27,7 @@ use function Chevere\Parameter\boolean;
 use function Safe\json_encode;
 
 #[Status(200)]
-#[Description('Update a lock')]
+#[Description('Update a lock (stop execution)')]
 final class LockPatchController extends Controller
 {
     use LockTrait;

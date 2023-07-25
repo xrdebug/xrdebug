@@ -28,7 +28,7 @@ use function Chevere\Parameter\string;
 use function Safe\json_encode;
 
 #[Status(201)]
-#[Description('Create a lock')]
+#[Description('Create a lock (pause execution)')]
 final class LockPostController extends Controller
 {
     public function __construct(
