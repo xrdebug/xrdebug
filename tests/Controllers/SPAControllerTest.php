@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrServer\Controllers\SPAController;
+use Chevere\XrDebug\Controllers\SPAController;
 use PHPUnit\Framework\TestCase;
 
 final class SPAControllerTest extends TestCase

@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-use Chevere\XrServer\Controllers\DumpStreamController;
-use Chevere\XrServer\Controllers\LockDeleteController;
-use Chevere\XrServer\Controllers\LockGetController;
-use Chevere\XrServer\Controllers\LockPatchController;
-use Chevere\XrServer\Controllers\LockPostController;
-use Chevere\XrServer\Controllers\MessagePostController;
-use Chevere\XrServer\Controllers\SPAController;
-use Chevere\XrServer\Middlewares\DecryptMiddleware;
-use Chevere\XrServer\Middlewares\VerifySignatureMiddleware;
+use Chevere\XrDebug\Controllers\MessagePostController;
+use Chevere\XrDebug\Controllers\PauseDeleteController;
+use Chevere\XrDebug\Controllers\PauseGetController;
+use Chevere\XrDebug\Controllers\PausePatchController;
+use Chevere\XrDebug\Controllers\PausePostController;
+use Chevere\XrDebug\Controllers\SPAController;
+use Chevere\XrDebug\Controllers\StreamController;
+use Chevere\XrDebug\Middlewares\DecryptMiddleware;
+use Chevere\XrDebug\Middlewares\VerifySignatureMiddleware;
 use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\routes;
@@ -33,36 +33,36 @@ return routes(
         )
     ),
     route(
-        path: '/locks',
+        path: '/pauses',
         POST: bind(
-            LockPostController::class,
+            PausePostController::class,
             VerifySignatureMiddleware::class,
         ),
     ),
     route(
-        path: '/locks/{id}',
+        path: '/pauses/{id}',
         GET: bind(
-            LockGetController::class,
+            PauseGetController::class,
             VerifySignatureMiddleware::class,
         ),
         PATCH: bind(
-            LockPatchController::class,
+            PausePatchController::class,
             DecryptMiddleware::class,
         ),
         DELETE: bind(
-            LockDeleteController::class,
+            PauseDeleteController::class,
             DecryptMiddleware::class,
         ),
     ),
     route(
-        path: '/message',
+        path: '/messages',
         POST: bind(
             MessagePostController::class,
             VerifySignatureMiddleware::class
         ),
     ),
     route(
-        path: '/dump',
-        GET: DumpStreamController::class,
+        path: '/stream',
+        GET: StreamController::class,
     ),
 );

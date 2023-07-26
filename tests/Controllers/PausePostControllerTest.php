@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrServer\Controllers\LockPostController;
-use Chevere\XrServer\Debugger;
+use Chevere\XrDebug\Controllers\PausePostController;
+use Chevere\XrDebug\Debugger;
 use PHPUnit\Framework\TestCase;
 use React\Http\Message\ServerRequest;
 
-final class LockPostControllerTest extends TestCase
+final class PausePostControllerTest extends TestCase
 {
     use DirectoryTrait;
 
@@ -57,7 +57,7 @@ final class LockPostControllerTest extends TestCase
                 $this->equalTo($body),
                 $this->equalTo($remoteAddress)
             );
-        $controller = new LockPostController(
+        $controller = new PausePostController(
             $directory,
             $debugger,
             $remoteAddress

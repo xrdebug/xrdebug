@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Chevere\Tests;
 
 use Chevere\Filesystem\Exceptions\DirectoryNotExistsException;
-use Chevere\XrServer\Build;
+use Chevere\XrDebug\Build;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Filesystem\directoryForPath;
 

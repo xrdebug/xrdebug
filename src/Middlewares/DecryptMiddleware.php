@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Middlewares;
+namespace Chevere\XrDebug\Middlewares;
 
 use phpseclib3\Crypt\AES;
 use Psr\Http\Message\ResponseInterface;
@@ -19,7 +19,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function Chevere\Writer\streamTemp;
-use function Chevere\XrServer\decrypt;
+use function Chevere\XrDebug\decrypt;
 
 final class DecryptMiddleware implements MiddlewareInterface
 {

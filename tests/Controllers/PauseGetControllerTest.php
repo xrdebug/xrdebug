@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
-use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrServer\Controllers\LockPatchController;
+use Chevere\XrDebug\Controllers\PauseGetController;
 use PHPUnit\Framework\TestCase;
 
-final class LockPatchControllerTest extends TestCase
+final class PauseGetControllerTest extends TestCase
 {
     use DirectoryTrait;
 
@@ -27,7 +26,7 @@ final class LockPatchControllerTest extends TestCase
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $directory = $this->getWritableDirectory();
-        $controller = new LockPatchController($directory);
+        $controller = new PauseGetController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
         $controller->getResponse(id: $id);
@@ -36,20 +35,18 @@ final class LockPatchControllerTest extends TestCase
     public function test200(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
-        $directory = $this->getWritableDirectory();
-        $path = $directory->path()->getChild($id);
-        $file = new File($path);
-        $file->createIfNotExists();
-        $controller = new LockPatchController($directory);
-        $response = $controller->getResponse(id: $id);
-        $decoded = json_decode($file->getContents(), true);
-        $expected = [
+        $array = [
             'pause' => true,
-            'stop' => true,
+            'stop' => false,
         ];
-        $this->assertSame($expected, $response->array());
-        $this->assertSame($expected, $decoded);
-        $this->assertTrue($file->exists());
+        $encode = json_encode($array);
+        $file = $this->getWritableFile($id);
+        $file->createIfNotExists();
+        $file->put($encode);
+        $directory = $this->getWritableDirectory();
+        $controller = new PauseGetController($directory);
+        $response = $controller->getResponse(id: $id);
+        $this->assertSame($array, $response->array());
         $file->remove();
     }
 }

@@ -1,11 +1,11 @@
 {
     "api": "xr",
-    "name": "XR Debug API",
+    "name": "XrDebug API",
     "version": "1.0.0",
     "servers": [
         {
             "url": "http:\/\/0.0.0.0:27420",
-            "description": "XR Debug Server"
+            "description": "XrDebug"
         }
     ],
     "paths": {
@@ -29,160 +29,9 @@
                 }
             }
         },
-        "\/dump": {
-            "name": "\/dump",
-            "regex": "\/dump",
-            "endpoints": {
-                "GET": {
-                    "description": "Debug dump stream",
-                    "responses": {
-                        "200": [
-                            {
-                                "context": "DumpStreamController",
-                                "body": {
-                                    "type": "className",
-                                    "className": "React\\Stream\\ThroughStream"
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        },
-        "\/locks": {
-            "name": "\/locks",
-            "regex": "\/locks",
-            "endpoints": {
-                "POST": {
-                    "description": "Create a lock (pause execution)",
-                    "body": {
-                        "type": "array#map",
-                        "parameters": {
-                            "id": {
-                                "type": "string",
-                                "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
-                            },
-                            "body": {
-                                "required": false,
-                                "type": "string",
-                                "regex": ".*?"
-                            },
-                            "emote": {
-                                "required": false,
-                                "type": "string"
-                            },
-                            "file_line": {
-                                "required": false,
-                                "type": "string"
-                            },
-                            "file_path": {
-                                "required": false,
-                                "type": "string"
-                            },
-                            "topic": {
-                                "required": false,
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "responses": {
-                        "201": [
-                            {
-                                "context": "LockPostController",
-                                "body": {
-                                    "type": "array#map",
-                                    "parameters": {
-                                        "pause": {
-                                            "type": "boolean"
-                                        },
-                                        "stop": {
-                                            "type": "boolean"
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        },
-        "\/locks\/{id}": {
-            "name": "\/locks\/{id}",
-            "regex": "^(?|\/locks\/([0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}))$",
-            "variables": {
-                "id": {
-                    "type": "string",
-                    "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
-                }
-            },
-            "endpoints": {
-                "DELETE": {
-                    "description": "Delete a lock",
-                    "responses": {
-                        "204": [
-                            {
-                                "context": "LockDeleteController"
-                            }
-                        ],
-                        "404": [
-                            {
-                                "context": "LockDeleteController"
-                            }
-                        ]
-                    }
-                },
-                "GET": {
-                    "description": "Get a lock",
-                    "responses": {
-                        "200": [
-                            {
-                                "context": "LockGetController",
-                                "body": {
-                                    "type": "array#map",
-                                    "parameters": {
-                                        "pause": {
-                                            "type": "boolean"
-                                        },
-                                        "stop": {
-                                            "type": "boolean"
-                                        }
-                                    }
-                                }
-                            }
-                        ],
-                        "404": [
-                            {
-                                "context": "LockGetController"
-                            }
-                        ]
-                    }
-                },
-                "PATCH": {
-                    "description": "Update a lock (stop execution)",
-                    "responses": {
-                        "200": [
-                            {
-                                "context": "LockPatchController",
-                                "body": {
-                                    "type": "array#map",
-                                    "parameters": {
-                                        "pause": {
-                                            "type": "boolean"
-                                        },
-                                        "stop": {
-                                            "type": "boolean"
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        },
-        "\/message": {
-            "name": "\/message",
-            "regex": "\/message",
+        "\/messages": {
+            "name": "\/messages",
+            "regex": "\/messages",
             "endpoints": {
                 "POST": {
                     "description": "Create a debug message",
@@ -222,6 +71,157 @@
                                 "context": "MessagePostController",
                                 "body": {
                                     "type": "null"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/pauses": {
+            "name": "\/pauses",
+            "regex": "\/pauses",
+            "endpoints": {
+                "POST": {
+                    "description": "Create a pause",
+                    "body": {
+                        "type": "array#map",
+                        "parameters": {
+                            "id": {
+                                "type": "string",
+                                "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+                            },
+                            "body": {
+                                "required": false,
+                                "type": "string",
+                                "regex": ".*?"
+                            },
+                            "emote": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "file_line": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "file_path": {
+                                "required": false,
+                                "type": "string"
+                            },
+                            "topic": {
+                                "required": false,
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201": [
+                            {
+                                "context": "PausePostController",
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "pause": {
+                                            "type": "boolean"
+                                        },
+                                        "stop": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/pauses\/{id}": {
+            "name": "\/pauses\/{id}",
+            "regex": "^(?|\/pauses\/([0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}))$",
+            "variables": {
+                "id": {
+                    "type": "string",
+                    "regex": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+                }
+            },
+            "endpoints": {
+                "DELETE": {
+                    "description": "Delete a pause",
+                    "responses": {
+                        "204": [
+                            {
+                                "context": "PauseDeleteController"
+                            }
+                        ],
+                        "404": [
+                            {
+                                "context": "PauseDeleteController"
+                            }
+                        ]
+                    }
+                },
+                "GET": {
+                    "description": "Get a pause",
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "PauseGetController",
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "pause": {
+                                            "type": "boolean"
+                                        },
+                                        "stop": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "404": [
+                            {
+                                "context": "PauseGetController"
+                            }
+                        ]
+                    }
+                },
+                "PATCH": {
+                    "description": "Update a pause to stop execution",
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "PausePatchController",
+                                "body": {
+                                    "type": "array#map",
+                                    "parameters": {
+                                        "pause": {
+                                            "type": "boolean"
+                                        },
+                                        "stop": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "\/stream": {
+            "name": "\/stream",
+            "regex": "\/stream",
+            "endpoints": {
+                "GET": {
+                    "description": "Debug stream",
+                    "responses": {
+                        "200": [
+                            {
+                                "context": "StreamController",
+                                "body": {
+                                    "type": "className",
+                                    "className": "React\\Stream\\ThroughStream"
                                 }
                             }
                         ]

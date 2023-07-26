@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer\Controllers\Traits;
+namespace Chevere\XrDebug\Controllers\Traits;
 
 use Chevere\Filesystem\Exceptions\FileNotExistsException;
 use Chevere\Filesystem\Interfaces\FileInterface;
 use Chevere\Http\Exceptions\ControllerException;
 
-trait LockTrait
+trait PauseTrait
 {
     private function assertExists(FileInterface $file): void
     {

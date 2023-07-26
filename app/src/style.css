@@ -720,10 +720,6 @@ pre+.backtrace {
     top: 0;
 }
 
-.splash-key:hover kbd {
-    border-color: rgba(var(--colorShadeRGB), 1);
-}
-
 .splash-key-title {
     font-weight: bold;
 }
@@ -733,10 +729,6 @@ pre+.backtrace {
     padding-left: 1.25em;
     position: relative;
     cursor: default;
-}
-
-.splash-key:hover .splash-key-description {
-    opacity: 0.7;
 }
 
 .splash-key-description:after {

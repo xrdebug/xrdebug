@@ -23,10 +23,10 @@ use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\Tests\src\Traits\Psr17Trait;
 use Chevere\Throwable\Exceptions\LogicException;
-use Chevere\XrServer\Controllers\DumpStreamController;
-use Chevere\XrServer\Controllers\LockPostController;
-use Chevere\XrServer\Controllers\SPAController;
-use Chevere\XrServer\Debugger;
+use Chevere\XrDebug\Controllers\PausePostController;
+use Chevere\XrDebug\Controllers\SPAController;
+use Chevere\XrDebug\Controllers\StreamController;
+use Chevere\XrDebug\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -38,11 +38,11 @@ use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\router;
 use function Chevere\Router\routes;
-use function Chevere\XrServer\decrypt;
-use function Chevere\XrServer\encrypt;
-use function Chevere\XrServer\getControllerArguments;
-use function Chevere\XrServer\getDump;
-use function Chevere\XrServer\getResponse;
+use function Chevere\XrDebug\decrypt;
+use function Chevere\XrDebug\encrypt;
+use function Chevere\XrDebug\getControllerArguments;
+use function Chevere\XrDebug\getDump;
+use function Chevere\XrDebug\getResponse;
 
 final class FunctionsTest extends TestCase
 {
@@ -184,11 +184,11 @@ final class FunctionsTest extends TestCase
                     route(
                         path: '/',
                         GET: bind(
-                            controller: DumpStreamController::class,
+                            controller: StreamController::class,
                         )
                     )
                 ),
-                DumpStreamController::class,
+                StreamController::class,
                 [
                     'channel' => $this->createMock(BufferedChannel::class),
                     'loop' => $this->createMock(LoopInterface::class),
@@ -209,11 +209,11 @@ final class FunctionsTest extends TestCase
                     route(
                         path: '/',
                         POST: bind(
-                            controller: LockPostController::class,
+                            controller: PausePostController::class,
                         )
                     )
                 ),
-                LockPostController::class,
+                PausePostController::class,
                 [
                     'directory' => $directory,
                     'debugger' => $debugger,

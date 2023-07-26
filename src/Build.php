@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrServer;
+namespace Chevere\XrDebug;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
@@ -25,6 +25,7 @@ final class Build implements Stringable
         private DirectoryInterface $source,
         private string $version,
         private string $codename,
+        private string $sessionName = 'XrDebug',
         bool $isEncryptionEnabled = false,
     ) {
         $source->assertExists();
@@ -35,6 +36,7 @@ final class Build implements Stringable
         $this->replace('%isEncryptionEnabled%', $isEncryptionEnabled ? 'true' : 'false');
         $this->replace('%nonceLength%', strval(cipherNonceLength()));
         $this->replace('%tagLength%', strval(cipherTagLength()));
+        $this->replace('%sessionName%', $this->sessionName);
         $this->replaceIcons('svg', 'image/svg+xml');
         $this->replaceIcons('png', 'image/png');
         $this->replaceStyles();

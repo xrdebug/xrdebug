@@ -16,10 +16,10 @@ namespace Chevere\Tests\Controllers;
 use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrServer\Controllers\LockDeleteController;
+use Chevere\XrDebug\Controllers\PauseDeleteController;
 use PHPUnit\Framework\TestCase;
 
-final class LockDeleteControllerTest extends TestCase
+final class PauseDeleteControllerTest extends TestCase
 {
     use DirectoryTrait;
 
@@ -30,7 +30,7 @@ final class LockDeleteControllerTest extends TestCase
         $path = $directory->path()->getChild($id);
         $file = new File($path);
         $file->removeIfExists();
-        $controller = new LockDeleteController($directory);
+        $controller = new PauseDeleteController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
         $controller->getResponse(id: $id);
@@ -43,7 +43,7 @@ final class LockDeleteControllerTest extends TestCase
         $path = $directory->path()->getChild($id);
         $file = new File($path);
         $file->createIfNotExists();
-        $controller = new LockDeleteController($directory);
+        $controller = new PauseDeleteController($directory);
         $response = $controller->getResponse(id: $id);
         $this->assertSame([], $response->array());
         $this->assertFalse($file->exists());

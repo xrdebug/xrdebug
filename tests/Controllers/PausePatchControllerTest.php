@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
+use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrServer\Controllers\LockGetController;
+use Chevere\XrDebug\Controllers\PausePatchController;
 use PHPUnit\Framework\TestCase;
 
-final class LockGetControllerTest extends TestCase
+final class PausePatchControllerTest extends TestCase
 {
     use DirectoryTrait;
 
@@ -26,7 +27,7 @@ final class LockGetControllerTest extends TestCase
     {
         $id = 'b1cabc9a-145f-11ee-be56-0242ac120002';
         $directory = $this->getWritableDirectory();
-        $controller = new LockGetController($directory);
+        $controller = new PausePatchController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
         $controller->getResponse(id: $id);
@@ -35,18 +36,20 @@ final class LockGetControllerTest extends TestCase
     public function test200(): void
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
-        $array = [
-            'pause' => true,
-            'stop' => false,
-        ];
-        $encode = json_encode($array);
-        $file = $this->getWritableFile($id);
-        $file->createIfNotExists();
-        $file->put($encode);
         $directory = $this->getWritableDirectory();
-        $controller = new LockGetController($directory);
+        $path = $directory->path()->getChild($id);
+        $file = new File($path);
+        $file->createIfNotExists();
+        $controller = new PausePatchController($directory);
         $response = $controller->getResponse(id: $id);
-        $this->assertSame($array, $response->array());
+        $decoded = json_decode($file->getContents(), true);
+        $expected = [
+            'pause' => true,
+            'stop' => true,
+        ];
+        $this->assertSame($expected, $response->array());
+        $this->assertSame($expected, $decoded);
+        $this->assertTrue($file->exists());
         $file->remove();
     }
 }

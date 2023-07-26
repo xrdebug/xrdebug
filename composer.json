@@ -1,6 +1,6 @@
 {
-    "name": "chevere/xr-server",
-    "description": "XR Debug server",
+    "name": "chevere/xrdebug",
+    "description": "Lightweight debug utility",
     "homepage": "https://xr-debug.chevere.org",
     "license": "Apache-2.0",
     "authors": [
@@ -34,7 +34,7 @@
             "src/functions.php"
         ],
         "psr-4": {
-            "Chevere\\XrServer\\": "src/"
+            "Chevere\\XrDebug\\": "src/"
         }
     },
     "autoload-dev": {
@@ -48,11 +48,12 @@
         "sort-packages": true
     },
     "bin": [
-        "xr"
+        "xrdebug"
     ],
     "scripts": {
         "all": [
             "composer phpstan",
+            "composer test",
             "composer test-coverage",
             "composer infection"
         ],
@@ -60,14 +61,16 @@
         "phpstan": "vendor/bin/phpstan analyze src/ --memory-limit 512M --level 9",
         "test": "vendor/bin/phpunit -c phpunit.xml",
         "test-coverage": "vendor/bin/phpunit -c phpunit-coverage.xml",
-        "update-cs": "mkdir -p .ecs && cd .ecs && curl -O https://raw.githubusercontent.com/chevere/code-style/main/.ecs/ecs-chevere.php"
+        "cs-update": "mkdir -p .ecs && cd .ecs && curl -O https://raw.githubusercontent.com/chevere/code-style/main/.ecs/ecs-chevere.php",
+        "cs-fix": "vendor/bin/ecs --config='.ecs/ecs.php' check src --fix"
     },
     "scripts-descriptions": {
         "all": "Runs all checks",
         "infection": "Runs infection",
         "phpstan": "Runs phpstan",
         "test": "Run test suite",
-        "test-coverage": "Run test suite (report)",
-        "update-cs": "Update Chevere code style definition"
+        "test-coverage": "Run test suite (coverage)",
+        "cs-update": "Update Chevere code style definition",
+        "cs-fix": "Update Chevere code style definition"
     }
 }

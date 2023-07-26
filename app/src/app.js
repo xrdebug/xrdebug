@@ -19,10 +19,10 @@ let filter = {
     queuedMessageCount = 0,
     messageActions = {
         continue: function (el) {
-            messageAction('DELETE', 'locks', el);
+            messageAction('DELETE', 'pauses', el);
         },
         stop: function (el) {
-            messageAction('PATCH', 'locks', el);
+            messageAction('PATCH', 'pauses', el);
         }
     },
     messageAction = function (method, endpoint, el) {
@@ -379,7 +379,7 @@ setTimeout(function () {
         .classList
         .add("body--splash-in");
 }, 100);
-es = new EventSource("dump");
+es = new EventSource("stream");
 es.addEventListener("message", function (event) {
     if (currentStatus === "stop") {
         return;

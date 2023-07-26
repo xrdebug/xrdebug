@@ -1,4 +1,4 @@
-# XR Debug server
+# XrDebug
 
 > 🔔 Subscribe to the [newsletter](https://chv.to/chevere-newsletter) to don't miss any update regarding Chevere.
 

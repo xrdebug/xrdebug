@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Throwable\Errors\ArgumentCountError;
-use Chevere\XrServer\Controllers\MessagePostController;
-use Chevere\XrServer\Debugger;
+use Chevere\XrDebug\Controllers\MessagePostController;
+use Chevere\XrDebug\Debugger;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Parameter\assertArray;
 
-final class MessageDumpControllerTest extends TestCase
+final class MessagePostControllerTest extends TestCase
 {
     public function dataProvider(): array
     {
@@ -72,6 +72,6 @@ final class MessageDumpControllerTest extends TestCase
         );
         $controller = $controller->withBody($body);
         $response = $controller->getResponse();
-        $this->assertSame(null, $response->null());
+        $this->assertSame(null, $response->mixed());
     }
 }
