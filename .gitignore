@@ -5,6 +5,7 @@
 /vendor
 /composer.lock
 /build
+/app/compiled
 /locks
 /tests/writable/**
 !tests/writable/.gitkeep
