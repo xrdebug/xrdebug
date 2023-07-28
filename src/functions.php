@@ -27,8 +27,11 @@ use phpseclib3\Crypt\EC\PrivateKey;
 use phpseclib3\Crypt\Random;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use React\Http\Message\Response;
 use React\Stream\ThroughStream;
+use Relay\Relay;
 use Throwable;
 use function Chevere\Http\classStatus;
 use function Safe\base64_decode;
@@ -129,7 +132,27 @@ function getResponse(
 
     try {
         $routed = $dispatcher->dispatch($request->getMethod(), $path);
-    } catch (Throwable) {
+        $queue = [];
+        $middlewares = $routed->bind()->middlewares();
+        foreach ($middlewares as $middlewareName) {
+            $className = (string) $middlewareName;
+            if (array_key_exists($className, $queue)) {
+                continue;
+            }
+            $middlewareArguments = getArguments($dependencies, $className, $container);
+            $queue[$className] = new $className(...$middlewareArguments);
+        }
+        $queue[] = new class() implements MiddlewareInterface {
+            public function process(
+                ServerRequestInterface $request,
+                RequestHandlerInterface $handler
+            ): ResponseInterface {
+                return new Response();
+            }
+        };
+        $relay = new Relay($queue);
+        $response = $relay->handle($request);
+    } catch (Throwable $e) {
         return new Response(404);
     }
     $container = array_merge($container, [
@@ -139,7 +162,7 @@ function getResponse(
     ]);
     $view = $routed->bind()->view();
     $controllerName = $routed->bind()->controllerName()->__toString();
-    $controllerArguments = getControllerArguments($dependencies, $controllerName, $container);
+    $controllerArguments = getArguments($dependencies, $controllerName, $container);
     /** @var Controller $controller */
     $controller = new $controllerName(...$controllerArguments);
     if ($request->getMethod() === 'POST') {
@@ -199,18 +222,20 @@ function getResponse(
  * @param array<string, mixed> $container
  * @return array<string, mixed>
  */
-function getControllerArguments(
+function getArguments(
     DependenciesInterface $dependencies,
-    string $controllerName,
+    string $class,
     array $container
 ): array {
-    $controllerArguments = [];
-    foreach ($dependencies->get($controllerName)->keys() as $key) {
-        $controllerArguments[$key] = $container[$key]
-            ?? throw new LogicException("Missing container key {$key}");
+    $arguments = [];
+    foreach ($dependencies->get($class)->keys() as $key) {
+        $arguments[$key] = array_key_exists($key, $container)
+            ? $container[$key]
+            : throw new LogicException("Missing container key {$key}");
     }
+    // vdd($arguments);
 
-    return $controllerArguments;
+    return $arguments;
 }
 
 function getCipher(

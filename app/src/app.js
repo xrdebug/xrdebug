@@ -27,31 +27,28 @@ let filter = {
     },
     messageAction = function (method, endpoint, el) {
         let message = el.closest(".message");
-        // let data = {
-        //     id: message.dataset.id
-        // };
-        let contentType = 'application/json';
-        // data = JSON.stringify(data);
-        // if (IS_ENCRYPTION_ENABLED) {
-        //     let nonce = sjcl.random.randomWords(GCM_NONCE_LENGTH/32);
-        //     let encrypted = sjcl.mode.gcm
-        //         .encrypt(
-        //             cipher,
-        //             sjcl.codec.utf8String.toBits(data),
-        //             nonce,
-        //             null,
-        //             GCM_TAG_LENGTH
-        //         );
-        //     data = sjcl.codec.base64.fromBits(
-        //         sjcl.bitArray.concat(nonce, encrypted)
-        //     );
-        // }
+        let data = [];
+        data = JSON.stringify(data);
+        if (IS_ENCRYPTION_ENABLED) {
+            let nonce = sjcl.random.randomWords(GCM_NONCE_LENGTH/32);
+            let encrypted = sjcl.mode.gcm
+                .encrypt(
+                    cipher,
+                    sjcl.codec.utf8String.toBits(data),
+                    nonce,
+                    null,
+                    GCM_TAG_LENGTH
+                );
+            data = sjcl.codec.base64.fromBits(
+                sjcl.bitArray.concat(nonce, encrypted)
+            );
+        }
         fetch("/" + endpoint + "/" + message.dataset.id, {
                 method: method,
                 headers: {
-                    "Content-Type": contentType
+                    "Content-Type": "application/json"
                 },
-                // body: data
+                body: data
             })
             .then(function () {
                 message

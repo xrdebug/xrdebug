@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Chevereto debug</title>
+        <title>XrDebug</title>
         <style media="all">:root {
     --fontPre: XR, monospace;
     --borderSize: 0.0625rem;
@@ -807,7 +807,7 @@ body:not(.body--splash) .splash {
             </div>
         </section>
         <header>
-            <div contenteditable="true" class="header-title no-keys">Chevereto debug</div>
+            <div contenteditable="true" class="header-title no-keys">XrDebug</div>
             <div class="header-filter">
                 <span class="topic filter-button user-select-none cursor-pointer hide-if-empty"></span>
                 <span class="emote filter-button user-select-none cursor-pointer hide-if-empty"></span>
@@ -852,7 +852,7 @@ body:not(.body--splash) .splash {
         </template>
     </body>
     <script>
-        const IS_ENCRYPTION_ENABLED = false;
+        const IS_ENCRYPTION_ENABLED = true;
         const NONCE_LENGTH = 16;
         const TAG_LENGTH = 16;
         const GCM_NONCE_LENGTH = NONCE_LENGTH * 8;
@@ -968,31 +968,28 @@ let filter = {
     },
     messageAction = function (method, endpoint, el) {
         let message = el.closest(".message");
-        // let data = {
-        //     id: message.dataset.id
-        // };
-        let contentType = 'application/json';
-        // data = JSON.stringify(data);
-        // if (IS_ENCRYPTION_ENABLED) {
-        //     let nonce = sjcl.random.randomWords(GCM_NONCE_LENGTH/32);
-        //     let encrypted = sjcl.mode.gcm
-        //         .encrypt(
-        //             cipher,
-        //             sjcl.codec.utf8String.toBits(data),
-        //             nonce,
-        //             null,
-        //             GCM_TAG_LENGTH
-        //         );
-        //     data = sjcl.codec.base64.fromBits(
-        //         sjcl.bitArray.concat(nonce, encrypted)
-        //     );
-        // }
+        let data = [];
+        data = JSON.stringify(data);
+        if (IS_ENCRYPTION_ENABLED) {
+            let nonce = sjcl.random.randomWords(GCM_NONCE_LENGTH/32);
+            let encrypted = sjcl.mode.gcm
+                .encrypt(
+                    cipher,
+                    sjcl.codec.utf8String.toBits(data),
+                    nonce,
+                    null,
+                    GCM_TAG_LENGTH
+                );
+            data = sjcl.codec.base64.fromBits(
+                sjcl.bitArray.concat(nonce, encrypted)
+            );
+        }
         fetch("/" + endpoint + "/" + message.dataset.id, {
                 method: method,
                 headers: {
-                    "Content-Type": contentType
+                    "Content-Type": "application/json"
                 },
-                // body: data
+                body: data
             })
             .then(function () {
                 message

@@ -35,7 +35,7 @@ final class DecryptMiddleware implements MiddlewareInterface
         if ($this->cipher === null) {
             return $handler->handle($request);
         }
-        $body = decrypt($this->cipher, $request->getBody()->__toString());
+        $body = decrypt($this->cipher, (string) $request->getBody());
         $stream = streamTemp($body);
         $request = $request->withBody($stream);
 

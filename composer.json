@@ -19,7 +19,7 @@
         "chevere/throwable-handler": "^0.10.x-dev",
         "middlewares/utils": "^3.0",
         "phpseclib/phpseclib": "~3.0",
-        "relay/relay": "2.x-dev",
+        "relay/relay": "~2.0",
         "rodber/php-sse-react": "^0.1",
         "samejack/php-argv": "^1.0"
     },

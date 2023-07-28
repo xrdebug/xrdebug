@@ -40,7 +40,7 @@ use function Chevere\Router\router;
 use function Chevere\Router\routes;
 use function Chevere\XrDebug\decrypt;
 use function Chevere\XrDebug\encrypt;
-use function Chevere\XrDebug\getControllerArguments;
+use function Chevere\XrDebug\getArguments;
 use function Chevere\XrDebug\getDump;
 use function Chevere\XrDebug\getResponse;
 
@@ -267,10 +267,10 @@ final class FunctionsTest extends TestCase
         $pass = [
             'app' => $this->createMock(FileInterface::class),
         ];
-        $arguments = getControllerArguments($dependencies, SPAController::class, $pass);
+        $arguments = getArguments($dependencies, SPAController::class, $pass);
         $this->assertSame($pass, $arguments);
         $this->expectException(LogicException::class);
-        $arguments = getControllerArguments($dependencies, SPAController::class, []);
+        $arguments = getArguments($dependencies, SPAController::class, []);
     }
 
     private function getDispatcher(RoutesInterface $routes): DispatcherInterface
