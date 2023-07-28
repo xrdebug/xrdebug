@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrDebug\Controllers\PausePostController;
-use Chevere\XrDebug\Debugger;
+use Chevere\xrDebug\Controllers\PausePostController;
+use Chevere\xrDebug\Debugger;
 use PHPUnit\Framework\TestCase;
 use React\Http\Message\ServerRequest;
 

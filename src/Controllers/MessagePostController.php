@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug\Controllers;
+namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use Chevere\Parameter\Interfaces\ParameterInterface;
-use Chevere\XrDebug\Debugger;
+use Chevere\xrDebug\Debugger;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\null;
 use function Chevere\Parameter\string;

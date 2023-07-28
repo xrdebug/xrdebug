@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug\Controllers\Traits;
+namespace Chevere\xrDebug\Controllers\Traits;
 
 use Chevere\Filesystem\Exceptions\FileNotExistsException;
 use Chevere\Filesystem\Interfaces\FileInterface;

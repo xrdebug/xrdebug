@@ -17,7 +17,7 @@ use Chevere\Http\Exceptions\MiddlewareException;
 use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Tests\src\Traits\KeyTrait;
 use Chevere\Tests\src\Traits\Psr17Trait;
-use Chevere\XrDebug\Middlewares\VerifySignatureMiddleware;
+use Chevere\xrDebug\Middlewares\VerifySignatureMiddleware;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

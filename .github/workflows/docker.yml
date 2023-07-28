@@ -36,8 +36,8 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
           labels: |
-            org.opencontainers.image.title=XrDebug server
-            org.opencontainers.image.description=XrDebug server (ReactPHP SSE).
+            org.opencontainers.image.title=xrDebug server
+            org.opencontainers.image.description=xrDebug server (ReactPHP SSE).
             org.opencontainers.image.vendor=chevere
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

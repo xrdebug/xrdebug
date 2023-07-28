@@ -23,10 +23,10 @@ use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Tests\src\Traits\DirectoryTrait;
 use Chevere\Tests\src\Traits\Psr17Trait;
 use Chevere\Throwable\Exceptions\LogicException;
-use Chevere\XrDebug\Controllers\PausePostController;
-use Chevere\XrDebug\Controllers\SPAController;
-use Chevere\XrDebug\Controllers\StreamController;
-use Chevere\XrDebug\Debugger;
+use Chevere\xrDebug\Controllers\PausePostController;
+use Chevere\xrDebug\Controllers\SPAController;
+use Chevere\xrDebug\Controllers\StreamController;
+use Chevere\xrDebug\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -38,11 +38,11 @@ use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\router;
 use function Chevere\Router\routes;
-use function Chevere\XrDebug\decrypt;
-use function Chevere\XrDebug\encrypt;
-use function Chevere\XrDebug\getArguments;
-use function Chevere\XrDebug\getDump;
-use function Chevere\XrDebug\getResponse;
+use function Chevere\xrDebug\decrypt;
+use function Chevere\xrDebug\encrypt;
+use function Chevere\xrDebug\getArguments;
+use function Chevere\xrDebug\getDump;
+use function Chevere\xrDebug\getResponse;
 
 final class FunctionsTest extends TestCase
 {

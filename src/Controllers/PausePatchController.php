@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug\Controllers;
+namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
@@ -20,8 +20,8 @@ use Chevere\Filesystem\Interfaces\DirectoryInterface;
 use Chevere\Http\Attributes\Status;
 use Chevere\Http\Controller;
 use Chevere\Parameter\Interfaces\ParameterInterface;
-use Chevere\XrDebug\Constants\UrlPathRegex;
-use Chevere\XrDebug\Controllers\Traits\PauseTrait;
+use Chevere\xrDebug\Constants\UrlPathRegex;
+use Chevere\xrDebug\Controllers\Traits\PauseTrait;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 use function Safe\json_encode;

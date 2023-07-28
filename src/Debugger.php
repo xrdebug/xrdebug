@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug;
+namespace Chevere\xrDebug;
 
 use Chevere\Writer\Interfaces\WriterInterface;
 use Clue\React\Sse\BufferedChannel;

@@ -15,12 +15,12 @@ namespace Chevere\Tests\Middlewares;
 
 use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Tests\src\Traits\Psr17Trait;
-use Chevere\XrDebug\Middlewares\DecryptMiddleware;
+use Chevere\xrDebug\Middlewares\DecryptMiddleware;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function Chevere\Writer\streamTemp;
-use function Chevere\XrDebug\encrypt;
+use function Chevere\xrDebug\encrypt;
 
 final class DecryptMiddlewareTest extends TestCase
 {

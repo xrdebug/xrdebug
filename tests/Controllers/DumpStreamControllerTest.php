@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
-use Chevere\XrDebug\Controllers\StreamController;
+use Chevere\xrDebug\Controllers\StreamController;
 use Clue\React\Sse\BufferedChannel;
 use PHPUnit\Framework\TestCase;
 use React\EventLoop\LoopInterface;

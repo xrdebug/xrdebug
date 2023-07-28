@@ -15,7 +15,7 @@ namespace Chevere\Tests\Controllers;
 
 use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrDebug\Controllers\PauseGetController;
+use Chevere\xrDebug\Controllers\PauseGetController;
 use PHPUnit\Framework\TestCase;
 
 final class PauseGetControllerTest extends TestCase

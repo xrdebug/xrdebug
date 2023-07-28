@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug\Constants;
+namespace Chevere\xrDebug\Constants;
 
 /**
  * Defines the regex used in the URL path.

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Chevere\Tests\Controllers;
 
 use Chevere\Throwable\Errors\ArgumentCountError;
-use Chevere\XrDebug\Controllers\MessagePostController;
-use Chevere\XrDebug\Debugger;
+use Chevere\xrDebug\Controllers\MessagePostController;
+use Chevere\xrDebug\Debugger;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Parameter\assertArray;
 

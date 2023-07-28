@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-use Chevere\XrDebug\Controllers\MessagePostController;
-use Chevere\XrDebug\Controllers\PauseDeleteController;
-use Chevere\XrDebug\Controllers\PauseGetController;
-use Chevere\XrDebug\Controllers\PausePatchController;
-use Chevere\XrDebug\Controllers\PausePostController;
-use Chevere\XrDebug\Controllers\SPAController;
-use Chevere\XrDebug\Controllers\StreamController;
-use Chevere\XrDebug\Middlewares\DecryptMiddleware;
-use Chevere\XrDebug\Middlewares\VerifySignatureMiddleware;
+use Chevere\xrDebug\Controllers\MessagePostController;
+use Chevere\xrDebug\Controllers\PauseDeleteController;
+use Chevere\xrDebug\Controllers\PauseGetController;
+use Chevere\xrDebug\Controllers\PausePatchController;
+use Chevere\xrDebug\Controllers\PausePostController;
+use Chevere\xrDebug\Controllers\SPAController;
+use Chevere\xrDebug\Controllers\StreamController;
+use Chevere\xrDebug\Middlewares\DecryptMiddleware;
+use Chevere\xrDebug\Middlewares\VerifySignatureMiddleware;
 use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\routes;

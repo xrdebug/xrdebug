@@ -15,11 +15,11 @@ namespace Chevere\Tests;
 
 use Chevere\Tests\src\Traits\CipherTrait;
 use Chevere\Writer\StreamWriter;
-use Chevere\XrDebug\Debugger;
+use Chevere\xrDebug\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Writer\streamTemp;
-use function Chevere\XrDebug\decrypt;
+use function Chevere\xrDebug\decrypt;
 
 final class DebuggerTest extends TestCase
 {

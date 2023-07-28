@@ -16,7 +16,7 @@ namespace Chevere\Tests\Controllers;
 use Chevere\Filesystem\File;
 use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Tests\src\Traits\DirectoryTrait;
-use Chevere\XrDebug\Controllers\PauseDeleteController;
+use Chevere\xrDebug\Controllers\PauseDeleteController;
 use PHPUnit\Framework\TestCase;
 
 final class PauseDeleteControllerTest extends TestCase

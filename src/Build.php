@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug;
+namespace Chevere\xrDebug;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
@@ -25,7 +25,7 @@ final class Build implements Stringable
         private DirectoryInterface $source,
         private string $version,
         private string $codename,
-        private string $sessionName = 'XrDebug',
+        private string $sessionName = 'xrDebug',
         bool $isEncryptionEnabled = false,
     ) {
         $source->assertExists();

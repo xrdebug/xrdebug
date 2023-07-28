@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug\Controllers;
+namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
 use Chevere\Filesystem\Interfaces\FileInterface;

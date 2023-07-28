@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug\Middlewares;
+namespace Chevere\xrDebug\Middlewares;
 
 use Chevere\Http\Exceptions\MiddlewareException;
 use phpseclib3\Crypt\EC\PrivateKey;

@@ -1,11 +1,11 @@
 {
     "api": "xr",
-    "name": "XrDebug API",
+    "name": "xrDebug API",
     "version": "1.0.0",
     "servers": [
         {
             "url": "http:\/\/0.0.0.0:27420",
-            "description": "XrDebug"
+            "description": "xrDebug"
         }
     ],
     "paths": {

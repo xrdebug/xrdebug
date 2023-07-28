@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Chevere\XrDebug;
+namespace Chevere\xrDebug;
 
 use Chevere\Http\Controller;
 use Chevere\Http\Exceptions\ControllerException;

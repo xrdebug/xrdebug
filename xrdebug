@@ -31,8 +31,8 @@ use Chevere\ThrowableHandler\ThrowableHandler;
 use Chevere\Writer\StreamWriter;
 use Chevere\Writer\Writers;
 use Chevere\Writer\WritersInstance;
-use Chevere\XrDebug\Build;
-use Chevere\XrDebug\Debugger;
+use Chevere\xrDebug\Build;
+use Chevere\xrDebug\Debugger;
 use Clue\React\Sse\BufferedChannel;
 use Colors\Color;
 use Psr\Http\Message\ServerRequestInterface;
@@ -54,9 +54,9 @@ use function Chevere\ThrowableHandler\handleAsConsole;
 use function Chevere\ThrowableHandler\handleAsTerminal;
 use function Chevere\Writer\streamFor;
 use function Chevere\Writer\writers;
-use function Chevere\XrDebug\getCipher;
-use function Chevere\XrDebug\getPrivateKey;
-use function Chevere\XrDebug\getResponse;
+use function Chevere\xrDebug\getCipher;
+use function Chevere\xrDebug\getPrivateKey;
+use function Chevere\xrDebug\getResponse;
 use function Safe\json_encode;
 
 new WritersInstance(
@@ -85,7 +85,7 @@ $logger = writers()->log();
 $logger->write(
     $color($logo)->cyan()
     . "\n"
-    . $color(strtr('XrDebug %v (%c) by Rodolfo Berrios', [
+    . $color(strtr('xrDebug %v (%c) by Rodolfo Berrios', [
         '%v' => XRDEBUG_VERSION,
         '%c' => XRDEBUG_CODENAME,
     ]))->green()
@@ -96,7 +96,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
     $logger->write(
         <<<LOG
         -p Port (default 27420)
-        -n Session name (default XrDebug)
+        -n Session name (default xrDebug)
         -e Enable end-to-end encryption
         -k Symmetric key (for -e option)
         -v Enable sign verification
@@ -109,7 +109,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
 }
 $host = '0.0.0.0';
 $port = $options['p'] ?? '27420';
-$sessionName = $options['n'] ?? 'XrDebug';
+$sessionName = $options['n'] ?? 'xrDebug';
 $cert = $options['c'] ?? null;
 $isEncryptionEnabled = $options['e'] ?? false;
 $isSignVerificationEnabled = $options['v'] ?? false;
@@ -212,12 +212,12 @@ $logger->write(
 
 $document = new DocumentSchema(
     api: 'xr',
-    name: 'XrDebug API',
+    name: 'xrDebug API',
     version: '1.0.0'
 );
 $server = new ServerSchema(
     url: $httpAddress,
-    description: 'XrDebug',
+    description: 'xrDebug',
 );
 $spec = new Spec($router, $document, $server);
 $array = arrayFilterBoth($spec->toArray(), function ($v, $k) {

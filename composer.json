@@ -34,7 +34,7 @@
             "src/functions.php"
         ],
         "psr-4": {
-            "Chevere\\XrDebug\\": "src/"
+            "Chevere\\xrDebug\\": "src/"
         }
     },
     "autoload-dev": {
