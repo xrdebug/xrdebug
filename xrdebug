@@ -98,10 +98,15 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
         -p Port (default 27420)
         -n Session name (default xrDebug)
         -e Enable end-to-end encryption
-        -k Symmetric key (for -e option)
         -v Enable sign verification
-        -s Private key (for -v option)
         -c Cert file for TLS
+        -k [for -e option] Symmetric key (leave empty to generate)
+        -s [for -v option] Private key (leave empty to generate)
+        -i Default editor
+            [for -i option] Supported IDEs:
+            vscode (default)
+            atom emacs espresso idea macvim netbeans
+            phpstorm sublime textmate
 
         LOG
     );
@@ -114,6 +119,7 @@ $cert = $options['c'] ?? null;
 $isEncryptionEnabled = $options['e'] ?? false;
 $isSignVerificationEnabled = $options['v'] ?? false;
 $scheme = isset($cert) ? 'tls' : 'tcp';
+$ide = $options['i'] ?? 'vscode';
 $uri = "{$scheme}://{$host}:{$port}";
 $context = $scheme === 'tcp'
     ? []
@@ -146,11 +152,12 @@ try {
 } catch (Throwable) {
 }
 $build = new Build(
-    $appDirectory->getChild('src/'),
-    XRDEBUG_VERSION,
-    XRDEBUG_CODENAME,
-    $sessionName,
-    $isEncryptionEnabled,
+    source: $appDirectory->getChild('src/'),
+    version: XRDEBUG_VERSION,
+    codename: XRDEBUG_CODENAME,
+    sessionName: $sessionName,
+    editor: $ide,
+    isEncryptionEnabled: $isEncryptionEnabled,
 );
 $app = fileForPath($appCompiledPath . 'en.html');
 $app->removeIfExists();

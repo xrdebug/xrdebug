@@ -140,7 +140,28 @@ let filter = {
     },
     templates = {
         message: document.querySelector("#message")
+    },
+    editors = {
+        atom: 'atom://core/open/file?filename=%file&line=%line',
+        emacs: 'emacs://open?url=file://%file&line=%line',
+        espresso: 'x-espresso://open?filepath=%file&lines=%line',
+        idea: 'idea://open?file=%file&line=%line',
+        macvim: 'mvim://open/?url=file://%file&line=%line',
+        netbeans: 'netbeans://open/?f=%file:%line',
+        phpstorm: 'phpstorm://open?file=%file&line=%line',
+        sublime: 'subl://open?url=file://%file&line=%line',
+        textmate: 'txmt://open?url=file://%file&line=%line',
+        vscode: 'vscode://file/%file:%line',
+    },
+    getEditorLink = function(editor, file, line) {
+        if (editor in editors) {
+            return editors[editor]
+                .replace('%file', file)
+                .replace('%line', line);
+        }
+        return '';
     };
+
 copyToClipboard = function (text) {
     try {
         navigator
@@ -194,8 +215,11 @@ pushMessage = function (data, isStatus = false) {
     let bodyContextDisplay = el.querySelector(".body-context-display");
     bodyContextDisplay.textContent = data.file_display_short;
     if (data.file_display_short) {
-        bodyContextDisplay.textContent = "・" + data.file_display_short;
-        bodyContextDisplay.setAttribute("title", data.file_display || "");
+        bodyContextDisplay.innerHTML = "・"
+            + '<a href="'+ getEditorLink(EDITOR, data.file_path, data.file_line) +'">'
+            + data.file_display_short
+            + "</a>";
+        bodyContextDisplay.setAttribute("title", "Open " + data.file_display);
     }
     document
         .body
@@ -334,9 +358,11 @@ document.addEventListener("click", event => {
             });
             break;
     }
+    /*
     if (el.classList.contains("body-context-display")) {
         copyToClipboard(el.getAttribute("title"));
     }
+    */
     if (el.classList.contains("filter-button")) {
         var filterQuery = "",
             messageEl = messageEl,
