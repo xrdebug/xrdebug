@@ -38,7 +38,7 @@ final class Build implements Stringable
         $this->replace('%nonceLength%', strval(cipherNonceLength()));
         $this->replace('%tagLength%', strval(cipherTagLength()));
         $this->replace('%sessionName%', $this->sessionName);
-        $this->replace('%editor%', $editor);
+        $this->replace('%editor%', $this->editor);
         $this->replaceIcons('svg', 'image/svg+xml');
         $this->replaceIcons('png', 'image/png');
         $this->replaceStyles();
