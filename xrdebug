@@ -37,6 +37,7 @@ use React\Socket\SocketServer;
 use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
 use function Chevere\Filesystem\directoryForPath;
+use function Chevere\Message\message;
 use function Chevere\Router\router;
 use function Chevere\Standard\arrayFilterBoth;
 use function Chevere\ThrowableHandler\handleAsTerminal;
@@ -45,24 +46,21 @@ use function Chevere\Writer\writers;
 use function Chevere\xrDebug\getCipher;
 use function Chevere\xrDebug\getPrivateKey;
 use function Chevere\xrDebug\getResponse;
-use function Safe\getcwd;
 use function Safe\json_encode;
 
 if (in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) === false) {
-    echo PHP_EOL . 'This app may only be invoked from a command line, got "' . PHP_SAPI . '"' . PHP_EOL;
-
+    echo message('xrDebug may only be invoked from a command line, got %sapi%')
+        ->withTranslate('%sapi%', PHP_SAPI);
     exit(1);
 }
-
 foreach (['/', '/../../../'] as $path) {
     $autoload = __DIR__ . $path . 'vendor/autoload.php';
-    if (file_exists($autoload)) {
+    if (stream_resolve_include_path($autoload)) {
         require $autoload;
 
         break;
     }
 }
-
 new WritersInstance(
     (new Writers())
         ->with(
