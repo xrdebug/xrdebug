@@ -1,0 +1,6 @@
+{
+    "chmod": "0700",
+    "directories-bin": [
+        "app"
+    ]
+}
