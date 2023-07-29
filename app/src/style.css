@@ -696,6 +696,16 @@ pre+.backtrace {
     cursor: pointer;
 }
 
+.splash-security {
+    font-size: 0.875rem;
+    opacity: 0.5;
+    margin-top: 1rem;
+}
+
+.splash-security:empty {
+    display: none;
+}
+
 .splash-keys {
     text-align: left;
     font-size: var(--fontSizeSubNormal);

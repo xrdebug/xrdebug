@@ -233,7 +233,6 @@ function getArguments(
             ? $container[$key]
             : throw new LogicException("Missing container key {$key}");
     }
-    // vdd($arguments);
 
     return $arguments;
 }
@@ -255,7 +254,7 @@ function getCipher(
     $cipher->setKey($symmetricKey);
     $encryptionKeyDisplay = base64_encode($symmetricKey);
     $logger->write(<<<LOG
-    🔐 ENCRYPTION KEY
+    ENCRYPTION KEY
     {$encryptionKeyDisplay}
 
 
@@ -280,7 +279,7 @@ function getPrivateKey(
     $privateKeyDisplay = $privateKey->toString('PKCS8');
     $logger->write(
         <<<LOG
-        🔏 PRIVATE KEY
+        PRIVATE KEY
         {$privateKeyDisplay}
 
 

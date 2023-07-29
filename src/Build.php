@@ -28,6 +28,7 @@ final class Build implements Stringable
         private string $sessionName = 'xrDebug',
         private string $editor = 'vscode',
         bool $isEncryptionEnabled = false,
+        bool $isSignVerificationEnabled = false
     ) {
         $source->assertExists();
         $file = new File($source->path()->getChild('index.html'));
@@ -39,6 +40,13 @@ final class Build implements Stringable
         $this->replace('%tagLength%', strval(cipherTagLength()));
         $this->replace('%sessionName%', $this->sessionName);
         $this->replace('%editor%', $this->editor);
+        $security = match (true) {
+            $isEncryptionEnabled && $isSignVerificationEnabled => 'End-to-end encrypted and sign verified',
+            $isEncryptionEnabled => 'End-to-end encrypted',
+            $isSignVerificationEnabled => 'Sign verified',
+            default => '',
+        };
+        $this->replace('%security%', $security);
         $this->replaceIcons('svg', 'image/svg+xml');
         $this->replaceIcons('png', 'image/png');
         $this->replaceStyles();

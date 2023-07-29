@@ -158,6 +158,7 @@ $build = new Build(
     sessionName: $sessionName,
     editor: $editor,
     isEncryptionEnabled: $isEncryptionEnabled,
+    isSignVerificationEnabled: $isSignVerificationEnabled
 );
 $app = fileForPath($appCompiledPath . 'en.html');
 $app->removeIfExists();
