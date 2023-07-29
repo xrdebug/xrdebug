@@ -23,7 +23,7 @@ use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\null;
 use function Chevere\Parameter\string;
 
-#[Status(200)]
+#[Status(204)]
 #[Description('Create a debug message')]
 final class MessagePostController extends Controller
 {
