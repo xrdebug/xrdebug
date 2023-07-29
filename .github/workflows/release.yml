@@ -13,6 +13,7 @@ jobs:
     env:
       tools: composer, phpstan, phive
       ini-values: default_charset='UTF-8'
+      box-gpg: 0x2DF45277AEF09A2F
       key: cache-1690242875644
     name: Release on PHP ${{ matrix.php }} ${{ matrix.os }}
     steps:
@@ -46,9 +47,14 @@ jobs:
       - name: Tests (PHPUnit)
         run: vendor/bin/phpunit --coverage-xml=build/logs/xml-coverage --log-junit=build/logs/junit.xml
       - name: Get humbug/box
-        run: phive install humbug/box
+        run: phive install --trust-gpg-keys ${{ env.box-gpg }} --target . humbug/box
       - name: Compile xrdebug.phar
-        run: box compile
+        run: ./box compile
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Sign xrdebug.phar
         run: gpg -ab xrdebug.phar
       - name: Upload artifacts
