@@ -55,7 +55,7 @@ if (in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) === false) {
 }
 foreach (['/', '/../../../'] as $path) {
     $autoload = __DIR__ . $path . 'vendor/autoload.php';
-    if (stream_resolve_include_path($autoload)) {
+    if (file_exists($autoload)) {
         require $autoload;
 
         break;
