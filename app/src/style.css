@@ -181,10 +181,6 @@ header>div {
     margin-bottom: 0;
 }
 
-.message {
-    border-bottom: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
-}
-
 .buttons {
     font-size: 0;
 }
@@ -330,6 +326,7 @@ header>div {
     animation: slideDown 250ms ease-in-out;
     position: relative;
     transition: all 500ms ease-in-out;
+    border-bottom: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
 }
 
 .message--while-pause {
@@ -426,6 +423,15 @@ header>div {
     font-size: 1.4rem;
     position: -webkit-sticky;
     position: sticky;
+}
+
+@media (max-width: 500px) {
+    .message {
+        grid-template-columns: 1fr;
+    }
+    .message-sidebar {
+        position: static;
+    }
 }
 
 .message--loading .message-sidebar {

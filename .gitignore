@@ -9,3 +9,4 @@
 /locks
 /tests/writable/**
 !tests/writable/.gitkeep
+/xrdebug.phar
