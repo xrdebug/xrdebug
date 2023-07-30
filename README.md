@@ -2,25 +2,60 @@
 
 > 🔔 Subscribe to the [newsletter](https://chv.to/chevere-newsletter) to don't miss any update regarding Chevere.
 
-![Chevere](chevere.svg)
+<p align="center"><img alt="xrDebug" src="app/src/icon.svg" width="40%"></p>
 
-[![Build](https://img.shields.io/github/actions/workflow/status/chevere/xrdebug/test.yml?branch=0.8&style=flat-square)](https://github.com/chevere/xrdebug/actions)![Code size](https://img.shields.io/github/languages/code-size/chevere/xrdebug?style=flat-square)
+https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4
+
+🦄 [View demo](https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4)
+
+[![Build](https://img.shields.io/github/actions/workflow/status/chevere/xrdebug/test.yml?branch=1.0&style=flat-square)](https://github.com/chevere/xrdebug/actions)![Code size](https://img.shields.io/github/languages/code-size/chevere/xrdebug?style=flat-square)
 [![Apache-2.0](https://img.shields.io/github/license/chevere/xrdebug?style=flat-square)](LICENSE)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%209-blueviolet?style=flat-square)](https://phpstan.org/)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchevere%2Fxrdebug%2F0.8)](https://dashboard.stryker-mutator.io/reports/github.com/chevere/xrdebug/0.8)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchevere%2Fxrdebug%2F1.0)](https://dashboard.stryker-mutator.io/reports/github.com/chevere/xrdebug/1.0)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=alert_status)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=security_rating)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=coverage)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=security_rating)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=coverage)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
 [![CodeFactor](https://www.codefactor.io/repository/github/chevere/xrdebug/badge)](https://www.codefactor.io/repository/github/chevere/xrdebug)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/66dc8822bf674a08a43054b9a3700626)](https://www.codacy.com/gh/chevere/xrdebug/dashboard)
 
+[xrDebug](https://xr-docs.chevere.org/) is a lightweight web application debug utility.
+
+<p align="center">
+    <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
+    <img alt="xrDebug dark" src=".screen/xr-0.1.3-dark-welcome.png">
+</p>
+
 ## Documentation
 
-Documentation is available at [xr-docs.chevere.org](https://xr-docs.chevere.org/).
+Documentation available at [xr-docs.chevere.org](https://xr-docs.chevere.org/).
+
+## Features
+
+* Ephemeral, it doesn't store any persistent data
+* Signed requests (Ed25519)
+* End-to-end encryption (AES-GCM AE)
+* Dump arguments using [VarDump](https://chevere.org/packages/var-dump.html)
+* Filter messages by [Topics](https://xr-docs.chevere.org/helpers/xr.html#topic) and [Emotes](https://xr-docs.chevere.org/helpers/xr.html#emote)
+* Resume, Pause, Stop and Clear debug window controls
+* Keyboard shortcuts (Resume **R**, Pause **P**, Stop **S** and Clear **C**)
+* Re-name "xrDebug" session to anything you want
+* Export dump output to clipboard or as PNG image
+* Generates dump [backtrace](https://xr-docs.chevere.org/helpers/xr.html#flags)
+* [Pause](https://xr-docs.chevere.org/helpers/xri.html#pause) and resume your code execution
+* Dark / 🌝 Light mode follows your system preferences
+* Portable & HTML based (save page, search, etc.)
+* Uses [FiraCode](https://github.com/tonsky/FiraCode) font for displaying _beautiful looking dumps_ ™
+* Handle exceptions (hook or replace your existing handler)
+* Open with editor links
+* Responsive user interface
+
+<p align="center">
+    <img alt="xrDebug dark demo" src=".screen/xr-0.1.3-dark-demo.png">
+</p>
 
 ## License
 
