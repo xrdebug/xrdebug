@@ -2,4 +2,4 @@
 
 set -e
 
-docker run --pull=always --rm --init -i -p 27420:27420 ghcr.io/chevere/xr-server:latest
+docker run --pull=always --rm --init -i -p 27420:27420 ghcr.io/chevere/xrdebug:latest
