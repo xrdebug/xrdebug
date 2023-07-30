@@ -1,4 +1,7 @@
 {
+    "files-bin": [
+        "loader.php"
+    ],
     "directories-bin": [
         "app"
     ]
