@@ -29,6 +29,8 @@ jobs:
           fail-fast: true
       - name: Install dependencies
         run: composer install --no-progress
+      - name: Schwager API
+        run: php schwager.php
       - name: Get humbug/box
         run: phive install --trust-gpg-keys ${{ env.box-gpg }} --target . humbug/box
       - name: Compile xrdebug.phar
@@ -45,6 +47,7 @@ jobs:
         with:
           allowUpdates: true
           artifacts: >
+            schwager.json,
             xrdebug.phar,
             xrdebug.phar.asc
           token: ${{ secrets.GITHUB_TOKEN }}

@@ -10,3 +10,4 @@
 /tests/writable/**
 !tests/writable/.gitkeep
 /xrdebug.phar
+/schwager.json

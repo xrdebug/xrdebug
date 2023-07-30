@@ -15,13 +15,6 @@ declare(strict_types=1);
 use Chevere\Filesystem\File;
 use Chevere\Router\Dependencies;
 use Chevere\Router\Dispatcher;
-use Chevere\Schwager\DocumentSchema;
-use Chevere\Schwager\ServerSchema;
-use Chevere\Schwager\Spec;
-use Chevere\ThrowableHandler\ThrowableHandler;
-use Chevere\Writer\StreamWriter;
-use Chevere\Writer\Writers;
-use Chevere\Writer\WritersInstance;
 use Chevere\xrDebug\Build;
 use Chevere\xrDebug\Debugger;
 use Clue\React\Sse\BufferedChannel;
@@ -37,51 +30,15 @@ use React\Socket\SocketServer;
 use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
 use function Chevere\Filesystem\directoryForPath;
-use function Chevere\Message\message;
-use function Chevere\Router\router;
-use function Chevere\Standard\arrayFilterBoth;
 use function Chevere\ThrowableHandler\handleAsTerminal;
-use function Chevere\Writer\streamFor;
 use function Chevere\Writer\writers;
 use function Chevere\xrDebug\getCipher;
 use function Chevere\xrDebug\getPrivateKey;
 use function Chevere\xrDebug\getResponse;
-use function Safe\json_encode;
 
-if (in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) === false) {
-    echo message('xrDebug may only be invoked from a command line, got %sapi%')
-        ->withTranslate('%sapi%', PHP_SAPI);
-    exit(1);
-}
-foreach (['/', '/../../../'] as $path) {
-    $autoload = __DIR__ . $path . 'vendor/autoload.php';
-    if (file_exists($autoload)) {
-        require $autoload;
-
-        break;
-    }
-}
-new WritersInstance(
-    (new Writers())
-        ->with(
-            new StreamWriter(
-                streamFor('php://output', 'w')
-            )
-        )
-        ->withError(
-            new StreamWriter(
-                streamFor('php://stderr', 'w')
-            )
-        )
-);
-set_error_handler(ThrowableHandler::ERROR_AS_EXCEPTION);
-register_shutdown_function(ThrowableHandler::SHUTDOWN_ERROR_AS_EXCEPTION);
-set_exception_handler(ThrowableHandler::CONSOLE);
-$appDirectory = directoryForPath(__DIR__ . '/app');
-$appPath = $appDirectory->path();
-include $appPath->getChild('meta.php');
+require_once __DIR__ . '/loader.php';
 $color = new Color();
-$logo = (new File($appPath->getChild('logo')))->getContents();
+$logo = (new File($appDirectory->path()->getChild('logo')))->getContents();
 $logger = writers()->log();
 $logger->write(
     $color($logo)->cyan()
@@ -113,7 +70,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
     );
     exit(0);
 }
-$host = '0.0.0.0';
+$host = '127.0.0.1';
 $port = $options['p'] ?? '27420';
 $sessionName = $options['n'] ?? 'xrDebug';
 $cert = $options['c'] ?? null;
@@ -173,10 +130,7 @@ $app = new File($appCompiledPath->getChild('en.html'));
 $app->removeIfExists();
 $app->create();
 $app->put($build->__toString());
-$routes = include $appPath->getChild('routes.php');
 $dependencies = new Dependencies($routes);
-$router = router($routes);
-$routeCollector = $router->routeCollector();
 $dispatcher = new Dispatcher($routeCollector);
 $loop = Loop::get();
 $channel = new BufferedChannel();
@@ -226,32 +180,4 @@ $logger->write(
 
     LOG
 );
-
-$document = new DocumentSchema(
-    api: 'xr',
-    name: 'xrDebug API',
-    version: '1.0.0'
-);
-$server = new ServerSchema(
-    url: $httpAddress,
-    description: 'xrDebug',
-);
-$spec = new Spec($router, $document, $server);
-$array = arrayFilterBoth($spec->toArray(), function ($v, $k) {
-    return match (true) {
-        $v === null => false,
-        $v === [] => false,
-        $v === '' => false,
-        $k === 'required' && $v === true => false,
-        $k === 'regex' && $v === '^.*$' => false,
-        $k === 'body' && $v === [
-            'type' => 'array#map',
-        ] => false,
-        default => true,
-    };
-});
-$json = json_encode($array, JSON_PRETTY_PRINT);
-$file = new File($appCompiledPath->getChild('schwager.json'));
-$file->createIfNotExists();
-$file->put($json);
 $loop->run();
