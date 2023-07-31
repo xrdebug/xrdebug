@@ -39,7 +39,6 @@ final class PauseGetController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            pause: boolean(),
             stop: boolean()
         );
     }

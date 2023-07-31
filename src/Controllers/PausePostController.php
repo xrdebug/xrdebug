@@ -41,7 +41,6 @@ final class PausePostController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            pause: boolean(),
             stop: boolean(),
         );
     }
@@ -67,7 +66,6 @@ final class PausePostController extends Controller
         $file->removeIfExists();
         $file->create();
         $data = [
-            'pause' => true,
             'stop' => false,
         ];
         $encoded = json_encode($data);

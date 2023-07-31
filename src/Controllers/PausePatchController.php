@@ -40,7 +40,6 @@ final class PausePatchController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            pause: boolean(),
             stop: boolean(),
         );
     }
@@ -55,7 +54,6 @@ final class PausePatchController extends Controller
         $file->remove();
         $file->create();
         $data = [
-            'pause' => true,
             'stop' => true,
         ];
         $json = json_encode($data);

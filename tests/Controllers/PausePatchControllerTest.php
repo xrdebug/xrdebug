@@ -44,7 +44,6 @@ final class PausePatchControllerTest extends TestCase
         $response = $controller->getResponse(id: $id);
         $decoded = json_decode($file->getContents(), true);
         $expected = [
-            'pause' => true,
             'stop' => true,
         ];
         $this->assertSame($expected, $response->array());

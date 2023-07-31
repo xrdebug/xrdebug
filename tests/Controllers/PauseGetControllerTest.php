@@ -36,7 +36,6 @@ final class PauseGetControllerTest extends TestCase
     {
         $id = '93683d90-145f-11ee-be56-0242ac120002';
         $array = [
-            'pause' => true,
             'stop' => false,
         ];
         $encode = json_encode($array);

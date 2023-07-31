@@ -220,7 +220,7 @@ final class FunctionsTest extends TestCase
                     'remoteAddress' => $remoteAddress,
                 ],
                 'text/json',
-                '{"pause":true,"stop":false}',
+                '{"stop":false}',
             ],
         ];
     }
