@@ -1,14 +1,15 @@
 name: Release
 on:
-  push:
-    tags:
-      - "*"
+  workflow_dispatch:
+  # push:
+  #   tags:
+  #     - "*"
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [macos-latest]
         php: ["8.2"]
     env:
       tools: composer, phive
