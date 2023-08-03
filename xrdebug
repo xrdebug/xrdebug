@@ -43,9 +43,8 @@ $logger = writers()->log();
 $logger->write(
     $color($logo)->cyan()
     . "\n"
-    . $color(strtr('xrDebug %v (%c) by Rodolfo Berrios', [
+    . $color(strtr('xrDebug %v by Rodolfo Berrios', [
         '%v' => XRDEBUG_VERSION,
-        '%c' => XRDEBUG_CODENAME,
     ]))->green()
     . "\n\n"
 );
@@ -120,7 +119,6 @@ try {
 $build = new Build(
     source: $appDirectory->getChild('src/'),
     version: XRDEBUG_VERSION,
-    codename: XRDEBUG_CODENAME,
     sessionName: $sessionName,
     editor: $editor,
     isEncryptionEnabled: $isEncryptionEnabled,
@@ -172,8 +170,10 @@ $httpAddress = strtr(
         'tcp' => 'http',
     ]
 );
+$phpVersion = PHP_VERSION . ' ' . PHP_OS. ' (' . PHP_SAPI . ')';
 $logger->write(
     <<<LOG
+    Runtime: PHP {$phpVersion}
     Server listening on {$scheme} {$httpAddress}
     Press Ctrl+C to quit
     --

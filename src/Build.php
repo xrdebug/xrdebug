@@ -24,7 +24,6 @@ final class Build implements Stringable
     public function __construct(
         private DirectoryInterface $source,
         private string $version,
-        private string $codename,
         private string $sessionName = 'xrDebug',
         private string $editor = 'vscode',
         bool $isEncryptionEnabled = false,
@@ -34,7 +33,6 @@ final class Build implements Stringable
         $file = new File($source->path()->getChild('index.html'));
         $this->string = $file->getContents();
         $this->replace('%version%', $this->version);
-        $this->replace('%codename%', $this->codename);
         $this->replace('%isEncryptionEnabled%', $isEncryptionEnabled ? 'true' : 'false');
         $this->replace('%nonceLength%', strval(cipherNonceLength()));
         $this->replace('%tagLength%', strval(cipherTagLength()));

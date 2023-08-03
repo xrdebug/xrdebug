@@ -24,7 +24,7 @@ final class BuildTest extends TestCase
     {
         $directory = directoryForPath(__DIR__ . '/non-existent');
         $this->expectException(DirectoryNotExistsException::class);
-        new Build($directory, 'version', 'codename');
+        new Build($directory, 'version');
     }
 
     public function testConstruct(): void
@@ -32,7 +32,6 @@ final class BuildTest extends TestCase
         $build = new Build(
             directoryForPath(__DIR__ . '/build-mock/source'),
             '6.6.6',
-            'ElNúmeroDeLaBestia'
         );
         $this->assertStringEqualsFile(
             __DIR__ . '/build-mock/output/index.html',

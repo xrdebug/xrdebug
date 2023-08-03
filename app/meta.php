@@ -12,4 +12,3 @@
 declare(strict_types=1);
 
 const XRDEBUG_VERSION = '1.0.0';
-const XRDEBUG_CODENAME = 'Magnum';
