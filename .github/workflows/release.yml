@@ -43,6 +43,16 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Sign xrdebug.phar
         run: gpg -ab xrdebug.phar
+      - name: Download micro.sfx
+        uses: robinraju/release-downloader@v1.8
+        with:
+          repository: "rodber/repo"
+          latest: true
+          tarBall: true
+          out-file-path: "micro"
+          extract: true
+      - name: Check extracted files
+        run: ls micro/*
       - name: Upload artifacts
         uses: ncipollo/release-action@v1
         with:
