@@ -54,7 +54,7 @@ jobs:
           latest: true
           tarBall: true
           extract: true
-          out-file-path: "micro"
+          out-file-path: ""
       - name: Check extracted files
         run: ls micro/*
       - name: Run micro
