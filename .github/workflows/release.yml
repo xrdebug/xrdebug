@@ -46,7 +46,7 @@ jobs:
       - name: Download micro.sfx
         uses: robinraju/release-downloader@v1.8
         with:
-          repository: "rodber/repo"
+          repository: "rodber/lwmbs"
           latest: true
           tarBall: true
           out-file-path: "micro"
