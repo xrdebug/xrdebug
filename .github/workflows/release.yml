@@ -50,9 +50,26 @@ jobs:
           latest: true
           tarBall: true
           out-file-path: "micro"
-          extract: true
       - name: Check extracted files
         run: ls micro/*
+      - name: Run micro
+        run: |
+          mkdir -p bin/macos/{arm64,x86_64}
+          cat micro/micro-arm64.sfx xrdebug.phar > bin/macos/arm64/xrdebug
+          cat micro/micro-x86_64.sfx xrdebug.phar > bin/macos/x86_64/xrdebug
+          chmod +x bin/macos/arm64/xrdebug +x bin/macos/x86_64/xrdebug
+      - name: Build packages
+        run: |
+          pkgbuild --identifier org.chevere.xrdebug.pkg \
+            --install-location ./usr/local/bin/ \
+            --version 1.0.0 \
+            --root ./bin/macos/arm64 \
+            xrdebug-1.0.0-macos-arm64.pkg
+          pkgbuild --identifier org.chevere.xrdebug.pkg \
+            --install-location ./usr/local/bin/ \
+            --version 1.0.0 \
+            --root ./bin/macos/x86_64 \
+            xrdebug-1.0.0-macos-x86_64.pkg
       - name: Upload artifacts
         uses: ncipollo/release-action@v1
         with:
@@ -60,5 +77,7 @@ jobs:
           artifacts: >
             schwager.json,
             xrdebug.phar,
-            xrdebug.phar.asc
+            xrdebug.phar.asc,
+            xrdebug-1.0.0-macos-arm64.pkg,
+            xrdebug-1.0.0-macos-x86_64.pkg
           token: ${{ secrets.GITHUB_TOKEN }}
