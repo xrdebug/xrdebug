@@ -54,14 +54,13 @@ jobs:
           latest: true
           tarBall: true
           extract: true
-          out-file-path: ""
       - name: Check extracted files
         run: ls micro/*
       - name: Run micro
         run: |
           mkdir -p bin/macos/{arm64,x86_64}
-          cat micro/micro-8.2-arm64.sfx xrdebug.phar > bin/macos/arm64/xrdebug
-          cat micro/micro-8.2-x86_64.sfx xrdebug.phar > bin/macos/x86_64/xrdebug
+          cat micro/micro/micro-8.2-arm64.sfx xrdebug.phar > bin/macos/arm64/xrdebug
+          cat micro/micro/micro-8.2-x86_64.sfx xrdebug.phar > bin/macos/x86_64/xrdebug
           chmod +x bin/macos/arm64/xrdebug bin/macos/x86_64/xrdebug
       - name: Build packages
         run: |
