@@ -1,9 +1,8 @@
 name: Release
 on:
-  workflow_dispatch:
-  # push:
-  #   tags:
-  #     - "*"
+  push:
+    tags:
+      - "*"
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -66,14 +65,14 @@ jobs:
         run: |
           pkgbuild --identifier org.chevere.xrdebug.pkg \
             --install-location ./usr/local/bin/ \
-            --version 1.0.0 \
+            --version ${{ github.ref_name}} \
             --root ./bin/macos/arm64 \
-            xrdebug-1.0.0-macos-arm64.pkg
+            xrdebug-${{ github.ref_name}}-macos-arm64.pkg
           pkgbuild --identifier org.chevere.xrdebug.pkg \
             --install-location ./usr/local/bin/ \
-            --version 1.0.0 \
+            --version ${{ github.ref_name}} \
             --root ./bin/macos/x86_64 \
-            xrdebug-1.0.0-macos-x86_64.pkg
+            xrdebug-${{ github.ref_name}}-macos-x86_64.pkg
       - name: Upload artifacts
         uses: ncipollo/release-action@v1
         with:
@@ -82,6 +81,6 @@ jobs:
             schwager.json,
             xrdebug.phar,
             xrdebug.phar.asc,
-            xrdebug-1.0.0-macos-arm64.pkg,
-            xrdebug-1.0.0-macos-x86_64.pkg
+            xrdebug-${{ github.ref_name}}-macos-arm64.pkg,
+            xrdebug-${{ github.ref_name}}-macos-x86_64.pkg
           token: ${{ secrets.GITHUB_TOKEN }}
