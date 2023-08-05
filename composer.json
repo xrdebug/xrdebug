@@ -20,7 +20,7 @@
         "middlewares/utils": "^3.0",
         "phpseclib/phpseclib": "~3.0",
         "relay/relay": "~2.0",
-        "rodber/php-sse-react": "^0.1",
+        "rodber/php-sse-react": "^0.2",
         "samejack/php-argv": "^1.0"
     },
     "require-dev": {
