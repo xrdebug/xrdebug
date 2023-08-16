@@ -17,16 +17,21 @@ use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Header;
+use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Constants\UrlPathRegex;
 use Chevere\xrDebug\Controllers\Traits\PauseTrait;
 use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 
-#[Status(200, 404)]
 #[Description('Get a pause')]
+#[Response(
+    new Status(200, 404),
+    new Header('Content-Type', 'application/json')
+)]
 final class PauseGetController extends Controller
 {
     use PauseTrait;

@@ -14,16 +14,19 @@ declare(strict_types=1);
 namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Clue\React\Sse\BufferedChannel;
 use React\EventLoop\LoopInterface;
 use React\Stream\ThroughStream;
 use function Chevere\Parameter\object;
 
-#[Status(200)]
 #[Description('Debug stream')]
+#[Response(
+    new Status(200)
+)]
 final class StreamController extends Controller
 {
     public function __construct(

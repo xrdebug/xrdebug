@@ -15,13 +15,18 @@ namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
 use Chevere\Filesystem\Interfaces\FileInterface;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Header;
+use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use function Chevere\Parameter\string;
 
-#[Status(200)]
 #[Description('Single page application')]
+#[Response(
+    new Status(200),
+    new Header('Content-Type', 'text/html')
+)]
 final class SPAController extends Controller
 {
     public function __construct(

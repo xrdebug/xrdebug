@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Debugger;
@@ -23,8 +24,10 @@ use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\null;
 use function Chevere\Parameter\string;
 
-#[Status(204)]
 #[Description('Create a debug message')]
+#[Response(
+    new Status(204),
+)]
 final class MessagePostController extends Controller
 {
     public function __construct(

@@ -17,13 +17,18 @@ use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Status;
+use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Constants\UrlPathRegex;
 use Chevere\xrDebug\Controllers\Traits\PauseTrait;
+use function Chevere\Parameter\null;
 
-#[Status(204, 404)]
 #[Description('Delete a pause')]
+#[Response(
+    new Status(204, 404)
+)]
 final class PauseDeleteController extends Controller
 {
     use PauseTrait;
@@ -33,15 +38,18 @@ final class PauseDeleteController extends Controller
     ) {
     }
 
+    public static function acceptResponse(): ParameterInterface
+    {
+        return null();
+    }
+
     protected function run(
         #[Regex(UrlPathRegex::UUID)]
         string $id
-    ): array {
+    ): void {
         $path = $this->directory->path()->getChild($id);
         $file = new File($path);
         $this->assertExists($file);
         $file->remove();
-
-        return [];
     }
 }

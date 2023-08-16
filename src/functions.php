@@ -38,7 +38,7 @@ use React\Http\Message\Response;
 use React\Stream\ThroughStream;
 use Relay\Relay;
 use Throwable;
-use function Chevere\Http\classStatus;
+use function Chevere\Http\response;
 use function Chevere\Standard\arrayFilterBoth;
 use function Safe\base64_decode;
 use function Safe\json_encode;
@@ -205,10 +205,10 @@ function getResponse(
     } catch (Throwable) {
     }
     $isStream = $stream instanceof ThroughStream;
-    $statuses = classStatus($controllerName);
+    $status = response($controllerName)->status;
 
     return new Response(
-        $statuses->primary,
+        $status->primary,
         [
             'Content-Type' => match (true) {
                 $isStream => 'text/event-stream',

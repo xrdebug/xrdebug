@@ -17,8 +17,10 @@ use Chevere\Attributes\Description;
 use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Header;
+use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Constants\UrlPathRegex;
 use Chevere\xrDebug\Controllers\Traits\PauseTrait;
@@ -26,8 +28,11 @@ use function Chevere\Parameter\arrayp;
 use function Chevere\Parameter\boolean;
 use function Safe\json_encode;
 
-#[Status(200)]
 #[Description('Update a pause to stop execution')]
+#[Response(
+    new Status(200),
+    new Header('Content-Type', 'application/json')
+)]
 final class PausePatchController extends Controller
 {
     use PauseTrait;

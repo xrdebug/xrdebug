@@ -16,8 +16,10 @@ namespace Chevere\xrDebug\Controllers;
 use Chevere\Attributes\Description;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use Chevere\Http\Attributes\Status;
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Header;
+use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Constants\UrlPathRegex;
@@ -27,8 +29,11 @@ use function Chevere\Parameter\boolean;
 use function Chevere\Parameter\string;
 use function Safe\json_encode;
 
-#[Status(201)]
 #[Description('Create a pause')]
+#[Response(
+    new Status(201),
+    new Header('Content-Type', 'application/json')
+)]
 final class PausePostController extends Controller
 {
     public function __construct(

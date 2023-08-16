@@ -45,7 +45,7 @@ final class PauseDeleteControllerTest extends TestCase
         $file->createIfNotExists();
         $controller = new PauseDeleteController($directory);
         $response = $controller->getResponse(id: $id);
-        $this->assertSame([], $response->array());
+        $this->assertSame(null, $response->mixed());
         $this->assertFalse($file->exists());
     }
 }
