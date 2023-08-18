@@ -35,38 +35,61 @@ use function Chevere\Writer\writers;
 use function Chevere\xrDebug\getCipher;
 use function Chevere\xrDebug\getPrivateKey;
 use function Chevere\xrDebug\getResponse;
+use function Safe\exec;
+use function Safe\shell_exec;
 
 require_once __DIR__ . '/loader.php';
 $color = new Color();
 $logo = (new File($appDirectory->path()->getChild('logo')))->getContents();
 $logger = writers()->log();
-$logger->write(
-    $color($logo)->cyan()
-    . "\n"
-    . $color(strtr('xrDebug %v by Rodolfo Berrios', [
-        '%v' => XRDEBUG_VERSION,
-    ]))->green()
-    . "\n\n"
-);
-$options = (new ArgvParser())->parseConfigs();
-if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
-    $logger->write(
-        <<<LOG
-        -p Port (default 27420)
-        -n Session name (default xrDebug)
-        -e Enable end-to-end encryption
-        -v Enable sign verification
-        -c Cert file for TLS
-        -w Working directory
-        -k [for -e option] Symmetric key
-        -s [for -v option] Private key
-        -i Editor (default vscode)
-            [for -i option] Supported IDEs:
-            atom emacs espresso idea macvim netbeans
-            phpstorm sublime textmate vscode
+$version = 'xrDebug version ' . XRDEBUG_VERSION;
+$url = 'https://docs.xrdebug.com';
+$header = (string) $color(
+    <<<CONSOLE
+    <cyan>$logo</cyan>
+    <green>$version</green>
 
-        LOG
-    );
+    CONSOLE
+)->colorize();
+$logger->write($header);
+$options = (new ArgvParser())->parseConfigs();
+if (array_key_exists('v', $options) || array_key_exists('version', $options)) {
+    exit(0);
+}
+if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
+    $supportedIdes = (string) $color('')->yellow();
+    $help = (string) $color(
+        <<<CONSOLE
+
+        <yellow>Usage</yellow>
+          xrdebug [options]
+
+        <yellow>Server options</yellow>
+          <cyan>-p</cyan> Port (default 27420)
+          <cyan>-c</cyan> Cert file for TLS
+          <cyan>-e</cyan> Enable end-to-end encryption
+          <cyan>-k</cyan> <dark_gray>[for -e option]</dark_gray> Symmetric key
+          <cyan>-x</cyan> Enable sign verification
+          <cyan>-s</cyan> <dark_gray>[for -x option]</dark_gray> Private key
+
+        <yellow>Session options</yellow>
+          <cyan>-n</cyan> Session name (default xrDebug)
+          <cyan>-w</cyan> Working directory
+
+        <yellow>IDE options</yellow>
+          <cyan>-i</cyan> Editor (default vscode)
+
+        <yellow>Supported IDEs</yellow>
+          atom emacs espresso idea macvim netbeans
+          phpstorm sublime textmate vscode
+
+        <yellow>Documentation</yellow>
+          <cyan>$url</cyan>
+
+
+        CONSOLE
+    )->colorize();
+    $logger->write($help);
     exit(0);
 }
 $host = '127.0.0.1';
@@ -74,7 +97,7 @@ $port = $options['p'] ?? '27420';
 $sessionName = $options['n'] ?? 'xrDebug';
 $cert = $options['c'] ?? null;
 $isEncryptionEnabled = $options['e'] ?? false;
-$isSignVerificationEnabled = $options['v'] ?? false;
+$isSignVerificationEnabled = $options['x'] ?? false;
 $scheme = isset($cert) ? 'tls' : 'tcp';
 $editor = $options['i'] ?? 'vscode';
 $uri = "{$scheme}://{$host}:{$port}";
@@ -180,4 +203,5 @@ $logger->write(
 
     LOG
 );
+exec("open $httpAddress");
 $loop->run();

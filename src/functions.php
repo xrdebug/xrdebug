@@ -38,7 +38,7 @@ use React\Http\Message\Response;
 use React\Stream\ThroughStream;
 use Relay\Relay;
 use Throwable;
-use function Chevere\Http\response;
+use function Chevere\Http\responseAttribute;
 use function Chevere\Standard\arrayFilterBoth;
 use function Safe\base64_decode;
 use function Safe\json_encode;
@@ -205,7 +205,7 @@ function getResponse(
     } catch (Throwable) {
     }
     $isStream = $stream instanceof ThroughStream;
-    $status = response($controllerName)->status;
+    $status = responseAttribute($controllerName)->status;
 
     return new Response(
         $status->primary,
