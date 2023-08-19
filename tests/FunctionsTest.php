@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use React\EventLoop\LoopInterface;
 use React\Stream\ThroughStream;
-use function Chevere\Http\response;
+use function Chevere\Http\responseAttribute;
 use function Chevere\Router\bind;
 use function Chevere\Router\route;
 use function Chevere\Router\router;
@@ -244,7 +244,7 @@ final class FunctionsTest extends TestCase
             $dependencies,
             $container
         );
-        $status = response($controllerName)->status;
+        $status = responseAttribute($controllerName)->status;
         $this->assertSame($status->primary, $response->getStatusCode());
         $this->assertSame($contentType, $response->getHeaderLine('Content-Type'));
         if ($content instanceof ThroughStream) {
