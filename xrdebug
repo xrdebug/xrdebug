@@ -53,7 +53,7 @@ $header = (string) $color(
 )->colorize();
 $logger->write($header);
 $options = (new ArgvParser())->parseConfigs();
-if (array_key_exists('v', $options) || array_key_exists('version', $options)) {
+if (array_key_exists('version', $options)) {
     exit(0);
 }
 if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
@@ -65,25 +65,30 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
           xrdebug [options]
 
         <yellow>Server options</yellow>
-          <cyan>-p</cyan> Port (default 27420)
+          <cyan>-p</cyan> Port <red>(default 27420)</red>
           <cyan>-c</cyan> Cert file for TLS
+
+        <yellow>Cipher options</yellow>
           <cyan>-e</cyan> Enable end-to-end encryption
-          <cyan>-k</cyan> <dark_gray>[for -e option]</dark_gray> Symmetric key
           <cyan>-x</cyan> Enable sign verification
+          <cyan>-k</cyan> <dark_gray>[for -e option]</dark_gray> Symmetric key
           <cyan>-s</cyan> <dark_gray>[for -x option]</dark_gray> Private key
 
         <yellow>Session options</yellow>
-          <cyan>-n</cyan> Session name (default xrDebug)
+          <cyan>-n</cyan> Session name <red>(default xrDebug)</red>
           <cyan>-w</cyan> Working directory
 
         <yellow>IDE options</yellow>
-          <cyan>-i</cyan> Editor (default vscode)
+          <cyan>-i</cyan> Editor <red>(default vscode)</red>
 
-        <yellow>Supported IDEs</yellow>
           atom emacs espresso idea macvim netbeans
           phpstorm sublime textmate vscode
 
-        <yellow>Documentation</yellow>
+        <yellow>Miscellaneous</yellow>
+          <cyan>-h|--help</cyan> Show this help message
+          <cyan>--version</cyan> Show version
+
+        <yellow>Docs</yellow>
           <cyan>$url</cyan>
 
 
@@ -194,14 +199,15 @@ $httpAddress = strtr(
     ]
 );
 $phpVersion = PHP_VERSION . ' ' . PHP_OS. ' (' . PHP_SAPI . ')';
-$logger->write(
-    <<<LOG
-    Runtime: PHP {$phpVersion}
-    Server listening on {$scheme} {$httpAddress}
-    Press Ctrl+C to quit
-    --
+$message = <<<LOG
+<green>PHP {$phpVersion}</green>
 
-    LOG
-);
+Running at {$scheme} <cyan>{$httpAddress}</cyan>
+<italic>Press Ctrl+C to quit</italic>
+--
+
+LOG;
+$message = (string) $color($message)->colorize();
+$logger->write($message);
 exec("open $httpAddress");
 $loop->run();
