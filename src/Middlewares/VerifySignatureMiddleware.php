@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug\Middlewares;
 
+use Chevere\Http\Attributes\Response;
 use Chevere\Http\Exceptions\MiddlewareException;
+use Chevere\Http\Status;
 use phpseclib3\Crypt\EC\PrivateKey;
 use phpseclib3\Crypt\EC\PublicKey;
 use Psr\Http\Message\ResponseInterface;
@@ -22,6 +24,9 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use function Safe\base64_decode;
 
+#[Response(
+    new Status(400)
+)]
 final class VerifySignatureMiddleware implements MiddlewareInterface
 {
     public function __construct(

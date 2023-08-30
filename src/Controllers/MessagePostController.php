@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Chevere\xrDebug\Controllers;
 
 use Chevere\Attributes\Description;
+use Chevere\Http\Attributes\Request;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
+use Chevere\Http\Header;
 use Chevere\Http\Status;
 use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
 use Chevere\Parameter\Interfaces\ParameterInterface;
@@ -25,6 +27,9 @@ use function Chevere\Parameter\null;
 use function Chevere\Parameter\string;
 
 #[Description('Create a debug message')]
+#[Request(
+    new Header('Content-Type', 'application/json'),
+)]
 #[Response(
     new Status(204),
 )]

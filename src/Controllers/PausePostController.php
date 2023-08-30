@@ -16,6 +16,7 @@ namespace Chevere\xrDebug\Controllers;
 use Chevere\Attributes\Description;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Chevere\Http\Attributes\Request;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
 use Chevere\Http\Header;
@@ -30,6 +31,9 @@ use function Chevere\Parameter\string;
 use function Safe\json_encode;
 
 #[Description('Create a pause')]
+#[Request(
+    new Header('Content-Type', 'application/json'),
+)]
 #[Response(
     new Status(201),
     new Header('Content-Type', 'application/json')
