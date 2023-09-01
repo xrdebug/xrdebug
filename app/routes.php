@@ -27,15 +27,13 @@ use function Chevere\Router\routes;
 return routes(
     route(
         path: '/',
-        GET: bind(
-            controller: SPAController::class,
-            view: 'spa'
-        )
+        GET: bind(SPAController::class)->withView('spa')
     ),
     route(
         path: '/pauses',
         POST: bind(
             PausePostController::class,
+            DecryptMiddleware::class,
             VerifySignatureMiddleware::class,
         ),
     ),
@@ -58,6 +56,7 @@ return routes(
         path: '/messages',
         POST: bind(
             MessagePostController::class,
+            DecryptMiddleware::class,
             VerifySignatureMiddleware::class
         ),
     ),
