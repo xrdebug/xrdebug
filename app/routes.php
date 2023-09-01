@@ -33,7 +33,7 @@ return routes(
         path: '/pauses',
         POST: bind(
             PausePostController::class,
-            DecryptMiddleware::class,
+            // DecryptMiddleware::class,
             VerifySignatureMiddleware::class,
         ),
     ),
@@ -56,7 +56,7 @@ return routes(
         path: '/messages',
         POST: bind(
             MessagePostController::class,
-            DecryptMiddleware::class,
+            // DecryptMiddleware::class,
             VerifySignatureMiddleware::class
         ),
     ),
