@@ -165,10 +165,7 @@ final class FunctionsTest extends TestCase
                 routes(
                     route(
                         path: '/',
-                        GET: bind(
-                            controller: SPAController::class,
-                            view: 'spa'
-                        )
+                        GET: bind(SPAController::class)->withView('spa')
                     )
                 ),
                 SPAController::class,
@@ -183,9 +180,7 @@ final class FunctionsTest extends TestCase
                 routes(
                     route(
                         path: '/',
-                        GET: bind(
-                            controller: StreamController::class,
-                        )
+                        GET: StreamController::class
                     )
                 ),
                 StreamController::class,
@@ -208,9 +203,7 @@ final class FunctionsTest extends TestCase
                 routes(
                     route(
                         path: '/',
-                        POST: bind(
-                            controller: PausePostController::class,
-                        )
+                        POST: PausePostController::class
                     )
                 ),
                 PausePostController::class,
@@ -258,9 +251,7 @@ final class FunctionsTest extends TestCase
         $routes = routes(
             route(
                 path: '/',
-                GET: bind(
-                    controller: SPAController::class,
-                )
+                GET: SPAController::class
             )
         );
         $dependencies = new Dependencies($routes);
