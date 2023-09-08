@@ -19,7 +19,7 @@ use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
 use Chevere\Http\Header;
 use Chevere\Http\Status;
-use Chevere\Parameter\Interfaces\ArrayTypeParameterInterface;
+use Chevere\Parameter\Interfaces\ArrayParameterInterface;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Debugger;
 use function Chevere\Parameter\arrayp;
@@ -41,7 +41,7 @@ final class MessagePostController extends Controller
     ) {
     }
 
-    public static function acceptBody(): ArrayTypeParameterInterface
+    public static function acceptBody(): ArrayParameterInterface
     {
         return arrayp()->withOptional(
             body: string('/.*?/'),

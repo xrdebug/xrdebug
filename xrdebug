@@ -36,7 +36,6 @@ use function Chevere\xrDebug\getCipher;
 use function Chevere\xrDebug\getPrivateKey;
 use function Chevere\xrDebug\getResponse;
 use function Safe\exec;
-use function Safe\shell_exec;
 
 require_once __DIR__ . '/loader.php';
 $color = new Color();
@@ -46,8 +45,10 @@ $version = 'xrDebug version ' . XRDEBUG_VERSION;
 $url = 'https://docs.xrdebug.com';
 $header = (string) $color(
     <<<CONSOLE
-    <cyan>$logo</cyan>
-    <green>$version</green>
+    <cyan>{$logo}</cyan>
+    <green>{$version}</green>
+    <dark_gray>By Chevere Software
+    Copyright Rodolfo Berrios A.</dark_gray>
 
     CONSOLE
 )->colorize();
@@ -89,7 +90,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
           <cyan>--version</cyan> Show version
 
         <yellow>Docs</yellow>
-          <cyan>$url</cyan>
+          <cyan>{$url}</cyan>
 
 
         CONSOLE
@@ -198,7 +199,7 @@ $httpAddress = strtr(
         'tcp' => 'http',
     ]
 );
-$phpVersion = PHP_VERSION . ' ' . PHP_OS. ' (' . PHP_SAPI . ')';
+$phpVersion = PHP_VERSION . ' ' . PHP_OS . ' (' . PHP_SAPI . ')';
 $message = <<<LOG
 <green>PHP {$phpVersion}</green>
 
@@ -209,5 +210,5 @@ Running at {$scheme} <cyan>{$httpAddress}</cyan>
 LOG;
 $message = (string) $color($message)->colorize();
 $logger->write($message);
-exec("open $httpAddress");
+exec("open {$httpAddress}");
 $loop->run();
