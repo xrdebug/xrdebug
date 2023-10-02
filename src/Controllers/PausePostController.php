@@ -69,7 +69,7 @@ final class PausePostController extends Controller
 
     protected function run(): array
     {
-        $id = $this->body()->cast('id')->string();
+        $id = $this->body()->required('id')->string();
         $path = $this->directory->path()->getChild($id);
         $file = new File($path);
         $file->removeIfExists();
