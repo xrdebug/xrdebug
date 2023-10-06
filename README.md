@@ -20,9 +20,9 @@ https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=coverage)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chevere_xr-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chevere_xr-server)
 [![CodeFactor](https://www.codefactor.io/repository/github/chevere/xrdebug/badge)](https://www.codefactor.io/repository/github/chevere/xrdebug)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/66dc8822bf674a08a43054b9a3700626)](https://www.codacy.com/gh/chevere/xrdebug/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/66dc8822bf674a08a43054b9a3700626)](https://app.codacy.com/gh/chevere/xrdebug/dashboard)
 
-[xrDebug](https://xr-docs.chevere.org/) is a lightweight web application debug utility.
+[xrDebug](https://xrdebug.com/) is a lightweight web application debug utility.
 
 <p align="center">
     <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
@@ -31,27 +31,32 @@ https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-
 
 ## Documentation
 
-Documentation available at [xr-docs.chevere.org](https://xr-docs.chevere.org/).
+Documentation available at [docs.xrdebug.com](https://docs.xrdebug.com/).
 
 ## Features
 
 * Ephemeral, it doesn't store any persistent data
 * Signed requests (Ed25519)
 * End-to-end encryption (AES-GCM AE)
-* Dump arguments using [VarDump](https://chevere.org/packages/var-dump.html)
-* Filter messages by [Topics](https://xr-docs.chevere.org/helpers/xr.html#topic) and [Emotes](https://xr-docs.chevere.org/helpers/xr.html#emote)
+* Filter messages by Topics and Emotes
 * Resume, Pause, Stop and Clear debug window controls
 * Keyboard shortcuts (Resume **R**, Pause **P**, Stop **S** and Clear **C**)
 * Re-name "xrDebug" session to anything you want
 * Export dump output to clipboard or as PNG image
-* Generates dump [backtrace](https://xr-docs.chevere.org/helpers/xr.html#flags)
-* [Pause](https://xr-docs.chevere.org/helpers/xri.html#pause) and resume your code execution
+* Pause and resume your code execution
 * Dark / 🌝 Light mode follows your system preferences
 * Portable & HTML based (save page, search, etc.)
 * Uses [FiraCode](https://github.com/tonsky/FiraCode) font for displaying _beautiful looking dumps_ ™
-* Handle exceptions (hook or replace your existing handler)
 * Open with editor links
 * Responsive user interface
+
+## PHP Features
+
+* Configuration via code and `xr.php` file
+* Dump arguments using [VarDump](https://chevere.org/packages/var-dump.html)
+* Generates dump backtrace
+* Custom inspectors
+* Handle errors and exceptions (hook or replace your existing handler)
 
 <p align="center">
     <img alt="xrDebug dark demo" src=".screen/xr-0.1.3-dark-demo.png">
