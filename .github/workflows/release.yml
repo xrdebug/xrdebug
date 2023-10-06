@@ -4,24 +4,19 @@ on:
     tags:
       - "*"
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest]
-        php: ["8.2"]
+  release:
+    runs-on: macos-latest
     env:
+      phpVer: "8.2"
       tools: composer
       ini-values: default_charset='UTF-8'
-      key: cache-1690242875644
-    name: Release on PHP ${{ matrix.php }} ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: ${{ env.phpVer }}
           ini-values: ${{ env.ini-values }}
           tools: ${{ env.tools }}
         env:
@@ -49,22 +44,19 @@ jobs:
         uses: robinraju/release-downloader@v1.8
         with:
           repository: "chevere/xrdebug-micro"
+          out-file-path: "downloads"
           latest: true
           tarBall: true
-          extract: true
-      - name: Check extracted files
-        run: ls micro/*
-      - name: Run micro
-        run: |
-          mkdir -p bin/macos/{arm64,x86_64}
-          cat micro/micro-arm64.sfx xrdebug.phar > bin/macos/arm64/xrdebug
-          cat micro/micro-x86_64.sfx xrdebug.phar > bin/macos/x86_64/xrdebug
-          chmod +x bin/macos/arm64/xrdebug bin/macos/x86_64/xrdebug
-      - name: Build packages
+          extract: false
+      - name: Extract micro files
+        run: for filename in ./downloads/*.tar.gz; do tar -xvf $filename --keep-old-files; done
+      - name: Cat micro
+        run: ./cat.sh
+      - name: Create macOS package
         run: |
           pkgbuild --identifier org.chevere.xrdebug.pkg \
             --install-location ./usr/local/bin/ \
-            --version ${{ github.ref_name}} \
+            --version ${{ github.ref_name}} \cat
             --root ./bin/macos/arm64 \
             xrdebug-${{ github.ref_name}}-macos-arm64.pkg
           pkgbuild --identifier org.chevere.xrdebug.pkg \
@@ -72,6 +64,11 @@ jobs:
             --version ${{ github.ref_name}} \
             --root ./bin/macos/x86_64 \
             xrdebug-${{ github.ref_name}}-macos-x86_64.pkg
+      - name: Build Linux tar
+        run: |
+          tar -zcvf xrdebug-${{ github.ref_name}}-linux-aarch64.tar.gz bin/linux/aarch64/xrdebug
+          tar -zcvf xrdebug-${{ github.ref_name}}-linux-x86_64.tar.gz bin/linux/x86_64/xrdebug
+          ls .
       - name: Upload artifacts
         uses: ncipollo/release-action@v1
         with:
@@ -80,6 +77,6 @@ jobs:
             schwager.json,
             xrdebug.phar,
             xrdebug.phar.asc,
-            xrdebug-${{ github.ref_name}}-macos-arm64.pkg,
-            xrdebug-${{ github.ref_name}}-macos-x86_64.pkg
+            xrdebug-${{ github.ref_name}}-macos-*.pkg,
+            xrdebug-${{ github.ref_name}}-linux-*.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
