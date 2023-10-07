@@ -51,7 +51,7 @@ jobs:
           extract: false
       - name: Extract micro files
         run: |
-          for filename in downloads/*.tar.gz; do tar -xvf $filename; done
+          for filename in downloads/php-*.tar.gz; do tar -xvf $filename; done
           ls micro
       - name: Cat micro
         run: ./cat.sh
@@ -59,7 +59,7 @@ jobs:
         run: |
           pkgbuild --identifier org.chevere.xrdebug.pkg \
             --install-location ./usr/local/bin/ \
-            --version ${{ github.ref_name}} \cat
+            --version ${{ github.ref_name}} \
             --root ./bin/macos/arm64 \
             xrdebug-${{ github.ref_name}}-macos-arm64.pkg
           pkgbuild --identifier org.chevere.xrdebug.pkg \
