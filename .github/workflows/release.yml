@@ -45,11 +45,14 @@ jobs:
         with:
           repository: "chevere/xrdebug-micro"
           out-file-path: "downloads"
+          fileName: "php-*.tar.gz"
           latest: true
           tarBall: true
           extract: false
       - name: Extract micro files
-        run: for filename in ./downloads/*.tar.gz; do tar -xvf $filename --keep-old-files; done
+        run: |
+          for filename in downloads/*.tar.gz; do tar -xvf $filename; done
+          ls micro
       - name: Cat micro
         run: ./cat.sh
       - name: Create macOS package

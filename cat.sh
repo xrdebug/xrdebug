@@ -2,16 +2,13 @@
 
 set -e
 
-CURRENT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-PARENT_DIRECTORY="${CURRENT_DIRECTORY%/*}"
+mkdir -p bin/macos/{arm64,x86_64}
+mkdir -p bin/linux/{aarch64,x86_64}
 
-mkdir -p ${PARENT_DIRECTORY}/bin/macos/{arm64,x86_64}
-mkdir -p ${PARENT_DIRECTORY}/bin/linux/{aarch64,x86_64}
+cat micro/micro-macos-arm64.sfx xrdebug.phar >bin/macos/arm64/xrdebug
+cat micro/micro-macos-x86_64.sfx xrdebug.phar >bin/macos/x86_64/xrdebug
+cat micro/micro-linux-aarch64.sfx xrdebug.phar >bin/linux/aarch64/xrdebug
+cat micro/micro-linux-x86_64.sfx xrdebug.phar >bin/linux/x86_64/xrdebug
 
-cat ${PARENT_DIRECTORY}/micro/micro-macos-arm64.sfx ${PARENT_DIRECTORY}/xrdebug.phar >${PARENT_DIRECTORY}/bin/macos/arm64/xrdebug
-cat ${PARENT_DIRECTORY}/micro/micro-macos-x86_64.sfx ${PARENT_DIRECTORY}/xrdebug.phar >${PARENT_DIRECTORY}/bin/macos/x86_64/xrdebug
-cat ${PARENT_DIRECTORY}/micro/micro-linux-aarch64.sfx ${PARENT_DIRECTORY}/xrdebug.phar >${PARENT_DIRECTORY}/bin/linux/aarch64/xrdebug
-cat ${PARENT_DIRECTORY}/micro/micro-linux-x86_64.sfx ${PARENT_DIRECTORY}/xrdebug.phar >${PARENT_DIRECTORY}/bin/linux/x86_64/xrdebug
-
-chmod +x ${PARENT_DIRECTORY}/bin/macos/*/xrdebug
-chmod +x ${PARENT_DIRECTORY}/bin/linux/*/xrdebug
+chmod +x bin/macos/*/xrdebug
+chmod +x bin/linux/*/xrdebug
