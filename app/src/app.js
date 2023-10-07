@@ -104,9 +104,11 @@ let filter = {
         } else {
             windowActions.pushStatus(action);
         }
+        let actionDisplay = action.toUpperCase();
+        action = 'window_action';
         pushMessage({
-            message: "<b>" + action.toUpperCase() + "</b> " + document.title,
-            action: action
+            message: "<b>" + actionDisplay + "</b> " + document.title,
+            action: action,
         }, true);
     },
     keysToAction = {
