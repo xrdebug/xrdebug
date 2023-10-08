@@ -10,7 +10,6 @@ jobs:
     env:
       tools: composer, phpstan, infection
       ini-values: default_charset='UTF-8'
-      key: cache-1690242875644
     name: PHP ${{ matrix.php }} test on ${{ matrix.os }}
     steps:
       - name: Checkout
