@@ -22,7 +22,7 @@ https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-
 [![CodeFactor](https://www.codefactor.io/repository/github/chevere/xrdebug/badge)](https://www.codefactor.io/repository/github/chevere/xrdebug)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/66dc8822bf674a08a43054b9a3700626)](https://app.codacy.com/gh/chevere/xrdebug/dashboard)
 
-[xrDebug](https://xrdebug.com/) is a lightweight web application debug utility.
+[xrDebug](https://docs.xrdebug.com/) is a lightweight web application debug utility.
 
 <p align="center">
     <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
