@@ -43,7 +43,7 @@ jobs:
       - name: Download micro.sfx
         uses: robinraju/release-downloader@v1.8
         with:
-          repository: "chevere/xrdebug-micro"
+          repository: "xrdebug/xrdebug-micro"
           out-file-path: "downloads"
           fileName: "php-*.tar.gz"
           latest: true

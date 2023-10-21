@@ -1,7 +1,7 @@
 {
-    "name": "chevere/xrdebug",
+    "name": "xrdebug/xrdebug",
     "description": "Lightweight debug utility",
-    "homepage": "https://xr-debug.chevere.org",
+    "homepage": "https://docs.xrdebug.com",
     "license": "Apache-2.0",
     "authors": [
         {
