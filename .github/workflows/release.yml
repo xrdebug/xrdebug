@@ -6,6 +6,8 @@ on:
 jobs:
   release:
     runs-on: macos-latest
+    permissions:
+      contents: write
     env:
       phpVer: "8.2"
       tools: composer
