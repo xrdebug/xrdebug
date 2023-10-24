@@ -13,14 +13,14 @@ https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%209-blueviolet?style=flat-square)](https://phpstan.org/)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchevere%2Fxrdebug%2F1.0)](https://dashboard.stryker-mutator.io/reports/github.com/xrdebug/xrdebug/1.0)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=alert_status)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=security_rating)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=coverage)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chevere_xrdebug&metric=sqale_index)](https://sonarcloud.io/dashboard?id=chevere_xrdebug)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=alert_status)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=security_rating)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=coverage)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=sqale_index)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
 [![CodeFactor](https://www.codefactor.io/repository/github/xrdebug/xrdebug/badge)](https://www.codefactor.io/repository/github/xrdebug/xrdebug)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/66dc8822bf674a08a43054b9a3700626)](https://app.codacy.com/gh/xrdebug/xrdebug/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/752634e86f5040ff9aef3c761a70a476)](https://app.codacy.com/gh/xrdebug/xrdebug/dashboard)
 
 [xrDebug](https://docs.xrdebug.com/) is a lightweight web application debug utility.
 
