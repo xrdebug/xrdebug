@@ -8,6 +8,8 @@ env:
 jobs:
   buildx:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
