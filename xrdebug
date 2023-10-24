@@ -210,5 +210,10 @@ Running at {$scheme} <cyan>{$httpAddress}</cyan>
 LOG;
 $message = (string) $color($message)->colorize();
 $logger->write($message);
-exec("open {$httpAddress}");
+$command = match (strtoupper(substr(PHP_OS, 0, 3))) {
+    'WIN' => 'start',
+    'DAR' => 'open',
+    default => 'xdg-open',
+};
+exec("{$command} {$httpAddress}");
 $loop->run();
