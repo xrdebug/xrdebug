@@ -62,9 +62,9 @@ final class PausePostControllerTest extends TestCase
             $remoteAddress
         );
         $controller = $controller->withBody($body);
-        $response = $controller->getResponse();
+        $response = $controller->__invoke();
         $decoded = json_decode($file->getContents(), true);
-        $this->assertSame($decoded, $response->array());
+        $this->assertSame($decoded, $response);
         $this->assertTrue($file->exists());
         $this->assertSame($encode, $file->getContents());
         $file->remove();

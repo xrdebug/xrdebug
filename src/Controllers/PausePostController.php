@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug\Controllers;
 
-use Chevere\Attributes\Description;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Chevere\Http\Attributes\Description;
 use Chevere\Http\Attributes\Request;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
@@ -26,7 +26,7 @@ use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Constants\UrlPathRegex;
 use Chevere\xrDebug\Debugger;
 use function Chevere\Parameter\arrayp;
-use function Chevere\Parameter\boolean;
+use function Chevere\Parameter\bool;
 use function Chevere\Parameter\string;
 use function Safe\json_encode;
 
@@ -50,7 +50,7 @@ final class PausePostController extends Controller
     public static function acceptResponse(): ParameterInterface
     {
         return arrayp(
-            stop: boolean(),
+            stop: bool(),
         );
     }
 
@@ -67,7 +67,7 @@ final class PausePostController extends Controller
         );
     }
 
-    protected function run(): array
+    protected function main(): array
     {
         $id = $this->body()->required('id')->string();
         $path = $this->directory->path()->getChild($id);

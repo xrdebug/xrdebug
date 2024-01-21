@@ -28,15 +28,15 @@ foreach (['/', '/../../../'] as $path) {
         break;
     }
 }
+
 if (! in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed', 'micro'], true)) {
     echo message(
-        <<<ERROR
-        xrDebug may only be invoked from a command line, got %sapi%
-        ERROR
-    )->withTranslate('%sapi%', PHP_SAPI);
+        'xrDebug may only be invoked from a command line, called from %sapi%',
+        sapi: PHP_SAPI
+    );
     exit(1);
 }
-new WritersInstance(
+$writersInstance = new WritersInstance(
     (new Writers())
         ->with(
             new StreamWriter(

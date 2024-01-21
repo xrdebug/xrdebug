@@ -38,15 +38,16 @@ use function Chevere\xrDebug\getResponse;
 use function Safe\exec;
 
 require_once __DIR__ . '/loader.php';
+
 $color = new Color();
 $logo = (new File($appDirectory->path()->getChild('logo')))->getContents();
 $logger = writers()->log();
-$version = 'xrDebug version ' . XRDEBUG_VERSION;
+$version = XRDEBUG_VERSION;
 $url = 'https://docs.xrdebug.com';
 $header = (string) $color(
     <<<CONSOLE
     <cyan>{$logo}</cyan>
-    <green>{$version}</green>
+    <green>xrDebug version {$version}</green>
     <dark_gray>By Chevere Software
     Copyright Rodolfo Berrios A.</dark_gray>
 
@@ -201,7 +202,8 @@ $httpAddress = strtr(
 );
 $phpVersion = PHP_VERSION . ' ' . PHP_OS . ' (' . PHP_SAPI . ')';
 $message = <<<LOG
-<green>PHP {$phpVersion}</green>
+
+<cyan>PHP {$phpVersion}</cyan>
 
 Running at {$scheme} <cyan>{$httpAddress}</cyan>
 <italic>Press Ctrl+C to quit</italic>

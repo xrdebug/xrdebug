@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug\Controllers;
 
-use Chevere\Attributes\Description;
-use Chevere\Attributes\Regex;
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Chevere\Http\Attributes\Description;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
 use Chevere\Http\Status;
+use Chevere\Parameter\Attributes\StringAttr;
 use Chevere\Parameter\Interfaces\ParameterInterface;
 use Chevere\xrDebug\Constants\UrlPathRegex;
 use Chevere\xrDebug\Controllers\Traits\PauseTrait;
@@ -43,8 +43,8 @@ final class PauseDeleteController extends Controller
         return null();
     }
 
-    protected function run(
-        #[Regex(UrlPathRegex::UUID)]
+    protected function main(
+        #[StringAttr(UrlPathRegex::UUID)]
         string $id
     ): void {
         $path = $this->directory->path()->getChild($id);

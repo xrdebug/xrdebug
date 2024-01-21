@@ -22,9 +22,9 @@ use Chevere\Router\Interfaces\RouterInterface;
 use Chevere\Schwager\DocumentSchema;
 use Chevere\Schwager\ServerSchema;
 use Chevere\Schwager\Spec;
-use Chevere\Throwable\Exceptions\LogicException;
 use Chevere\Writer\Interfaces\WriterInterface;
 use Colors\Color;
+use LogicException;
 use phpseclib3\Crypt\AES;
 use phpseclib3\Crypt\Common\SymmetricKey;
 use phpseclib3\Crypt\EC;
@@ -191,37 +191,29 @@ function getResponse(
     }
 
     try {
-        $response = $controller->getResponse(...$routed->arguments());
+        $response = $controller->__invoke(...$routed->arguments());
     } catch (ControllerException $e) {
         return new Response(
             $e->getCode(),
         );
     }
-    $stream = null;
+    $isStream = $response instanceof ThroughStream;
+    $status = responseAttribute($controllerName)->status->primary;
+    $headers = [
+        'Content-Type' => match (true) {
+            $isStream => 'text/event-stream',
+            $view === 'spa/GET' => 'text/html',
+            default => 'text/json',
+        },
+    ];
+    /** @var ThroughStream|string $body */
+    $body = match (true) {
+        $isStream => $response,
+        $view === 'spa/GET' => $response,
+        default => json_encode($response),
+    };
 
-    try {
-        /** @var ThroughStream $stream */
-        $stream = $response->object();
-    } catch (Throwable) {
-    }
-    $isStream = $stream instanceof ThroughStream;
-    $status = responseAttribute($controllerName)->status;
-
-    return new Response(
-        $status->primary,
-        [
-            'Content-Type' => match (true) {
-                $isStream => 'text/event-stream',
-                $view === 'spa/GET' => 'text/html',
-                default => 'text/json',
-            },
-        ],
-        match (true) {
-            $isStream => $stream,
-            $view === 'spa/GET' => $response->string(),
-            default => json_encode($response->mixed()),
-        }
-    );
+    return new Response($status, $headers, $body);
 }
 
 /**

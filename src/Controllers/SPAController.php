@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug\Controllers;
 
-use Chevere\Attributes\Description;
 use Chevere\Filesystem\Interfaces\FileInterface;
+use Chevere\Http\Attributes\Description;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
 use Chevere\Http\Header;
@@ -39,7 +39,7 @@ final class SPAController extends Controller
         return string('/^.*$/m');
     }
 
-    protected function run(): string
+    protected function main(): string
     {
         return $this->app->getContents();
     }

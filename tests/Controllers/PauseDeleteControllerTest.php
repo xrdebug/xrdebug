@@ -33,7 +33,7 @@ final class PauseDeleteControllerTest extends TestCase
         $controller = new PauseDeleteController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
-        $controller->getResponse(id: $id);
+        $controller->__invoke(id: $id);
     }
 
     public function test204(): void
@@ -44,8 +44,8 @@ final class PauseDeleteControllerTest extends TestCase
         $file = new File($path);
         $file->createIfNotExists();
         $controller = new PauseDeleteController($directory);
-        $response = $controller->getResponse(id: $id);
-        $this->assertSame(null, $response->mixed());
+        $response = $controller->__invoke(id: $id);
+        $this->assertSame(null, $response);
         $this->assertFalse($file->exists());
     }
 }

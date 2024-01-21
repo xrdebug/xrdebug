@@ -30,7 +30,7 @@ final class PausePatchControllerTest extends TestCase
         $controller = new PausePatchController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
-        $controller->getResponse(id: $id);
+        $controller->__invoke(id: $id);
     }
 
     public function test200(): void
@@ -41,12 +41,12 @@ final class PausePatchControllerTest extends TestCase
         $file = new File($path);
         $file->createIfNotExists();
         $controller = new PausePatchController($directory);
-        $response = $controller->getResponse(id: $id);
+        $response = $controller->__invoke(id: $id);
         $decoded = json_decode($file->getContents(), true);
         $expected = [
             'stop' => true,
         ];
-        $this->assertSame($expected, $response->array());
+        $this->assertSame($expected, $response);
         $this->assertSame($expected, $decoded);
         $this->assertTrue($file->exists());
         $file->remove();

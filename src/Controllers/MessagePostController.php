@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug\Controllers;
 
-use Chevere\Attributes\Description;
+use Chevere\Http\Attributes\Description;
 use Chevere\Http\Attributes\Request;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
@@ -58,7 +58,7 @@ final class MessagePostController extends Controller
         return null();
     }
 
-    protected function run(): void
+    protected function main(): void
     {
         $this->debugger->sendMessage(
             $this->body()->toArray(),

@@ -29,7 +29,7 @@ final class PauseGetControllerTest extends TestCase
         $controller = new PauseGetController($directory);
         $this->expectException(ControllerException::class);
         $this->expectExceptionCode(404);
-        $controller->getResponse(id: $id);
+        $controller->__invoke(id: $id);
     }
 
     public function test200(): void
@@ -44,8 +44,8 @@ final class PauseGetControllerTest extends TestCase
         $file->put($encode);
         $directory = $this->getWritableDirectory();
         $controller = new PauseGetController($directory);
-        $response = $controller->getResponse(id: $id);
-        $this->assertSame($array, $response->array());
+        $response = $controller->__invoke(id: $id);
+        $this->assertSame($array, $response);
         $file->remove();
     }
 }

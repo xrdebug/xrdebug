@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug\Controllers;
 
-use Chevere\Attributes\Description;
+use Chevere\Http\Attributes\Description;
 use Chevere\Http\Attributes\Response;
 use Chevere\Http\Controller;
 use Chevere\Http\Status;
@@ -42,7 +42,7 @@ final class StreamController extends Controller
         return object(ThroughStream::class);
     }
 
-    protected function run(): ThroughStream
+    protected function main(): ThroughStream
     {
         $stream = new ThroughStream();
         $channel = $this->channel;

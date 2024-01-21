@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Chevere\Tests\Controllers;
 
-use Chevere\Throwable\Errors\ArgumentCountError;
+use ArgumentCountError;
 use Chevere\xrDebug\Controllers\MessagePostController;
 use Chevere\xrDebug\Debugger;
 use PHPUnit\Framework\TestCase;
@@ -48,6 +48,11 @@ final class MessagePostControllerTest extends TestCase
             unset($binds[$key]);
         }
         $this->expectException(ArgumentCountError::class);
+        $this->expectExceptionMessage(
+            <<<PLAIN
+            Requires minimum **1** optional argument(s), **0** provided
+            PLAIN
+        );
         assertArray($body, []);
     }
 
@@ -71,7 +76,7 @@ final class MessagePostControllerTest extends TestCase
             $remoteAddress
         );
         $controller = $controller->withBody($body);
-        $response = $controller->getResponse();
-        $this->assertSame(null, $response->mixed());
+        $response = $controller->__invoke();
+        $this->assertSame(null, $response);
     }
 }

@@ -28,8 +28,8 @@ final class SPAControllerTest extends TestCase
         $file->createIfNotExists();
         $file->put($contents);
         $controller = new SPAController($file);
-        $response = $controller->getResponse();
-        $this->assertSame($contents, $response->string());
+        $response = $controller->__invoke();
+        $this->assertSame($contents, $response);
         $file->remove();
     }
 }
