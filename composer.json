@@ -26,7 +26,6 @@
         "dg/bypass-finals": "^1.4",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5",
-        "chevere/schwager": "^0.2.x-dev",
         "symplify/easy-coding-standard": "^11.1"
     },
     "autoload": {

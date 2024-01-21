@@ -297,35 +297,35 @@ function getPrivateKey(
     return $privateKey;
 }
 
-function schwager(
-    string $version,
-    RouterInterface $router,
-    FileInterface $file,
-): void {
-    $document = new DocumentSchema(
-        api: 'xr',
-        name: 'xrDebug API',
-        version: $version
-    );
-    $server = new ServerSchema(
-        url: '',
-        description: 'xrDebug',
-    );
-    $spec = new Spec($router, $document, $server);
-    $array = arrayFilterBoth($spec->toArray(), function ($v, $k) {
-        return match (true) {
-            $v === null => false,
-            $v === [] => false,
-            $v === '' => false,
-            $k === 'required' && $v === true => false,
-            $k === 'regex' && $v === '^.*$' => false,
-            $k === 'body' && $v === [
-                'type' => 'array#map',
-            ] => false,
-            default => true,
-        };
-    });
-    $json = json_encode($array, JSON_PRETTY_PRINT);
-    $file->createIfNotExists();
-    $file->put($json);
-}
+// function schwager(
+//     string $version,
+//     RouterInterface $router,
+//     FileInterface $file,
+// ): void {
+//     $document = new DocumentSchema(
+//         api: 'xr',
+//         name: 'xrDebug API',
+//         version: $version
+//     );
+//     $server = new ServerSchema(
+//         url: '',
+//         description: 'xrDebug',
+//     );
+//     $spec = new Spec($router, $document, $server);
+//     $array = arrayFilterBoth($spec->toArray(), function ($v, $k) {
+//         return match (true) {
+//             $v === null => false,
+//             $v === [] => false,
+//             $v === '' => false,
+//             $k === 'required' && $v === true => false,
+//             $k === 'regex' && $v === '^.*$' => false,
+//             $k === 'body' && $v === [
+//                 'type' => 'array#map',
+//             ] => false,
+//             default => true,
+//         };
+//     });
+//     $json = json_encode($array, JSON_PRETTY_PRINT);
+//     $file->createIfNotExists();
+//     $file->put($json);
+// }
