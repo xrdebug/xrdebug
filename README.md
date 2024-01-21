@@ -2,9 +2,15 @@
 
 > 🔔 Subscribe to the [newsletter](https://chv.to/chevere-newsletter) to don't miss any update regarding Chevere.
 
-<p align="center"><img alt="xrDebug" src="app/src/icon.svg" width="40%"></p>
+<p align="center">
+    <img alt="xrDebug" src="app/src/icon.svg" width="40%">
+</p>
 
-https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4
+<p align="center">
+    <img alt="Get it on macOS" src=".github/badge/macos.png" height="50">
+    <img alt="Get it on Linux" src=".github/badge/linux.png" height="50">
+    <img alt="Get it on Windows" src=".github/badge/windows.png" height="50">
+</p>
 
 🦄 [View demo](https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4)
 
@@ -20,9 +26,8 @@ https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=coverage)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=sqale_index)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
 [![CodeFactor](https://www.codefactor.io/repository/github/xrdebug/xrdebug/badge)](https://www.codefactor.io/repository/github/xrdebug/xrdebug)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/752634e86f5040ff9aef3c761a70a476)](https://app.codacy.com/gh/xrdebug/xrdebug/dashboard)
 
-[xrDebug](https://docs.xrdebug.com/) is a lightweight web application debug utility.
+[xrDebug](https://xrdebug.com/) is a lightweight web-based debug utility server.
 
 <p align="center">
     <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
@@ -64,7 +69,7 @@ Documentation available at [docs.xrdebug.com](https://docs.xrdebug.com/).
 
 ## License
 
-Copyright 2023 [Rodolfo Berrios A.](https://rodolfoberrios.com/)
+Copyright [Rodolfo Berrios A.](https://rodolfoberrios.com/)
 
 Chevere is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
 
