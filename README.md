@@ -2,17 +2,9 @@
 
 > 🔔 Subscribe to the [newsletter](https://chv.to/chevere-newsletter) to don't miss any update regarding Chevere.
 
-<p align="center">
-    <img alt="xrDebug" src="app/src/icon.svg" width="40%">
-</p>
+<a href="https://xrdebug.com"><img alt="xrDebug" src="app/src/icon.svg" width="40%"></a>
 
-<p align="center">
-    <img alt="Get it on macOS" src=".github/badge/macos.png" height="50">
-    <img alt="Get it on Linux" src=".github/badge/linux.png" height="50">
-    <img alt="Get it on Windows" src=".github/badge/windows.png" height="50">
-</p>
-
-🦄 [View demo](https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4)
+<a href="https://github.com/xrdebug/xrdebug/releases/latest"><img alt="Get it on macOS" src=".github/badge/macos.png" height="50" hspace="2"><img alt="Get it on Linux" src=".github/badge/linux.png" height="50" hspace="2"><img alt="Get it on Windows" src=".github/badge/windows.png" height="50" hspace="2"></a>
 
 [![Build](https://img.shields.io/github/actions/workflow/status/xrdebug/xrdebug/test.yml?branch=1.0&style=flat-square)](https://github.com/xrdebug/xrdebug/actions)![Code size](https://img.shields.io/github/languages/code-size/xrdebug/xrdebug?style=flat-square)
 [![Apache-2.0](https://img.shields.io/github/license/xrdebug/xrdebug?style=flat-square)](LICENSE)
@@ -27,7 +19,7 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=sqale_index)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
 [![CodeFactor](https://www.codefactor.io/repository/github/xrdebug/xrdebug/badge)](https://www.codefactor.io/repository/github/xrdebug/xrdebug)
 
-[xrDebug](https://xrdebug.com/) is a lightweight web-based debug utility server.
+[xrDebug](https://xrdebug.com/) is a lightweight web-based debug utility server. 🦄 [View demo](https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4)
 
 <p align="center">
     <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
