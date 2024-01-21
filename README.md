@@ -6,7 +6,8 @@
 
 <a href="https://github.com/xrdebug/xrdebug/releases/latest"><img alt="Get it on macOS" src=".github/badge/macos.png" height="50" hspace="2"><img alt="Get it on Linux" src=".github/badge/linux.png" height="50" hspace="2"><img alt="Get it on Windows" src=".github/badge/windows.png" height="50" hspace="2"></a>
 
-[![Build](https://img.shields.io/github/actions/workflow/status/xrdebug/xrdebug/test.yml?branch=1.0&style=flat-square)](https://github.com/xrdebug/xrdebug/actions)![Code size](https://img.shields.io/github/languages/code-size/xrdebug/xrdebug?style=flat-square)
+[![Build](https://img.shields.io/github/actions/workflow/status/xrdebug/xrdebug/test.yml?branch=1.0&style=flat-square)](https://github.com/xrdebug/xrdebug/actions)
+![Code size](https://img.shields.io/github/languages/code-size/xrdebug/xrdebug?style=flat-square)
 [![Apache-2.0](https://img.shields.io/github/license/xrdebug/xrdebug?style=flat-square)](LICENSE)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%209-blueviolet?style=flat-square)](https://phpstan.org/)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchevere%2Fxrdebug%2F1.0)](https://dashboard.stryker-mutator.io/reports/github.com/xrdebug/xrdebug/1.0)
