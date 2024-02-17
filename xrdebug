@@ -99,7 +99,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
     $logger->write($help);
     exit(0);
 }
-$host = '127.0.0.1';
+$host = '0.0.0.0';
 $port = $options['p'] ?? '27420';
 $sessionName = $options['n'] ?? 'xrDebug';
 $cert = $options['c'] ?? null;
@@ -198,6 +198,7 @@ $httpAddress = strtr(
     [
         'tls' => 'https',
         'tcp' => 'http',
+        '0.0.0.0' => 'localhost'
     ]
 );
 $phpVersion = PHP_VERSION . ' ' . PHP_OS . ' (' . PHP_SAPI . ')';
