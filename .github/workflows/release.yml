@@ -80,6 +80,7 @@ jobs:
           allowUpdates: true
           artifacts: >
             schwager.json,
+            schwager.html,
             xrdebug.phar,
             xrdebug.phar.asc,
             xrdebug-macos-*.pkg,

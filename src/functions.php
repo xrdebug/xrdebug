@@ -13,15 +13,10 @@ declare(strict_types=1);
 
 namespace Chevere\xrDebug;
 
-use Chevere\Filesystem\Interfaces\FileInterface;
 use Chevere\Http\Controller;
 use Chevere\Http\Exceptions\ControllerException;
 use Chevere\Router\Interfaces\DependenciesInterface;
 use Chevere\Router\Interfaces\DispatcherInterface;
-use Chevere\Router\Interfaces\RouterInterface;
-use Chevere\Schwager\DocumentSchema;
-use Chevere\Schwager\ServerSchema;
-use Chevere\Schwager\Spec;
 use Chevere\Writer\Interfaces\WriterInterface;
 use Colors\Color;
 use LogicException;
@@ -39,7 +34,6 @@ use React\Stream\ThroughStream;
 use Relay\Relay;
 use Throwable;
 use function Chevere\Http\responseAttribute;
-use function Chevere\Standard\arrayFilterBoth;
 use function Safe\base64_decode;
 use function Safe\json_encode;
 
@@ -287,37 +281,4 @@ function getPrivateKey(
     );
     /** @var PrivateKey */
     return $privateKey;
-}
-
-function schwager(
-    string $version,
-    RouterInterface $router,
-    FileInterface $file,
-): void {
-    $document = new DocumentSchema(
-        api: 'xr',
-        name: 'xrDebug API',
-        version: $version
-    );
-    $server = new ServerSchema(
-        url: '',
-        description: 'xrDebug',
-    );
-    $spec = new Spec($router, $document, $server);
-    $array = arrayFilterBoth($spec->toArray(), function ($v, $k) {
-        return match (true) {
-            $v === null => false,
-            $v === [] => false,
-            $v === '' => false,
-            $k === 'required' && $v === true => false,
-            $k === 'regex' && $v === '^.*$' => false,
-            $k === 'body' && $v === [
-                'type' => 'array#map',
-            ] => false,
-            default => true,
-        };
-    });
-    $json = json_encode($array, JSON_PRETTY_PRINT);
-    $file->createIfNotExists();
-    $file->put($json);
 }
