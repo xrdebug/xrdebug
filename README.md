@@ -31,8 +31,10 @@ bash <(curl -sL xrdebug.com/bin.sh)
 ```
 
 <p align="center">
-    <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
-    <img alt="xrDebug dark" src=".screen/xr-0.1.3-dark-welcome.png">
+    <img alt="xrDebug light" src=".screen/xrdebug-1.1.0-splash-light.png">
+</p>
+<p>
+    <img alt="xrDebug dark" src=".screen/xrdebug-1.1.0-splash-dark.png">
 </p>
 
 ## Documentation
@@ -56,6 +58,14 @@ Documentation available at [docs.xrdebug.com](https://docs.xrdebug.com/).
 * Open with editor links
 * Responsive user interface
 
+<p align="center">
+    <img alt="xrDebug light demo" src=".screen/xrdebug-1.1.0-demo-dark.png">
+</p>
+
+<p align="center">
+    <img alt="xrDebug dark demo" src=".screen/xrdebug-1.1.0-demo-light.png">
+</p>
+
 ## PHP Features
 
 * Configuration via code and `xr.php` file
@@ -64,14 +74,10 @@ Documentation available at [docs.xrdebug.com](https://docs.xrdebug.com/).
 * Custom inspectors
 * Handle errors and exceptions (hook or replace your existing handler)
 
-<p align="center">
-    <img alt="xrDebug dark demo" src=".screen/xr-0.1.3-dark-demo.png">
-</p>
-
 ## License
 
 Copyright [Rodolfo Berrios A.](https://rodolfoberrios.com/)
 
-Chevere is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
+xrDebug is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
