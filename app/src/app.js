@@ -259,14 +259,7 @@ pushMessage = function (data, isStatus = false) {
             setTimeout(function () {
                 el.remove();
                 if(data.action === "clear" && document.querySelector("main").childElementCount == 0) {
-                    document.body.classList = "body--splash";
-                    setTimeout(function () {
-                        if(document.querySelector("main").childElementCount != 0) {
-                            document.body.classList = "";
-                            return;
-                        }
-                        document.body.classList.add("body--splash-in");
-                    }, 10)
+                    splash();
                 }
             }, 250)
         }, 5000);
@@ -287,6 +280,19 @@ pushMessage = function (data, isStatus = false) {
             .remove("message--loading");
     }, 250);
 
+}
+splash = function () {
+    if(document.querySelector("main").childElementCount > 0) {
+        return;
+    }
+    document.body.classList = "body--splash";
+    setTimeout(function () {
+        if(document.querySelector("main").childElementCount != 0) {
+            document.body.classList = "";
+            return;
+        }
+        document.body.classList.add("body--splash-in");
+    }, 10)
 }
 setStatus(currentStatus);
 for (key in keysToAction) {
@@ -339,6 +345,7 @@ document.addEventListener("click", event => {
                 .add("message--removing");
             setTimeout(function () {
                 messageEl.remove();
+                splash();
             }, 250);
             break;
         case "copy":
