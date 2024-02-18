@@ -22,6 +22,14 @@
 
 [xrDebug](https://xrdebug.com/) is a lightweight web-based debug utility server. 🦄 [View demo](https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4)
 
+## Installation
+
+Download latest xrdebug binary by running the following command in your terminal, it detects your operating system and CPU architecture:
+
+```sh
+bash <(curl -sL xrdebug.com/bin.sh)
+```
+
 <p align="center">
     <img alt="xrDebug light" src=".screen/xr-0.1.3-light-welcome.png">
     <img alt="xrDebug dark" src=".screen/xr-0.1.3-dark-welcome.png">
