@@ -48,8 +48,8 @@ $header = (string) $color(
     <<<CONSOLE
     <cyan>{$logo}</cyan>
     <green>xrDebug version {$version}</green>
-    <dark_gray>By Chevere Software
-    Copyright Rodolfo Berrios A.</dark_gray>
+    <dark_gray>https://xrdebug.com</dark_gray>
+    <dark_gray>Copyright Rodolfo Berrios A.</dark_gray>
 
     CONSOLE
 )->colorize();
