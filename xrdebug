@@ -68,6 +68,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
 
         <yellow>Server options</yellow>
           <cyan>-p</cyan> Port <red>(default 27420)</red>
+          <cyan>-a</cyan> IP address <red>(default 0.0.0.0)</red>
           <cyan>-c</cyan> Cert file for TLS
 
         <yellow>Cipher options</yellow>
@@ -99,7 +100,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
     $logger->write($help);
     exit(0);
 }
-$host = '0.0.0.0';
+$address = $options['a'] ?? '0.0.0.0';
 $port = $options['p'] ?? '27420';
 $sessionName = $options['n'] ?? 'xrDebug';
 $cert = $options['c'] ?? null;
@@ -107,7 +108,7 @@ $isEncryptionEnabled = $options['e'] ?? false;
 $isSignVerificationEnabled = $options['x'] ?? false;
 $scheme = isset($cert) ? 'tls' : 'tcp';
 $editor = $options['i'] ?? 'vscode';
-$uri = "{$scheme}://{$host}:{$port}";
+$uri = "{$scheme}://{$address}:{$port}";
 $context = $scheme === 'tcp'
     ? []
     : [
