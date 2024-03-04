@@ -67,7 +67,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
           xrdebug [options]
 
         <yellow>Server options</yellow>
-          <cyan>-p</cyan> Port <red>(default 27420)</red>
+          <cyan>-p</cyan> Port <dark_gray>[use 0 for random]</dark_gray> <red>(default 27420)</red>
           <cyan>-a</cyan> IP address <red>(default 0.0.0.0)</red>
           <cyan>-c</cyan> Cert file for TLS
 
@@ -79,7 +79,7 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
 
         <yellow>Session options</yellow>
           <cyan>-n</cyan> Session name <red>(default xrDebug)</red>
-          <cyan>-w</cyan> Working directory
+          <cyan>-w</cyan> Working directory <red>(default temp dir)</red>
 
         <yellow>IDE options</yellow>
           <cyan>-i</cyan> Editor <red>(default vscode)</red>
