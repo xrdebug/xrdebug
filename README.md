@@ -20,7 +20,7 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=xrdebug_xrdebug&metric=sqale_index)](https://sonarcloud.io/dashboard?id=xrdebug_xrdebug)
 [![CodeFactor](https://www.codefactor.io/repository/github/xrdebug/xrdebug/badge)](https://www.codefactor.io/repository/github/xrdebug/xrdebug)
 
-[xrDebug](https://xrdebug.com/) is a lightweight web-based debug utility server. 🦄 [View demo](https://user-images.githubusercontent.com/20590102/153045551-619c74cc-c4ae-41da-b7b6-bd8733e623a2.mp4)
+[xrDebug](https://xrdebug.com/) is a lightweight web-based debug utility server. 🦄 [Play video](https://xrdebug.com/xrdebug.mp4)
 
 ## Installation
 
