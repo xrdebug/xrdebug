@@ -105,7 +105,7 @@ let filter = {
             windowActions.pushStatus(action);
         }
         let actionDisplay = action.toUpperCase();
-        action = 'window_action';
+        action = 'window_' + action;
         pushMessage({
             message: "<b>" + actionDisplay + "</b> " + document.title,
             action: action,
@@ -258,9 +258,12 @@ pushMessage = function (data, isStatus = false) {
                 .add("message--removing");
             setTimeout(function () {
                 el.remove();
-                if(data.action === "clear" && document.querySelector("main").childElementCount == 0) {
+                if(data.action == "window_clear"
+                    && document.querySelector("main").childElementCount == 0)
+                {
                     splash();
                 }
+
             }, 250)
         }, 5000);
 
