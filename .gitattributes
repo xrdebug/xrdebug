@@ -14,5 +14,6 @@
 /schwager.php export-ignore
 /sonar-project.properties export-ignore
 /tests export-ignore
+/app/src/* linguist-vendored
 
 *.php diff=php
