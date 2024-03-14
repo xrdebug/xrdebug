@@ -26,6 +26,7 @@ use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
 use React\Http\Middleware\RequestBodyBufferMiddleware;
 use React\Http\Middleware\RequestBodyParserMiddleware;
 use React\Http\Middleware\StreamingRequestMiddleware;
+use React\Http\Server;
 use React\Socket\SocketServer;
 use React\Stream\ThroughStream;
 use samejack\PHP\ArgvParser;
@@ -69,7 +70,8 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
         <yellow>Server options</yellow>
           <cyan>-p</cyan> Port <dark_gray>[use 0 for random]</dark_gray> <red>(default 27420)</red>
           <cyan>-a</cyan> IP address <red>(default 0.0.0.0)</red>
-          <cyan>-c</cyan> Cert file for TLS
+          <cyan>-c</cyan> Cert file for TLS <dark_gray>[PEM: local_cert]</dark_gray>
+          <cyan>-z</cyan> Private key for TLS <dark_gray>[PEM: local_pk]</dark_gray>
 
         <yellow>Cipher options</yellow>
           <cyan>-e</cyan> Enable end-to-end encryption
@@ -103,17 +105,19 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
 $address = $options['a'] ?? '0.0.0.0';
 $port = $options['p'] ?? '27420';
 $sessionName = $options['n'] ?? 'xrDebug';
-$cert = $options['c'] ?? null;
+$localCert = $options['c'] ?? null;
+$localPk = $options['z'] ?? null;
 $isEncryptionEnabled = $options['e'] ?? false;
 $isSignVerificationEnabled = $options['x'] ?? false;
-$scheme = isset($cert) ? 'tls' : 'tcp';
+$scheme = isset($localCert) ? 'tls' : 'tcp';
 $editor = $options['i'] ?? 'vscode';
 $uri = "{$scheme}://{$address}:{$port}";
 $context = $scheme === 'tcp'
     ? []
     : [
         'tls' => [
-            'local_cert' => $cert,
+            'local_cert' => $localCert,
+            'local_pk' => $localPk,
         ],
     ];
 $workingDirectory = realpath($options['w'] ?? sys_get_temp_dir());
