@@ -118,6 +118,7 @@ $context = $scheme === 'tcp'
         'tls' => [
             'local_cert' => $localCert,
             'local_pk' => $localPk,
+            'verify_peer' => false,
         ],
     ];
 $workingDirectory = realpath($options['w'] ?? sys_get_temp_dir());
