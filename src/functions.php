@@ -247,9 +247,8 @@ function getCipher(
     $encryptionKeyDisplay = base64_encode($symmetricKey);
     $logger->write(<<<LOG
 
-    ENCRYPTION KEY
+    > ENCRYPTION KEY
     {$encryptionKeyDisplay}
-
 
     LOG);
 
@@ -264,7 +263,7 @@ function getPrivateKey(
     if ($privateKey === null) {
         $privateKey = EC::createKey('ed25519');
         $logger->write(
-            $color('INFO: Generated private key (empty -s)')->magenta() . "\n"
+            $color('INFO: Generated private key (empty -x)')->magenta() . "\n"
         );
     } else {
         $privateKey = EC::load($privateKey);
@@ -273,9 +272,8 @@ function getPrivateKey(
     $logger->write(
         <<<LOG
 
-        PRIVATE KEY
+        > PRIVATE KEY
         {$privateKeyDisplay}
-
 
         LOG
     );

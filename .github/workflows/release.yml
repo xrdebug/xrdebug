@@ -9,7 +9,7 @@ jobs:
     permissions:
       contents: write
     env:
-      phpVer: "8.2"
+      phpVer: "8.3"
       tools: composer
       ini-values: default_charset='UTF-8'
     steps:

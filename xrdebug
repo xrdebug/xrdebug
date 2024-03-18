@@ -75,9 +75,9 @@ if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
 
         <yellow>Cipher options</yellow>
           <cyan>-e</cyan> Enable end-to-end encryption
-          <cyan>-x</cyan> Enable sign verification
           <cyan>-k</cyan> <dark_gray>[for -e option]</dark_gray> Symmetric key
-          <cyan>-s</cyan> <dark_gray>[for -x option]</dark_gray> Private key
+          <cyan>-s</cyan> Enable sign verification
+          <cyan>-x</cyan> <dark_gray>[for -x option]</dark_gray> Private key
 
         <yellow>Session options</yellow>
           <cyan>-n</cyan> Session name <red>(default xrDebug)</red>
@@ -108,7 +108,7 @@ $sessionName = $options['n'] ?? 'xrDebug';
 $localCert = $options['c'] ?? null;
 $localPk = $options['z'] ?? null;
 $isEncryptionEnabled = $options['e'] ?? false;
-$isSignVerificationEnabled = $options['x'] ?? false;
+$isSignVerificationEnabled = $options['s'] ?? false;
 $scheme = isset($localCert) ? 'tls' : 'tcp';
 $editor = $options['i'] ?? 'vscode';
 $uri = "{$scheme}://{$address}:{$port}";
@@ -139,7 +139,7 @@ if ($isEncryptionEnabled) {
 }
 $privateKey = null;
 if ($isSignVerificationEnabled) {
-    $privateKey = $options['s'] ?? null;
+    $privateKey = $options['x'] ?? null;
     if ($privateKey === true) {
         $privateKey = null;
     }
