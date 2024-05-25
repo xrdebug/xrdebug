@@ -11,4 +11,4 @@
 
 declare(strict_types=1);
 
-const XRDEBUG_VERSION = '1.1.1';
+const XRDEBUG_VERSION = '1.1.2';
