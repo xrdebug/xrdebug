@@ -132,7 +132,7 @@ button:not([disabled]) {
 }
 
 pre, .pre {
-    padding: 1rem;
+    padding: 1.09375rem;
     font-family: var(--fontPre);
     line-height: normal;
     overflow: auto;

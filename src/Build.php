@@ -15,6 +15,7 @@ namespace Chevere\xrDebug;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
+use Chevere\VarDump\Outputs\HtmlOutput;
 use Stringable;
 
 final class Build implements Stringable
@@ -37,6 +38,7 @@ final class Build implements Stringable
         $this->replace('%nonceLength%', strval(cipherNonceLength()));
         $this->replace('%tagLength%', strval(cipherTagLength()));
         $this->replace('%sessionName%', $this->sessionName);
+        $this->replace('/*varDumpCSS*/', HtmlOutput::CSS);
         $this->replace('%editor%', $this->editor);
         $security = match (true) {
             $isEncryptionEnabled && $isSignVerificationEnabled => 'End-to-end encrypted and sign verified',
