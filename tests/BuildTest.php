@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of Chevere.
+ * This file is part of xrDebug.
  *
  * (c) Rodolfo Berrios <rodolfo@chevere.org>
  *
@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Chevere\Tests;
 
 use Chevere\Filesystem\Exceptions\DirectoryNotExistsException;
+use Chevere\Filesystem\File;
+use Chevere\VarDump\Outputs\HtmlOutput;
 use Chevere\xrDebug\Build;
 use PHPUnit\Framework\TestCase;
 use function Chevere\Filesystem\directoryForPath;
@@ -29,10 +31,16 @@ final class BuildTest extends TestCase
 
     public function testConstruct(): void
     {
+        $source = directoryForPath(__DIR__ . '/build-mock/source');
         $build = new Build(
-            directoryForPath(__DIR__ . '/build-mock/source'),
+            $source,
             '6.6.6',
         );
+        $filePath = $source->path()->getChild('var-dump.css');
+        $file = new File($filePath);
+        $file->removeIfExists();
+        $file->create();
+        $file->put(HtmlOutput::CSS);
         $this->assertStringEqualsFile(
             __DIR__ . '/build-mock/output/index.html',
             $build->__toString()

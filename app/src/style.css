@@ -538,7 +538,7 @@ header>div {
     margin-bottom: -1px;
 }
 
-.backtrace .hr>span {
+.xrdebug-backtrace .hr>span {
     opacity: 0;
     line-height: 0;
 }
@@ -549,7 +549,7 @@ header>div {
     opacity: 0;
 }
 
-.dump, .backtrace {
+.xrdebug-dump, .xrdebug-backtrace {
     border-radius: var(--borderRadiusBox);
     word-break: break-word;
     display: block;
@@ -557,7 +557,7 @@ header>div {
     text-align: left;
 }
 
-.dump {
+.xrdebug-dump {
     font-size: var(--dumpFontSize);
     margin-bottom: var(--marginEl);
     white-space: pre-wrap;
@@ -565,11 +565,11 @@ header>div {
     background: var(--dumpBackground);
 }
 
-.dump>pre {
+.xrdebug-dump>pre {
     margin: 0;
 }
 
-.backtrace {
+.xrdebug-backtrace {
     font-size: var(--traceFontSize);
     margin-bottom: var(--marginEl);
     overflow: hidden;
@@ -578,7 +578,7 @@ header>div {
     flex-direction: column;
 }
 
-pre+.backtrace {
+pre+.xrdebug-backtrace {
     margin-top: var(--marginEl);
 }
 

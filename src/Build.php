@@ -38,7 +38,6 @@ final class Build implements Stringable
         $this->replace('%nonceLength%', strval(cipherNonceLength()));
         $this->replace('%tagLength%', strval(cipherTagLength()));
         $this->replace('%sessionName%', $this->sessionName);
-        $this->replace('/*varDumpCSS*/', HtmlOutput::CSS);
         $this->replace('%editor%', $this->editor);
         $security = match (true) {
             $isEncryptionEnabled && $isSignVerificationEnabled => 'End-to-end encrypted and sign verified',
@@ -49,6 +48,7 @@ final class Build implements Stringable
         $this->replace('%security%', $security);
         $this->replaceIcons('svg', 'image/svg+xml');
         $this->replaceIcons('png', 'image/png');
+        $this->sourceVarDumpCSS();
         $this->replaceStyles();
         $this->replaceFont('fonts/firacode/firacode-regular.woff', 'font/woff');
         $this->replaceScripts();
@@ -57,6 +57,15 @@ final class Build implements Stringable
     public function __toString(): string
     {
         return $this->string;
+    }
+
+    private function sourceVarDumpCSS(): void
+    {
+        $filePath = $this->source->path()->getChild('var-dump.css');
+        $file = new File($filePath);
+        $file->removeIfExists();
+        $file->create();
+        $file->put(HtmlOutput::CSS);
     }
 
     private function replaceStyles(): void
@@ -68,7 +77,11 @@ final class Build implements Stringable
         );
         foreach ($files[0] as $pos => $match) {
             $fileMatch = new File($this->source->path()->getChild($files[2][$pos]));
-            $replace = '<style media="all">' . $fileMatch->getContents() . '</style>';
+            $replace = '<style media="all">'
+                . "\n"
+                . $fileMatch->getContents()
+                . "\n"
+                . '</style>';
             $this->replace($match, $replace);
         }
     }
