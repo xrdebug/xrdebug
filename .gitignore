@@ -11,7 +11,4 @@
 /locks
 /tests/writable/**
 !tests/writable/.gitkeep
-/tests/build-mock/source/var-dump.css
 /xrdebug.phar
-/schwager.json
-/app/src/var-dump.css

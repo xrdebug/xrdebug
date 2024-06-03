@@ -15,7 +15,6 @@ namespace Chevere\xrDebug;
 
 use Chevere\Filesystem\File;
 use Chevere\Filesystem\Interfaces\DirectoryInterface;
-use Chevere\VarDump\Outputs\HtmlOutput;
 use Stringable;
 
 final class Build implements Stringable
@@ -48,7 +47,6 @@ final class Build implements Stringable
         $this->replace('%security%', $security);
         $this->replaceIcons('svg', 'image/svg+xml');
         $this->replaceIcons('png', 'image/png');
-        $this->sourceVarDumpCSS();
         $this->replaceStyles();
         $this->replaceFont('fonts/firacode/firacode-regular.woff', 'font/woff');
         $this->replaceScripts();
@@ -57,15 +55,6 @@ final class Build implements Stringable
     public function __toString(): string
     {
         return $this->string;
-    }
-
-    private function sourceVarDumpCSS(): void
-    {
-        $filePath = $this->source->path()->getChild('var-dump.css');
-        $file = new File($filePath);
-        $file->removeIfExists();
-        $file->create();
-        $file->put(HtmlOutput::CSS);
     }
 
     private function replaceStyles(): void
