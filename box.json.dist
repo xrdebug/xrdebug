@@ -1,6 +1,8 @@
 {
     "files-bin": [
-        "loader.php"
+        "loader.php",
+        "schwager.php",
+        "var-dump.php"
     ],
     "directories-bin": [
         "app"
