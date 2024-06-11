@@ -634,7 +634,10 @@ pre+.xrdebug-backtrace {
 
 .throwable-message, .throwable-backtrace {
     margin-top: 1em;
-    font-size: 0.875em;
+}
+
+.throwable-backtrace {
+    font-size: var(--traceFontSize);
 }
 
 .splash {
