@@ -598,12 +598,10 @@ pre+.xrdebug-backtrace {
 }
 
 .throwable-item:first-child {
-    font-size: 1em;
     border: none;
 }
 
 .throwable-item {
-    font-size: 0.875em;
     border-top: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
     padding: var(--marginElRelative) 0;
 }
@@ -636,6 +634,7 @@ pre+.xrdebug-backtrace {
 
 .throwable-message, .throwable-backtrace {
     margin-top: 1em;
+    font-size: 0.875em;
 }
 
 .splash {
