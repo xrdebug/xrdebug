@@ -574,8 +574,20 @@ header>div {
     margin-bottom: var(--marginEl);
     overflow: hidden;
     border-radius: var(--borderRadiusBox);
-    display: flex;
-    flex-direction: column;
+    height: 5em;
+    min-height: 5em;
+    resize: vertical;
+    overflow: auto;
+}
+.xrdebug-backtrace[data-count="1"] {
+    height: auto;
+    min-height: auto;
+    resize: none;
+    min-height: auto;
+    max-height: none;
+}
+.xrdebug-backtrace .hr:last-child {
+    display: none;
 }
 
 pre+.xrdebug-backtrace {
