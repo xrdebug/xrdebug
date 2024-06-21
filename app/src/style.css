@@ -576,6 +576,7 @@ header>div {
     border-radius: var(--borderRadiusBox);
     height: 5em;
     min-height: 5em;
+    max-height: max-content;
     resize: vertical;
     overflow: auto;
 }
