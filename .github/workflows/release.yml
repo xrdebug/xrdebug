@@ -75,6 +75,8 @@ jobs:
       - name: Upload artifacts
         uses: ncipollo/release-action@v1
         with:
+          allowUpdates: true
+          omitBodyDuringUpdate: true
           artifacts: >
             schwager.json,
             schwager.html,
