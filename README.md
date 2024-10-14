@@ -1,7 +1,5 @@
 # xrDebug
 
-> 🔔 Subscribe to the [newsletter](https://chv.to/chevere-newsletter) to don't miss any update regarding Chevere.
-
 <a href="https://xrdebug.com"><img alt="xrDebug" src="app/src/icon.svg" width="40%"></a>
 
 <a href="https://github.com/xrdebug/xrdebug/releases/latest"><img alt="Get it on macOS" src=".github/badge/macos.png" height="50" hspace="2"><img alt="Get it on Linux" src=".github/badge/linux.png" height="50" hspace="2"><img alt="Get it on Windows" src=".github/badge/windows.png" height="50" hspace="2"></a>
