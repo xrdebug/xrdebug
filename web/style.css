@@ -576,8 +576,9 @@ header>div {
     margin-bottom: var(--marginEl);
     overflow: hidden;
     border-radius: var(--borderRadiusBox);
-    height: 5em;
     min-height: 5em;
+    max-height: -webkit-max-content;
+    max-height: -moz-max-content;
     max-height: max-content;
     resize: vertical;
     overflow: auto;
