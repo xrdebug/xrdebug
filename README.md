@@ -1,6 +1,8 @@
 # xrDebug
 
-[xrDebug](https://xrdebug.com/) is a lightweight web-based debug software. [Play video](https://xrdebug.com/xrdebug.mp4)
+[xrDebug](https://xrdebug.com/) is a lightweight ultra-fast Open Source debug software alternative to Ray. It allows developers to send debug messages from their applications to a web interface in real-time, enabling collaborative debugging sessions with features like message filtering, pause/resume controls, and end-to-end encryption.
+
+[Play video](https://xrdebug.com/xrdebug.mp4)
 
 <a href="https://github.com/xrdebug/xrdebug/releases/latest"><img alt="Get it on macOS" src="assets/badge/macos.png" height="50" hspace="2"><img alt="Get it on Linux" src="assets/badge/linux.png" height="50" hspace="2"><img alt="Get it on Windows" src="assets/badge/windows.png" height="50" hspace="2"><img alt="Get it on FreeBSD" src="assets/badge/freebsd.png" height="50" hspace="2"></a>
 
@@ -14,7 +16,7 @@
 
 xrDebug is available for Windows, macOS, Linux and FreeBSD. Download the latest xrdebug binary from the [releases page](https://github.com/xrdebug/xrdebug/releases/latest).
 
-### From binary
+### Pre-built binaries
 
 1. Go to the [releases page](https://github.com/xrdebug/xrdebug/releases/latest).
 2. Download the appropriate binary for your operating system.
@@ -27,17 +29,9 @@ Optionally, you can run this command to install the latest version:
 bash <(curl -sL xrdebug.com/bin.sh)
 ```
 
-### From source
+### Install as a Go module
 
-Ensure you have [Go](https://golang.org/dl/) installed.
-
-To run xrDebug from source, clone this repository and run:
-
-```sh
-go run .
-```
-
-To install xrDebug from this repository module:
+Ensure you have [Go](https://golang.org/dl/) installed then
 
 ```sh
 go install github.com/xrdebug/xrdebug@latest
@@ -384,6 +378,16 @@ curl --fail -X POST \
 End-to-end encryption (AES-GCM AE) between xrDebug server and the debugger web user interface client. To enable end-to-end encryption pass the `-e` flag. Optionally, you can pass the symmetric key using the `-k` flag.
 
 The SSE stream at `/stream` will be encrypted using the symmetric key. Decryption happens on the client-side (web browser).
+
+## Development
+
+Make sure you have [Go](https://golang.org/dl/) installed.
+
+Clone the repository and run the following command to build and run the server from source:
+
+```sh
+go run .
+```
 
 ## License
 
