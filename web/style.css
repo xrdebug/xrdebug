@@ -557,6 +557,7 @@ header>div {
     display: block;
     border: none;
     text-align: left;
+    overflow: auto;
 }
 
 .xrdebug-dump {
@@ -574,7 +575,6 @@ header>div {
 .xrdebug-backtrace {
     font-size: var(--traceFontSize);
     margin-bottom: var(--marginEl);
-    overflow: hidden;
     border-radius: var(--borderRadiusBox);
     min-height: 5em;
     max-height: -webkit-max-content;
