@@ -31,6 +31,14 @@ bash <(curl -sL xrdebug.com/bin.sh)
 
 Ensure you have [Go](https://golang.org/dl/) installed.
 
+To run xrDebug from source, clone this repository and run:
+
+```sh
+go run .
+```
+
+To install xrDebug from this repository module:
+
 ```sh
 go install github.com/xrdebug/xrdebug@latest
 ```
