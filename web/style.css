@@ -81,30 +81,6 @@
         url('fonts/firacode/firacode-regular.woff') format('woff');
 }
 
-@-webkit-keyframes slideDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 * {
     box-sizing: border-box;
 }
@@ -323,10 +299,7 @@ header>div {
     grid-template-columns: auto auto 1fr;
     align-items: flex-start;
     display: grid;
-    -webkit-animation: slideDown 250ms ease-in-out;
-    animation: slideDown 250ms ease-in-out;
     position: relative;
-    transition: all 500ms ease-in-out;
     border-bottom: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
 }
 
