@@ -427,11 +427,18 @@ document.addEventListener("click", event => {
                 + '"'
                 + "]";
         }
-        document
-            .getElementById("filtering")
-            .innerHTML = filterQuery === "" ?
+        let filterStyles = filterQuery === "" ?
             "" :
             ".message:not(" + filterQuery + ") { display: none; }";
+        if (filter.topic !== "") {
+            filterStyles += " .message .body-filters .topic { display: none; }";
+        }
+        if (filter.emote !== "") {
+            filterStyles += " .message .body-filters .emote { display: none; }";
+        }
+        document
+            .getElementById("filtering")
+            .innerHTML = filterStyles;
         document
             .querySelector(".header-filter ." + subject)
             .textContent = messageEl ?
