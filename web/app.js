@@ -255,7 +255,7 @@ pushMessage = function (data, isStatus = false) {
         .classList
         .add("message--loading");
     el.dataset.emote = data.emote ?
-        data.emote :
+        encodeBase64Utf8(data.emote) :
         "";
     el.dataset.topic = data.topic ?
         encodeBase64Utf8(data.topic) :
@@ -366,10 +366,8 @@ document.addEventListener("click", event => {
             messageEl
                 .classList
                 .add("message--removing");
-            setTimeout(function () {
-                messageEl.remove();
-                splash();
-            }, 250);
+            messageEl.remove();
+            splash();
             break;
         case "copy":
             copyToClipboard(
@@ -400,17 +398,15 @@ document.addEventListener("click", event => {
             messageEl = messageEl,
             subject = el
             .classList
-            .contains("topic") ?
-            "topic" :
-            "emote",
-            subjectValue = messageEl ?
-                messageEl.dataset[subject] :
-                "",
-            subjectDisplayValue = messageEl ?
-                (subject === "topic" ?
-                    messageEl.querySelector(".topic").textContent :
-                    messageEl.dataset[subject]) :
-                "";
+            .contains("topic")
+                ? "topic"
+                : "emote",
+            subjectValue = messageEl
+                ? messageEl.dataset[subject]
+                : "",
+            subjectDisplayValue = messageEl
+                ? messageEl.querySelector("." + subject).textContent
+                : "";
         if (messageEl && filter[subject] === subjectValue) {
             return;
         }
@@ -427,9 +423,9 @@ document.addEventListener("click", event => {
                 + '"'
                 + "]";
         }
-        let filterStyles = filterQuery === "" ?
-            "" :
-            ".message:not(" + filterQuery + ") { display: none; }";
+        let filterStyles = filterQuery === ""
+            ? ""
+            : ".message:not(" + filterQuery + ") { display: none; }";
         if (filter.topic !== "") {
             filterStyles += " .message .body-filters .topic { display: none; }";
         }
@@ -441,9 +437,9 @@ document.addEventListener("click", event => {
             .innerHTML = filterStyles;
         document
             .querySelector(".header-filter ." + subject)
-            .textContent = messageEl ?
-            subjectDisplayValue :
-            "";
+            .textContent = messageEl
+                ? subjectDisplayValue
+                : "";
     }
 });
 setTimeout(function () {
