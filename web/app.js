@@ -171,6 +171,17 @@ let filter = {
                 .replace('{{ line }}', line);
         }
         return '';
+    },
+    encodeBase64Utf8 = function (value) {
+        if (!value) {
+            return "";
+        }
+        let binary = "";
+        let bytes = new TextEncoder().encode(value);
+        bytes.forEach(function (byte) {
+            binary += String.fromCharCode(byte);
+        });
+        return btoa(binary);
     };
 
 copyToClipboard = function (text) {
@@ -247,7 +258,7 @@ pushMessage = function (data, isStatus = false) {
         data.emote :
         "";
     el.dataset.topic = data.topic ?
-        data.topic :
+        encodeBase64Utf8(data.topic) :
         "";
     el.dataset.id = data.id ?
         data.id :
@@ -391,19 +402,30 @@ document.addEventListener("click", event => {
             .classList
             .contains("topic") ?
             "topic" :
-            "emote";
-        if (messageEl && filter[subject] === messageEl.dataset[subject]) {
+            "emote",
+            subjectValue = messageEl ?
+                messageEl.dataset[subject] :
+                "",
+            subjectDisplayValue = messageEl ?
+                (subject === "topic" ?
+                    messageEl.querySelector(".topic").textContent :
+                    messageEl.dataset[subject]) :
+                "";
+        if (messageEl && filter[subject] === subjectValue) {
             return;
         }
-        filter[subject] = messageEl ?
-            messageEl.dataset[subject] :
-            "";
+        filter[subject] = subjectValue;
         for (filterSubject in filter) {
             if (filter[filterSubject] === "") {
                 continue;
             }
-            filterQuery += "[data-" + filterSubject + filterOperator[filterSubject] + filter[filterSubject] +
-                "]";
+            filterQuery += "[data-"
+                + filterSubject
+                + filterOperator[filterSubject]
+                + '"'
+                + CSS.escape(filter[filterSubject])
+                + '"'
+                + "]";
         }
         document
             .getElementById("filtering")
@@ -413,7 +435,7 @@ document.addEventListener("click", event => {
         document
             .querySelector(".header-filter ." + subject)
             .textContent = messageEl ?
-            filter[subject] :
+            subjectDisplayValue :
             "";
     }
 });
