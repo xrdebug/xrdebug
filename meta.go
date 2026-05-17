@@ -11,7 +11,7 @@ package main
 
 const (
 	name      = "xrDebug"
-	version   = "3.0.2"
+	version   = "3.0.3"
 	url       = "https://xrdebug.com"
 	copyright = "Copyright Rodolfo Berrios A."
 )

@@ -49,6 +49,10 @@
         --buttonActiveColor: #FFF;
         --buttonColor: #24292f;
         --buttonColorDisabled: rgba(36, 41, 47, .6);
+        --headerButtonBackgroundStart: rgba(var(--colorShadeRGB), .42);
+        --headerButtonBackgroundEnd: rgba(var(--colorShadeRGB), .2);
+        --headerButtonBackgroundHoverStart: rgba(var(--colorShadeRGB), .52);
+        --headerButtonBackgroundHoverEnd: rgba(var(--colorShadeRGB), .27);
     }
 }
 
@@ -73,6 +77,10 @@
         --buttonActiveColor: #FFF;
         --buttonColor: #c9d1d9;
         --buttonColorDisabled: rgba(201, 209, 217, .6);
+        --headerButtonBackgroundStart: rgba(96, 112, 132, .5);
+        --headerButtonBackgroundEnd: rgba(43, 52, 64, .75);
+        --headerButtonBackgroundHoverStart: rgba(120, 138, 160, .58);
+        --headerButtonBackgroundHoverEnd: rgba(58, 68, 82, .82);
     }
 }
 
@@ -254,8 +262,8 @@ header>div {
     border: var(--borderSize) solid rgba(var(--colorShadeRGB), .55);
     border-radius: 0.5rem;
     background: linear-gradient(180deg,
-            rgba(var(--colorShadeRGB), .42) 0%,
-            rgba(var(--colorShadeRGB), .2) 100%);
+            var(--headerButtonBackgroundStart) 0%,
+            var(--headerButtonBackgroundEnd) 100%);
     box-shadow:
         inset 0 1px 0 rgb(255 255 255 / 18%),
         0 1px 2px rgb(0 0 0 / 28%);
@@ -309,8 +317,8 @@ header>div {
     opacity: 1;
     border-color: rgba(var(--colorShadeRGB), .95);
     background: linear-gradient(180deg,
-            rgba(var(--colorShadeRGB), .52) 0%,
-            rgba(var(--colorShadeRGB), .27) 100%);
+            var(--headerButtonBackgroundHoverStart) 0%,
+            var(--headerButtonBackgroundHoverEnd) 100%);
 }
 
 .header-buttons .button.button--active {
