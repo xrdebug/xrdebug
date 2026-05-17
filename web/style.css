@@ -255,8 +255,8 @@ header>div {
 
 .header-buttons .button {
     font-size: 1.15rem;
-    width: 2.1rem;
-    height: 2.1rem;
+    width: 2rem;
+    height: 2rem;
     margin: 0;
     padding: 0;
     border: var(--borderSize) solid rgba(var(--colorShadeRGB), .55);
