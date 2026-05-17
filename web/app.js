@@ -20,6 +20,92 @@ let filter = {
         topic: "=",
         emote: "*="
     },
+    filterMenus = {
+        topic: document.getElementById("filter-topic"),
+        emote: document.getElementById("filter-emote")
+    },
+    applyFilter = function () {
+        let filterQuery = "";
+        for (let filterSubject in filter) {
+            if (filter[filterSubject] === "") {
+                continue;
+            }
+            filterQuery += "[data-"
+                + filterSubject
+                + filterOperator[filterSubject]
+                + '"'
+                + CSS.escape(filter[filterSubject])
+                + '"'
+                + "]";
+        }
+        let filterStyles = filterQuery === ""
+            ? ""
+            : ".message:not(" + filterQuery + ") { display: none; }";
+        if (filter.topic !== "") {
+            filterStyles += " .message .body-filters .topic { display: none; }";
+        }
+        if (filter.emote !== "") {
+            filterStyles += " .message .body-filters .emote { display: none; }";
+        }
+        document
+            .getElementById("filtering")
+            .innerHTML = filterStyles;
+    },
+    setFilterSubject = function (subject, value) {
+        filter[subject] = value || "";
+        if (filterMenus[subject]) {
+            filterMenus[subject].value = filter[subject];
+        }
+        applyFilter();
+    },
+    refreshFilterMenus = function () {
+        ["topic", "emote"].forEach(function (subject) {
+            let menu = filterMenus[subject];
+            let seen = {};
+            let values = [];
+            if (!menu) {
+                return;
+            }
+            document
+                .querySelectorAll("main .message")
+                .forEach(function (messageEl) {
+                    let encodedValue = messageEl.dataset[subject];
+                    if (!encodedValue || seen[encodedValue]) {
+                        return;
+                    }
+                    let displayEl = messageEl.querySelector("." + subject);
+                    let displayValue = displayEl
+                        ? displayEl.textContent
+                        : "";
+                    seen[encodedValue] = true;
+                    values.push({
+                        value: encodedValue,
+                        label: displayValue
+                    });
+                });
+            values.sort(function (a, b) {
+                return a.label.localeCompare(b.label);
+            });
+            menu.innerHTML = "";
+            let allOption = document.createElement("option");
+            allOption.value = "";
+            allOption.textContent = subject === "topic"
+                ? "All Topics"
+                : "All Emotes";
+            menu.appendChild(allOption);
+            values.forEach(function (entry) {
+                let option = document.createElement("option");
+                option.value = entry.value;
+                option.textContent = entry.label;
+                menu.appendChild(option);
+            });
+            if (filter[subject] !== "" && !seen[filter[subject]]) {
+                filter[subject] = "";
+            }
+            menu.value = filter[subject];
+        });
+        applyFilter();
+    },
     currentStatus = "resume",
     queuedMessageCount = 0,
     messageActions = {
@@ -98,6 +184,7 @@ let filter = {
                 emote: ""
             };
             this.resetQueue();
+            refreshFilterMenus();
         }
     },
     windowAction = function (action) {
@@ -263,6 +350,7 @@ pushMessage = function (data, isStatus = false) {
     el.dataset.id = data.id ?
         data.id :
         "";
+    refreshFilterMenus();
     if (data.action === "pause") {
         el
             .classList
@@ -283,6 +371,7 @@ pushMessage = function (data, isStatus = false) {
                 {
                     splash();
                 }
+                refreshFilterMenus();
 
             }, 250)
         }, 5000);
@@ -318,6 +407,15 @@ splash = function () {
     }, 10)
 }
 setStatus(currentStatus);
+for (let filterSubject in filterMenus) {
+    if (!filterMenus[filterSubject]) {
+        continue;
+    }
+    filterMenus[filterSubject].addEventListener("change", function () {
+        setFilterSubject(filterSubject, this.value);
+    });
+}
+refreshFilterMenus();
 for (key in keysToAction) {
     document
         .querySelectorAll("[data-action=" + keysToAction[key] + "]")
@@ -394,52 +492,15 @@ document.addEventListener("click", event => {
     }
     */
     if (el.classList.contains("filter-button")) {
-        var filterQuery = "",
-            messageEl = messageEl,
-            subject = el
+        var subject = el
             .classList
             .contains("topic")
                 ? "topic"
                 : "emote",
             subjectValue = messageEl
                 ? messageEl.dataset[subject]
-                : "",
-            subjectDisplayValue = messageEl
-                ? messageEl.querySelector("." + subject).textContent
                 : "";
-        if (messageEl && filter[subject] === subjectValue) {
-            return;
-        }
-        filter[subject] = subjectValue;
-        for (filterSubject in filter) {
-            if (filter[filterSubject] === "") {
-                continue;
-            }
-            filterQuery += "[data-"
-                + filterSubject
-                + filterOperator[filterSubject]
-                + '"'
-                + CSS.escape(filter[filterSubject])
-                + '"'
-                + "]";
-        }
-        let filterStyles = filterQuery === ""
-            ? ""
-            : ".message:not(" + filterQuery + ") { display: none; }";
-        if (filter.topic !== "") {
-            filterStyles += " .message .body-filters .topic { display: none; }";
-        }
-        if (filter.emote !== "") {
-            filterStyles += " .message .body-filters .emote { display: none; }";
-        }
-        document
-            .getElementById("filtering")
-            .innerHTML = filterStyles;
-        document
-            .querySelector(".header-filter ." + subject)
-            .textContent = messageEl
-                ? subjectDisplayValue
-                : "";
+        setFilterSubject(subject, subjectValue);
     }
 });
 setTimeout(function () {

@@ -53,10 +53,6 @@
         </section>
         <header>
             <div contenteditable="true" class="header-title no-keys">{{ .SessionName }}</div>
-            <div class="header-filter">
-                <span class="topic filter-button user-select-none cursor-pointer hide-if-empty"></span>
-                <span class="emote filter-button user-select-none cursor-pointer hide-if-empty"></span>
-            </div>
             <div class="buttons header-buttons">
                 <button data-action="resume" class="button button--resume"></button>
                 <button data-action="pause" class="button button--pause">
@@ -67,6 +63,14 @@
             </div>
         </header>
         <main></main>
+        <footer class="footer-filter">
+            <select id="filter-topic" class="footer-filter-select">
+                <option value="">All Topics</option>
+            </select>
+            <select id="filter-emote" class="footer-filter-select">
+                <option value="">All Emotes</option>
+            </select>
+        </footer>
         <template id="message">
             <div class="message" data-emote="" data-topic="" data-id="">
                 <div class="message-sidebar">
