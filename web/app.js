@@ -56,7 +56,7 @@ let filter = {
         if (filterMenus[subject]) {
             filterMenus[subject].value = filter[subject];
         }
-        applyFilter();
+        refreshFilterMenus();
     },
     refreshFilterMenus = function () {
         ["topic", "emote"].forEach(function (subject) {
@@ -65,6 +65,22 @@ let filter = {
             let values = [];
             if (!menu) {
                 return;
+            }
+            let otherSubject = subject === "topic" ? "emote" : "topic";
+            let activeOtherFilter = filter[otherSubject];
+            let compatibleValues = null;
+            if (activeOtherFilter !== "") {
+                compatibleValues = new Set();
+                document
+                    .querySelectorAll("main .message")
+                    .forEach(function (messageEl) {
+                        if (messageEl.dataset[otherSubject] === activeOtherFilter) {
+                            let val = messageEl.dataset[subject];
+                            if (val) {
+                                compatibleValues.add(val);
+                            }
+                        }
+                    });
             }
             document
                 .querySelectorAll("main .message")
@@ -97,6 +113,9 @@ let filter = {
                 let option = document.createElement("option");
                 option.value = entry.value;
                 option.textContent = entry.label;
+                if (compatibleValues !== null && !compatibleValues.has(entry.value)) {
+                    option.disabled = true;
+                }
                 menu.appendChild(option);
             });
             if (filter[subject] !== "" && !seen[filter[subject]]) {
