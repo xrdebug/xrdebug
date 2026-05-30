@@ -74,10 +74,11 @@ See the [run documentation](https://docs.xrdebug.com/run) for examples.
 
 The following clients are available:
 
+- Laravel client: [xrdebug/laravel](https://github.com/xrdebug/laravel)
 - PHP client: [xrdebug/php](https://github.com/xrdebug/php)
 - WordPress plugin: [xrdebug/wordpress](https://github.com/xrdebug/wordpress)
 
-(Contributions for other clients are welcome!)
+Contributions for other clients are welcome, and if you prefer, you can sponsor us to build a client for your project.
 
 ## Screens
 
