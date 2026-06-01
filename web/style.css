@@ -25,9 +25,11 @@
     --iconPause: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItcGF1c2UiPjxyZWN0IHg9IjYiIHk9IjQiIHdpZHRoPSI0IiBoZWlnaHQ9IjE2Ij48L3JlY3Q+PHJlY3QgeD0iMTQiIHk9IjQiIHdpZHRoPSI0IiBoZWlnaHQ9IjE2Ij48L3JlY3Q+PC9zdmc+);
     --iconRemove: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItdHJhc2giPjxwb2x5bGluZSBwb2ludHM9IjMgNiA1IDYgMjEgNiI+PC9wb2x5bGluZT48cGF0aCBkPSJNMTkgNnYxNGEyIDIgMCAwIDEtMiAySDdhMiAyIDAgMCAxLTItMlY2bTMgMFY0YTIgMiAwIDAgMSAyLTJoNGEyIDIgMCAwIDEgMiAydjIiPjwvcGF0aD48L3N2Zz4=);
     --iconCopy: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItY29weSI+PHJlY3QgeD0iOSIgeT0iOSIgd2lkdGg9IjEzIiBoZWlnaHQ9IjEzIiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNNSAxNUg0YTIgMiAwIDAgMS0yLTJWNGEyIDIgMCAwIDEgMi0yaDlhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+);
-    --iconShare: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItc2hhcmUtMiI+PGNpcmNsZSBjeD0iMTgiIGN5PSI1IiByPSIzIj48L2NpcmNsZT48Y2lyY2xlIGN4PSI2IiBjeT0iMTIiIHI9IjMiPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjE4IiBjeT0iMTkiIHI9IjMiPjwvY2lyY2xlPjxsaW5lIHgxPSI4LjU5IiB5MT0iMTMuNTEiIHgyPSIxNS40MiIgeTI9IjE3LjQ5Ij48L2xpbmU+PGxpbmUgeDE9IjE1LjQxIiB5MT0iNi41MSIgeDI9IjguNTkiIHkyPSIxMC40OSI+PC9saW5lPjwvc3ZnPg==);
     --iconExport: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItc2hhcmUiPjxwYXRoIGQ9Ik00IDEydjhhMiAyIDAgMCAwIDIgMmgxMmEyIDIgMCAwIDAgMi0ydi04Ij48L3BhdGg+PHBvbHlsaW5lIHBvaW50cz0iMTYgNiAxMiAyIDggNiI+PC9wb2x5bGluZT48bGluZSB4MT0iMTIiIHkxPSIyIiB4Mj0iMTIiIHkyPSIxNSI+PC9saW5lPjwvc3ZnPg==);
     --iconCheck: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItY2hlY2siPjxwb2x5bGluZSBwb2ludHM9IjIwIDYgOSAxNyA0IDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==);
+    --scrollbarTrack: rgba(127, 127, 127, .22);
+    --scrollbarThumb: rgba(127, 127, 127, .58);
+    --scrollbarThumbHover: rgba(127, 127, 127, .82);
 }
 
 @media (prefers-color-scheme: light) {
@@ -53,6 +55,9 @@
         --headerButtonBackgroundEnd: rgba(var(--colorShadeRGB), .2);
         --headerButtonBackgroundHoverStart: rgba(var(--colorShadeRGB), .52);
         --headerButtonBackgroundHoverEnd: rgba(var(--colorShadeRGB), .27);
+        --scrollbarTrack: rgba(27, 31, 36, .12);
+        --scrollbarThumb: rgba(27, 31, 36, .36);
+        --scrollbarThumbHover: rgba(27, 31, 36, .52);
     }
 }
 
@@ -81,6 +86,9 @@
         --headerButtonBackgroundEnd: rgba(43, 52, 64, .75);
         --headerButtonBackgroundHoverStart: rgba(120, 138, 160, .58);
         --headerButtonBackgroundHoverEnd: rgba(58, 68, 82, .82);
+        --scrollbarTrack: rgba(201, 209, 217, .14);
+        --scrollbarThumb: rgba(201, 209, 217, .42);
+        --scrollbarThumbHover: rgba(201, 209, 217, .62);
     }
 }
 
@@ -92,6 +100,28 @@
 
 * {
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbarThumb) var(--scrollbarTrack);
+}
+
+*::-webkit-scrollbar {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--scrollbarTrack);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--scrollbarThumb);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbarThumbHover);
 }
 
 html {
@@ -104,15 +134,17 @@ html {
 html, body {
     margin: 0;
     padding: 0;
-    min-height: 100vh;
+    height: 100vh;
     background: var(--bodyBackground);
+    overflow: hidden;
 }
 
 body {
     color: var(--bodyText);
-    padding-top: var(--headerHeight);
-    padding-bottom: var(--footerHeight);
     line-height: normal;
+    display: grid;
+    grid-template-rows: var(--headerHeight) minmax(0, 1fr) var(--footerHeight);
+    min-height: 0;
 }
 
 pre, .pre {
@@ -128,27 +160,18 @@ pre, .pre {
 }
 
 header {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
     background: var(--headerBackground);
     padding: 0.875rem 1.2rem;
     height: var(--headerHeight);
     grid-template-columns: auto 1fr;
     align-items: flex-start;
     display: grid;
-    z-index: 1;
     justify-content: center;
     align-content: center;
     justify-items: end;
 }
 
 .footer-filter {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
     height: var(--footerHeight);
     background: var(--headerBackground);
     border-top: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
@@ -157,11 +180,17 @@ header {
     justify-content: center;
     gap: 0.4rem;
     padding: 0.5rem 1.2rem;
-    z-index: 1;
+}
+
+main {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .footer-filter-select {
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     min-width: 10.5rem;
     max-width: 45vw;
@@ -547,7 +576,7 @@ header>div {
 
 .message-sidebar {
     width: 7rem;
-    top: var(--headerHeight);
+    top: 0;
     font-size: 1.4rem;
     position: -webkit-sticky;
     position: sticky;
@@ -790,6 +819,10 @@ pre+.xrdebug-backtrace {
     padding: 2rem;
     width: 22rem;
     margin: 0 auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .splash>div {
@@ -851,6 +884,7 @@ pre+.xrdebug-backtrace {
     text-align: left;
     font-size: var(--fontSizeSubNormal);
     border-top: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
+    border-bottom: var(--borderSize) solid rgba(var(--colorShadeRGB), .25);
 }
 
 .splash-key {
@@ -862,7 +896,7 @@ pre+.xrdebug-backtrace {
 
 .splash-key kbd {
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 400;
     font-family: sans-serif;
     background: var(--dumpBackground);
     color: var(--dumpText);
@@ -885,12 +919,59 @@ pre+.xrdebug-backtrace {
     padding-left: 1.25em;
     position: relative;
     cursor: default;
+    font-size: 90%;
 }
 
 .splash-key-description:after {
     left: 0;
     top: .125em;
     position: absolute;
+}
+
+.splash-client-software {
+    font-size: var(--fontSizeSmall);
+}
+
+.splash-client-software-title {
+    opacity: 0.5;
+    text-transform: uppercase;
+    font-size: 0.6rem;
+}
+
+.splash-client-software ul {
+    list-style: none;
+    margin: 0.875rem 0 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.splash-client-software li {
+    margin: 0;
+}
+
+.splash-client-software li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.9rem;
+    border: var(--borderSize) solid rgba(var(--colorShadeRGB), .6);
+    border-radius: var(--borderRadiusBox);
+    color: var(--buttonColor);
+    text-decoration: none;
+    background: var(--dumpBackground);
+}
+
+.splash-client-software li a:hover {
+    border-color: rgba(var(--colorShadeRGB), .9);
+    background: var(--colorShadeRGB);
+}
+
+.splash-client-software li a:active {
+    transform: translateY(1px);
 }
 
 body.body--splash {

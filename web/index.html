@@ -9,6 +9,8 @@
         <style rel="stylesheet" media="all" id="filtering"></style>
         <link rel="stylesheet" media="all" href="var-dump.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#132537" id="theme-color-meta">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     </head>
     <body class="body--splash body--splash-in">
         <section id="splash" class="splash">
@@ -49,6 +51,14 @@
                         <div class="splash-key-description button button--clear">Clear messages</div>
                     </div>
                 </div>
+            </div>
+            <div class="splash-client-software">
+                <div class="splash-client-software-title">Get client software</div>
+                <ul>
+                    <li><a href="https://github.com/xrdebug/laravel" target="_blank">Laravel</a></li>
+                    <li><a href="https://github.com/xrdebug/php" target="_blank">PHP</a></li>
+                    <li><a href="https://github.com/xrdebug/wordpress" target="_blank">WordPress</a></li>
+                </ul>
             </div>
         </section>
         <header>
@@ -105,6 +115,25 @@
         const GCM_NONCE_LENGTH = NONCE_LENGTH * 8;
         const GCM_TAG_LENGTH = TAG_LENGTH * 8;
         const EDITOR = "{{ .Editor }}";
+        const themeColorMeta = document.getElementById('theme-color-meta');
+        const syncThemeColor = () => {
+            if (!themeColorMeta) {
+                return;
+            }
+            const headerBackground = getComputedStyle(document.documentElement)
+                .getPropertyValue('--headerBackground')
+                .trim();
+            if (headerBackground) {
+                themeColorMeta.setAttribute('content', headerBackground);
+            }
+        };
+        document.addEventListener('DOMContentLoaded', syncThemeColor);
+        const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+        if (colorSchemeMedia.addEventListener) {
+            colorSchemeMedia.addEventListener('change', syncThemeColor);
+        } else if (colorSchemeMedia.addListener) {
+            colorSchemeMedia.addListener(syncThemeColor);
+        }
     </script>
     <script src="html2canvas.min.js"></script>
     <script src="sjcl.js"></script>
