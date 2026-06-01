@@ -1,5 +1,7 @@
 # xrDebug
 
+<a href="https://xrdebug.com"><img alt="xrDebug" src="web/icon.svg" width="40%"></a>
+
 [xrDebug](https://xrdebug.com/) is a lightweight ultra-fast Open Source debug software alternative to Ray. It allows developers to send debug messages from their applications to a web interface in real-time, enabling collaborative debugging sessions with features like message filtering, pause/resume controls, and end-to-end encryption.
 
 [Play video](https://xrdebug.com/xrdebug.mp4)
@@ -82,10 +84,10 @@ Contributions for other clients are welcome, and if you prefer, you can sponsor 
 
 ## Screens
 
-<img alt="xrDebug light" src="assets/screens/xrdebug-1.1.0-splash-light.png">
-<img alt="xrDebug dark" src="assets/screens/xrdebug-1.1.0-splash-dark.png">
-<img alt="xrDebug light demo" src="assets/screens/xrdebug-1.1.0-demo-dark.png">
-<img alt="xrDebug dark demo" src="assets/screens/xrdebug-1.1.0-demo-light.png">
+<img alt="xrDebug light" src="assets/screens/xrdebug-3.0.4-splash-light.webp">
+<img alt="xrDebug dark" src="assets/screens/xrdebug-3.0.4-splash-dark.webp">
+<img alt="xrDebug light demo" src="assets/screens/xrdebug-3.0.4-demo-dark.webp">
+<img alt="xrDebug dark demo" src="assets/screens/xrdebug-3.0.4-demo-light.webp">
 
 ## Documentation
 
