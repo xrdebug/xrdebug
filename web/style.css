@@ -357,19 +357,19 @@ header>div {
     box-shadow:
         inset 0 2px 5px rgb(0 0 0 / 32%),
         inset 0 0 0 1px rgb(0 0 0 / 12%);
+    border: 0;
 }
 
 .header-buttons .button.button--active:after {
     background-color: var(--buttonActiveColor);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 32%);
 }
 
 .header-buttons .button--resume.button--active {
-    border-color: #249f4a;
     background: linear-gradient(180deg, #35d566 0%, #2db957 100%);
 }
 
 .header-buttons .button--pause.button--active {
-    border-color: #cf9a00;
     background: linear-gradient(180deg, #ffe173 0%, #f5c51d 100%);
 }
 
@@ -378,12 +378,10 @@ header>div {
 }
 
 .header-buttons .button--stop.button--active {
-    border-color: #cf3a33;
     background: linear-gradient(180deg, #ff6f66 0%, #f14c43 100%);
 }
 
 .header-buttons .button--clear.button--active {
-    border-color: #838b99;
     background: linear-gradient(180deg, #b8bec8 0%, #989fad 100%);
 }
 
