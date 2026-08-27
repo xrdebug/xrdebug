@@ -525,6 +525,7 @@ header>div {
     padding: var(--fontSizeSmall) calc(1.5 * var(--fontSizeSmall));
     margin: 0;
     display: inline-flex;
+    align-items: center;
     color: var(--buttonColor);
 }
 
