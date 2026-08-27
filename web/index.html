@@ -15,11 +15,14 @@
     <body class="body--splash body--splash-in">
         <section id="splash" class="splash">
             <div class="splash-logo">
-                <a href="https://xrdebug.com"><img src="icon.svg"/></a>
+                <a href="https://xrdebug.com" target="_blank"><img src="icon.svg"/></a>
             </div>
             <div class="splash-welcome">xrDebug</div>
-            <div class="splash-version">Version
-                <a href="https://github.com/xrdebug/xrdebug/releases" target="_blank">{{ .Version }}</a>
+            <div class="splash-version">
+                <a href="https://github.com/xrdebug/xrdebug/releases" target="_blank">Version {{ .Version }}</a>
+            </div>
+            <div class="splash-documentation">
+                <a href="https://docs.xrdebug.com" target="_blank">Documentation</a>
             </div>
             <div class="splash-security">{{ .Security }}</div>
             <div class="splash-keys">

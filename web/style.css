@@ -865,7 +865,7 @@ pre+.xrdebug-backtrace {
 
 .splash-version a {
     color: inherit;
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -927,10 +927,20 @@ pre+.xrdebug-backtrace {
     position: absolute;
 }
 
+.splash .splash-documentation {
+    margin-top: -0.5rem;
+}
+
+.splash-documentation a {
+    color: inherit;
+}
+
+.splash-documentation,
 .splash-client-software {
     font-size: var(--fontSizeSmall);
 }
 
+.splash-documentation,
 .splash-client-software-title {
     opacity: 0.5;
     text-transform: uppercase;
