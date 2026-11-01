@@ -78,21 +78,12 @@ async function refreshKeys() {
     $("keys").classList.toggle("hidden", !keys.symmetricKey && !keys.signPrivateKey);
 }
 
-async function refreshLog() {
-    const log = $("logValue");
-    log.textContent = await call("Logs");
-    log.scrollTop = log.scrollHeight;
-}
-
 async function load() {
     const [settings, editors] = await Promise.all([call("Get"), call("Editors")]);
     $("editor").replaceChildren(...editors.map((name) => new Option(name, name)));
     saved = settings;
     fill(settings);
-    await Promise.all([refreshStatus(), refreshKeys(), refreshLog()]);
-    if (location.hash === "#log") {
-        $("log").scrollIntoView();
-    }
+    await Promise.all([refreshStatus(), refreshKeys()]);
 }
 
 form.addEventListener("change", syncDependents);
@@ -154,11 +145,8 @@ for (const button of document.querySelectorAll("[data-copy]")) {
     });
 }
 
-let logTimer;
-Events.On("server:log", () => {
-    clearTimeout(logTimer);
-    logTimer = setTimeout(refreshLog, 150);
-});
+$("showLog").addEventListener("click", () => call("ShowLog"));
+
 Events.On("server:status", refreshStatus);
 
 load().catch((err) => say(err.message || String(err)));

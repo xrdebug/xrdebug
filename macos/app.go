@@ -23,6 +23,7 @@ import (
 const (
 	mainWindowName     = "main"
 	settingsWindowName = "settings"
+	logWindowName      = "log"
 	cliLinkPath        = "/usr/local/bin/xrdebug"
 )
 
@@ -141,29 +142,37 @@ func (c *Controller) Shutdown() {
 }
 
 func (c *Controller) ShowSettings() {
-	c.openSettings("/settings.html")
+	c.openWindow(application.WebviewWindowOptions{
+		Name:      settingsWindowName,
+		Title:     "xrDebug Settings",
+		Width:     620,
+		Height:    640,
+		MinWidth:  520,
+		MinHeight: 480,
+		URL:       "/settings.html",
+	})
 }
 
 func (c *Controller) ShowLog() {
-	c.openSettings("/settings.html#log")
+	c.openWindow(application.WebviewWindowOptions{
+		Name:      logWindowName,
+		Title:     "xrDebug Server Log",
+		Width:     760,
+		Height:    480,
+		MinWidth:  420,
+		MinHeight: 240,
+		URL:       "/log.html",
+	})
 }
 
-func (c *Controller) openSettings(url string) {
-	if window, ok := c.app.Window.GetByName(settingsWindowName); ok {
-		window.SetURL(url)
+// openWindow focuses the named window, creating it on first use.
+func (c *Controller) openWindow(options application.WebviewWindowOptions) {
+	if window, ok := c.app.Window.GetByName(options.Name); ok {
 		window.Show()
 		window.Focus()
 		return
 	}
-	c.app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Name:      settingsWindowName,
-		Title:     "xrDebug Settings",
-		Width:     620,
-		Height:    720,
-		MinWidth:  520,
-		MinHeight: 480,
-		URL:       url,
-	}).Focus()
+	c.app.Window.NewWithOptions(options).Focus()
 }
 
 func (c *Controller) CopyURL() {

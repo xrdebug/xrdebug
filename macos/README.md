@@ -8,7 +8,7 @@ A native macOS app for xrDebug, built with [Wails v3](https://v3.wails.io). It b
 - Settings window (⌘,) for every CLI option: address, port, session name, editor, end-to-end encryption, sign verification and TLS.
 - App-managed encryption and sign keys, generated once and kept across restarts. The settings window shows them so you can copy them into your clients.
 - Editor links (`vscode://`, `phpstorm://`, …) open in your editor, and message export saves PNGs through a native save dialog.
-- Server menu: restart, copy URL, open in browser and show the server log.
+- Server menu: restart, copy URL, open in browser, and a separate Server Log window (⇧⌘L) that follows the CLI output.
 - **xrDebug › Install Command Line Tool…** symlinks the bundled CLI to `/usr/local/bin/xrdebug`.
 
 Settings and keys live in `~/Library/Application Support/xrDebug`.

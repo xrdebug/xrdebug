@@ -126,6 +126,13 @@ func (s *Server) Logs() string {
 	return strings.Join(s.logs, "\n")
 }
 
+// ClearLogs empties the captured CLI output.
+func (s *Server) ClearLogs() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.logs = nil
+}
+
 // Start launches the CLI with the given arguments, stopping any running one.
 func (s *Server) Start(args []string) error {
 	s.Stop()

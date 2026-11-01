@@ -67,6 +67,14 @@ func (s *SettingsService) Logs() string {
 	return s.c.server.Logs()
 }
 
+func (s *SettingsService) ClearLogs() {
+	s.c.server.ClearLogs()
+}
+
+func (s *SettingsService) ShowLog() {
+	s.c.ShowLog()
+}
+
 func (s *SettingsService) PickFile(title string) (string, error) {
 	dialog := s.c.app.Dialog.OpenFile().
 		SetTitle(title).

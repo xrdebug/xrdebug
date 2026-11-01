@@ -279,3 +279,37 @@ pre.log {
 .meta a {
     color: inherit;
 }
+
+.log-window {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.toolbar .status {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.follow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--muted);
+}
+
+.log-window pre.log {
+    flex: 1;
+    max-height: none;
+    margin: 0;
+    padding: 10px 12px;
+}
