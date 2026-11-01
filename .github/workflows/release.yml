@@ -32,3 +32,26 @@ jobs:
           artifacts: >
             dist/xrdebug-*.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
+  macos-app:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: macos/go.mod
+      - name: Test
+        run: make -C macos test
+      - name: Build dmg
+        run: make -C macos dmg VERSION=${{ github.ref_name }}
+      - name: Upload artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          artifacts: >
+            macos/bin/xrDebug-*.dmg
+          token: ${{ secrets.GITHUB_TOKEN }}

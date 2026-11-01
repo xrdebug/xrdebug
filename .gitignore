@@ -29,3 +29,5 @@ go.work.sum
 /coverage
 /dist
 /build
+
+/macos/bin

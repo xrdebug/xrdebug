@@ -31,6 +31,10 @@ Optionally, you can run this command to install the latest version:
 bash <(curl -sL xrdebug.com/bin.sh)
 ```
 
+### macOS app
+
+Download `xrDebug-<version>-macos-universal.dmg` from the [releases page](https://github.com/xrdebug/xrdebug/releases/latest), open it and drag xrDebug to Applications. The app bundles the `xrdebug` binary, runs the server for you and lets you set every option from its Settings window. See [macos/README.md](macos/README.md) to build it from source.
+
 ### Install as a Go module
 
 Ensure you have [Go](https://golang.org/dl/) installed then

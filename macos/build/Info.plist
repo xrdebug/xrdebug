@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleName</key>
+        <string>xrDebug</string>
+        <key>CFBundleDisplayName</key>
+        <string>xrDebug</string>
+        <key>CFBundleExecutable</key>
+        <string>xrdebug-app</string>
+        <key>CFBundleIdentifier</key>
+        <string>com.xrdebug.app</string>
+        <key>CFBundleVersion</key>
+        <string>@VERSION@</string>
+        <key>CFBundleShortVersionString</key>
+        <string>@VERSION@</string>
+        <key>CFBundleGetInfoString</key>
+        <string>xrDebug @VERSION@</string>
+        <key>CFBundleIconFile</key>
+        <string>icons</string>
+        <key>LSApplicationCategoryType</key>
+        <string>public.app-category.developer-tools</string>
+        <key>LSMinimumSystemVersion</key>
+        <string>12.0.0</string>
+        <key>NSHighResolutionCapable</key>
+        <true/>
+        <key>NSHumanReadableCopyright</key>
+        <string>Copyright Rodolfo Berrios A.</string>
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsLocalNetworking</key>
+            <true/>
+            <key>NSAllowsArbitraryLoadsInWebContent</key>
+            <true/>
+        </dict>
+    </dict>
+</plist>

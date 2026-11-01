@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>xrDebug Settings</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <main>
+        <header>
+            <img src="/icon.svg" alt="">
+            <div>
+                <h1>xrDebug</h1>
+                <p id="version">&nbsp;</p>
+            </div>
+            <div class="status" id="status">Stopped</div>
+        </header>
+
+        <form id="form" autocomplete="off">
+            <section>
+                <h2>Server</h2>
+                <div class="row">
+                    <label for="address">Address<small>Blank listens on all interfaces</small></label>
+                    <input type="text" id="address" placeholder="0.0.0.0" spellcheck="false">
+                </div>
+                <div class="row">
+                    <label for="port">Port<small>Use 0 for a random port</small></label>
+                    <input type="number" id="port" min="0" max="65535">
+                </div>
+                <div class="row">
+                    <label for="sessionName">Session name</label>
+                    <input type="text" id="sessionName" spellcheck="false">
+                </div>
+                <div class="row">
+                    <label for="editor">Editor<small>Used for file links</small></label>
+                    <select id="editor"></select>
+                </div>
+            </section>
+
+            <section>
+                <h2>Security</h2>
+                <div class="row">
+                    <label for="enableEncryption">End-to-end encryption</label>
+                    <input type="checkbox" id="enableEncryption">
+                </div>
+                <div class="row" data-depends="enableEncryption">
+                    <label>Symmetric key<small>AES-GCM, blank uses a key managed by the app</small></label>
+                    <div class="field">
+                        <input type="text" id="symmetricKey" placeholder="App-managed key" spellcheck="false">
+                        <button type="button" data-pick="symmetricKey">Choose…</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="enableSignVerification">Sign verification</label>
+                    <input type="checkbox" id="enableSignVerification">
+                </div>
+                <div class="row" data-depends="enableSignVerification">
+                    <label>Private key<small>ed25519 PEM, blank uses a key managed by the app</small></label>
+                    <div class="field">
+                        <input type="text" id="signPrivateKey" placeholder="App-managed key" spellcheck="false">
+                        <button type="button" data-pick="signPrivateKey">Choose…</button>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>TLS</h2>
+                <div class="row">
+                    <label>Certificate<small>PEM</small></label>
+                    <div class="field">
+                        <input type="text" id="tlsCert" placeholder="None" spellcheck="false">
+                        <button type="button" data-pick="tlsCert">Choose…</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Private key</label>
+                    <div class="field">
+                        <input type="text" id="tlsPrivateKey" placeholder="None" spellcheck="false">
+                        <button type="button" data-pick="tlsPrivateKey">Choose…</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="actions">
+                <span class="message" id="message"></span>
+                <button type="button" id="defaults">Defaults</button>
+                <button type="button" id="revert">Revert</button>
+                <button type="submit" class="primary" id="save">Save &amp; Restart</button>
+            </div>
+        </form>
+
+        <div id="keys" class="hidden" style="margin-top: 20px">
+            <h2 class="outside">Client keys</h2>
+            <section>
+                <div id="symmetricKeyBlock" class="hidden">
+                    <h2>Encryption key</h2>
+                    <textarea class="key" id="symmetricKeyValue" rows="2" readonly></textarea>
+                    <div class="actions" style="margin: 6px 0 12px">
+                        <button type="button" data-copy="symmetricKeyValue">Copy</button>
+                    </div>
+                </div>
+                <div id="signKeyBlock" class="hidden">
+                    <h2>Sign private key</h2>
+                    <textarea class="key" id="signKeyValue" rows="4" readonly></textarea>
+                    <div class="actions" style="margin: 6px 0 12px">
+                        <button type="button" data-copy="signKeyValue">Copy</button>
+                    </div>
+                </div>
+                <div class="actions" style="margin-bottom: 12px">
+                    <button type="button" id="regenerate">Regenerate App-Managed Keys</button>
+                </div>
+            </section>
+        </div>
+
+        <div id="log" style="margin-top: 20px">
+            <h2 class="outside">Server log</h2>
+            <section>
+                <pre class="log" id="logValue"></pre>
+            </section>
+        </div>
+
+        <p class="meta" id="meta"></p>
+    </main>
+    <script type="module" src="/settings.js"></script>
+</body>
+
+</html>
