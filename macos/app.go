@@ -88,7 +88,7 @@ func (c *Controller) ShowMain() {
 // StartServer (re)starts the CLI with the stored settings.
 func (c *Controller) StartServer() error {
 	settings := c.store.Load()
-	c.main.SetTitle("xrDebug — " + settings.SessionName)
+	c.main.SetTitle(windowTitle(settings.SessionName))
 	c.main.SetURL("/")
 	if err := settings.Validate(); err != nil {
 		c.showError("Invalid settings", err.Error())
@@ -276,4 +276,13 @@ func shellQuote(s string) string {
 	// Quoted for the shell, then escaped for the AppleScript string literal.
 	quoted := "'" + strings.ReplaceAll(s, "'", `'\''`) + "'"
 	return strings.ReplaceAll(strings.ReplaceAll(quoted, `\`, `\\`), `"`, `\"`)
+}
+
+// windowTitle names the main window after the session, avoiding
+// "xrDebug — xrDebug" for the default session name.
+func windowTitle(session string) string {
+	if session == "" || session == name {
+		return name
+	}
+	return name + " — " + session
 }
