@@ -47,6 +47,7 @@ Then notarize the `.dmg` with `xcrun notarytool submit … --wait` and `xcrun st
 - `server.go` starts the CLI, parses `Running at <url>` from its output, and stops it on quit. A PID file lets the next launch stop a server orphaned by a crash.
 - `settings.go` stores the settings and turns them into CLI flags.
 - `bridge.go` injects a small script into the UI page that forwards custom-scheme links and `<a download>` exports to Go, since WKWebView can't handle either on its own.
+- `build/appicon.icon` is the Icon Composer source for the app icon; run `make icons` after editing it to refresh `build/Assets.car` and `build/icons.icns`.
 - `frontend/` holds the loading page and the settings window, which talks to `SettingsService` (`service.go`) through the Wails runtime.
 
 TLS with a self-signed certificate will not load in the app window, because WKWebView rejects untrusted certificates. Use a trusted certificate (for example one made with `mkcert`) or open the server in a browser.

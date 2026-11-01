@@ -16,7 +16,7 @@ export CGO_LDFLAGS := -mmacosx-version-min=12.0
 WAILS3 ?= $(shell command -v wails3 || echo $(shell go env GOPATH)/bin/wails3)
 GO_FLAGS := -tags production -trimpath -buildvcs=false -ldflags="-s -w"
 
-.PHONY: all run dev app dmg cli clean vet test wails3
+.PHONY: all run dev app dmg cli clean vet test wails3 icons
 
 all: dmg
 
@@ -41,7 +41,7 @@ app: cli $(BIN_DIR)/$(APP_EXEC)
 	rm -rf "$(APP)"
 	mkdir -p "$(APP)/Contents/MacOS" "$(APP)/Contents/Resources"
 	cp $(BIN_DIR)/$(APP_EXEC) $(BIN_DIR)/xrdebug "$(APP)/Contents/MacOS/"
-	cp build/icons.icns "$(APP)/Contents/Resources/"
+	cp build/icons.icns build/Assets.car "$(APP)/Contents/Resources/"
 	sed 's/@VERSION@/$(VERSION)/g' build/Info.plist > "$(APP)/Contents/Info.plist"
 	xattr -cr "$(APP)"
 	codesign --force $(SIGN_FLAGS) --sign "$(SIGN_IDENTITY)" "$(APP)/Contents/MacOS/xrdebug"
@@ -55,6 +55,12 @@ dmg: app wails3
 		--volume-icon build/icons.icns
 	mv "$(BIN_DIR)/$(APP_NAME).dmg" "$(DMG)"
 	@echo "Created $(DMG)"
+
+# Regenerates build/Assets.car and build/icons.icns from the Icon Composer
+# icon (needs Xcode 26+ actool). The bundle uses Assets.car on macOS 26+,
+# which keeps the icon from being shrunk onto a grey tile.
+icons: wails3
+	"$(WAILS3)" generate icons -iconcomposerinput build/appicon.icon -macassetdir build
 
 wails3:
 	@test -x "$(WAILS3)" || go install github.com/wailsapp/wails/v3/cmd/wails3@v3.1.0

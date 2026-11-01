@@ -23,9 +23,6 @@ import (
 //go:embed frontend
 var assets embed.FS
 
-//go:embed build/appicon.png
-var icon []byte
-
 const (
 	name        = "xrDebug"
 	description = "Lightweight web-based debug software"
@@ -49,7 +46,6 @@ func main() {
 	app := application.New(application.Options{
 		Name:        name,
 		Description: description,
-		Icon:        icon,
 		Services: []application.Service{
 			application.NewService(&SettingsService{c: controller}),
 		},
