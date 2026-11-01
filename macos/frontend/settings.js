@@ -145,7 +145,6 @@ for (const button of document.querySelectorAll("[data-copy]")) {
     });
 }
 
-$("showLog").addEventListener("click", () => call("ShowLog"));
 
 Events.On("server:status", refreshStatus);
 
