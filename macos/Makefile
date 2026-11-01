@@ -59,9 +59,10 @@ dmg: app wails3
 wails3:
 	@test -x "$(WAILS3)" || go install github.com/wailsapp/wails/v3/cmd/wails3@v3.1.0
 
-# Runs the app against a freshly built CLI, without bundling.
-run: cli
-	XRDEBUG_BIN=$(CURDIR)/$(BIN_DIR)/xrdebug go run .
+# Builds the .app and runs it in the foreground (logs in the terminal).
+# Running from the bundle gives the menu bar its xrDebug name and icon.
+run: app
+	"$(APP)/Contents/MacOS/$(APP_EXEC)"
 
 vet:
 	go vet ./...

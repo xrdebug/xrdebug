@@ -28,7 +28,7 @@ Other targets:
 | Target       | Description                                              |
 | ------------ | -------------------------------------------------------- |
 | `make app`   | Build and sign `bin/xrDebug.app` only                    |
-| `make run`   | Run the app with `go run`, using a freshly built CLI     |
+| `make run`   | Build `bin/xrDebug.app` and run it with logs in the terminal |
 | `make test`  | Run the unit tests                                       |
 | `make clean` | Remove `bin/`                                            |
 
